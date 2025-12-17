@@ -1,79 +1,173 @@
+/* TitleBar Styles - Blue-Purple Theme */
 .titlebar {
-  height: 40px;
-  background: var(--bg-secondary);
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  height: 48px;
   padding: 0 16px;
-  user-select: none;
-  border-bottom: 1px solid var(--border);
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-subtle);
   -webkit-app-region: drag;
-  app-region: drag;
+  user-select: none;
 }
 
 .titlebar-left {
   display: flex;
   align-items: center;
-  gap: 12px;
-  -webkit-app-region: drag;
-  app-region: drag;
-}
-
-.app-logo-icon {
-  flex-shrink: 0;
+  gap: 16px;
 }
 
 .app-logo {
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 700;
-  background: linear-gradient(135deg, #22c55e 0%, #4ade80 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--text-primary);
+  letter-spacing: 0.5px;
 }
 
-.app-version {
-  font-size: 11px;
-  color: var(--text-secondary);
-  padding: 2px 8px;
+/* Language Selector */
+.language-selector-wrapper {
+  position: relative;
+}
+
+.language-selector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
   background: var(--bg-tertiary);
-  border-radius: 4px;
+  border-radius: 6px;
+  cursor: pointer;
+  -webkit-app-region: no-drag;
+  transition: all 0.2s ease;
 }
 
+.language-selector:hover {
+  background: var(--bg-card-hover);
+}
+
+.language-flag {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 15px;
+  flex-shrink: 0;
+}
+
+.language-text {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.language-arrow {
+  font-size: 10px;
+  color: var(--text-secondary);
+  margin-left: 4px;
+  transition: transform 0.2s ease;
+}
+
+.language-arrow.open {
+  transform: rotate(180deg);
+}
+
+/* Language Dropdown */
+.language-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 160px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  z-index: 1000;
+  animation: dropdownSlideIn 0.2s ease;
+}
+
+@keyframes dropdownSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.language-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  position: relative;
+}
+
+.language-option:hover {
+  background: var(--bg-tertiary);
+}
+
+.language-option.active {
+  background: var(--bg-card-hover);
+}
+
+.language-option .language-flag {
+  width: 20px;
+  height: 15px;
+}
+
+.language-option .language-text {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.check-icon {
+  width: 16px;
+  height: 16px;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+/* Window Controls */
 .titlebar-right {
   display: flex;
   align-items: center;
   gap: 4px;
-  -webkit-app-region: no-drag;
-  app-region: no-drag;
 }
 
 .title-btn {
-  width: 32px;
-  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 36px;
+  height: 36px;
   background: transparent;
   border: none;
-  color: var(--text-secondary);
+  border-radius: 6px;
   cursor: pointer;
-  border-radius: 4px;
-  transition: all 0.2s;
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
   -webkit-app-region: no-drag;
-  app-region: no-drag;
 }
 
 .title-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--bg-tertiary);
   color: var(--text-primary);
 }
 
-.title-btn:active {
-  transform: scale(0.95);
+.title-btn.close-btn:hover {
+  background: var(--error);
+  color: white;
 }
 
-.title-btn.close-btn:hover {
-  background: #EF4444;
-  color: white;
+.title-btn svg {
+  width: 12px;
+  height: 12px;
 }

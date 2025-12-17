@@ -13,9 +13,9 @@
     "windows": [
       {
         "title": "ShakeDown Launcher",
-        "width": 1000,
-        "height": 700,
-        "resizable": true,
+        "width": 847,
+        "height": 546,
+        "resizable": false,
         "fullscreen": false,
         "decorations": false,
         "transparent": true,
@@ -26,17 +26,35 @@
       "csp": null,
       "assetProtocol": {
         "enable": true,
-        "scope": ["**"]
+        "scope": [
+          "**"
+        ]
       }
     },
     "withGlobalTauri": true
   },
-  "plugins": {},
+  "plugins": {
+    "updater": {
+      "active": true,
+      "endpoints": ["https://your-update-server.com/update"],
+      "dialog": true,
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDQ5MEM0MjNEMEE4NjY5RkUK"
+    }
+  },
   "bundle": {
     "active": true,
     "targets": "all",
     "icon": [
       "icons/icon.ico"
-    ]
+    ],
+    "windows": {
+      "wix": {
+        "language": "en-US"
+      },
+      "nsis": {
+        "languages": ["English"]
+      }
+    },
+    "createUpdaterArtifacts": true
   }
 }

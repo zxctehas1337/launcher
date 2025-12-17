@@ -1,5 +1,6 @@
-
 import type { User } from '../types'
+import { useLanguage } from '../contexts/LanguageContext'
+import { useEffect } from 'react'
 import '../styles/ProfilePage.css'
 
 interface ProfilePageProps {
@@ -8,70 +9,124 @@ interface ProfilePageProps {
   onUserUpdate?: (user: User) => void
 }
 
-export default function ProfilePage({ user, onLogout }: ProfilePageProps) {
-  const subscriptionLabel = user.subscription === 'premium' ? 'Premium' :
-    user.subscription === 'alpha' ? 'Alpha' : 'Free'
+export default function ProfilePage({ user }: ProfilePageProps) {
+  const { t } = useLanguage()
+
+  // Предзагружаем часто используемые ссылки при монтировании компонента
+  useEffect(() => {
+    const urls = [
+      'https://shakedown.vercel.app/pricing',
+      'https://shakedown.vercel.app/dashboard',
+      'https://shakedown.vercel.app/dashboard/subscription'
+    ]
+    
+    urls.forEach(url => {
+      const link = document.createElement('link')
+      link.rel = 'prefetch'
+      link.href = url
+      document.head.appendChild(link)
+    })
+  }, [])
+
+  const subscriptionEndDate = user.subscription === 'premium'
+    ? t('profile.active')
+    : user.subscription === 'alpha'
+      ? t('profile.alpha_access')
+      : t('profile.not_purchased')
+
+  const handleOpenPersonalCabinet = () => {
+    window.electron?.openExternal('https://shakedown.vercel.app/dashboard')
+  }
+
+  const handleExtendSubscription = () => {
+    window.electron?.openExternal('https://shakedown.vercel.app/pricing')
+  }
+
+
+  const handleActivateKey = () => {
+    window.electron?.openExternal('https://shakedown.vercel.app/dashboard/subscription')
+  }
 
   return (
     <div className="page profile-page">
-      <div className="page-header">
-        <h1>Профиль</h1>
-        <p>Информация о вашем аккаунте</p>
+      {/* Top Section - Avatar & Profile */}
+      <div className="profile-top">
+        {/* Avatar Section */}
+        <div className="avatar-section">
+          <h3 className="card-title">{t('profile.avatar')}</h3>
+
+          <div className="avatar-container">
+            <img
+              src={user.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.username)}&background=random&color=fff&size=256&bold=true`}
+              alt={user.username}
+            />
+          </div>
+
+          <p className="avatar-text">{t('profile.upload_change_avatar')}</p>
+
+          <button className="avatar-upload-btn">
+            {t('profile.upload')}
+          </button>
+        </div>
+
+        {/* Profile Info Section */}
+        <div className="profile-section">
+          <h3 className="card-title">{t('sidebar.profile')}</h3>
+
+          <div className="profile-fields">
+            <div className="profile-field">
+              <span className="profile-field-label">{t('profile.uid')}</span>
+              <span className="profile-field-colon">:</span>
+              <span className="profile-field-value">{user.id}</span>
+            </div>
+
+            <div className="profile-field">
+              <span className="profile-field-label">{t('profile.login')}</span>
+              <span className="profile-field-colon">:</span>
+              <span className="profile-field-value">{user.username}</span>
+            </div>
+
+            <div className="profile-field">
+              <span className="profile-field-label">{t('profile.group')}</span>
+              <span className="profile-field-colon">:</span>
+              <span className="profile-field-value">
+                {user.subscription === 'premium' ? t('profile.premium') :
+                  user.subscription === 'alpha' ? t('profile.alpha') : t('profile.user')}
+              </span>
+            </div>
+
+            <div className="profile-field">
+              <span className="profile-field-label">{t('profile.client_purchased_until')}</span>
+              <span className="profile-field-colon">:</span>
+              <span className={`profile-field-value ${user.subscription !== 'free' ? 'subscription-active' : 'subscription-inactive'}`}>
+                {subscriptionEndDate}
+              </span>
+            </div>
+
+            <div className="profile-field">
+              <span className="profile-field-label">HWID</span>
+              <span className="profile-field-colon">:</span>
+              <span className="profile-field-value">
+                {user.hwid || "Не привязан"}
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div className="profile-card">
-        <div className="profile-avatar-container">
-          <div className="profile-avatar">
-            {user.avatar ? (
-              <img src={user.avatar} alt="Avatar" />
-            ) : (
-              <svg className="avatar-placeholder" width="48" height="48" viewBox="0 0 60 60" fill="currentColor">
-                <circle cx="30" cy="20" r="12" />
-                <path d="M30 35C18 35 10 40 10 50H50C50 40 42 35 30 35Z" />
-              </svg>
-            )}
-          </div>
-        </div>
+      {/* Actions Section */}
+      <div className="actions-section">
+        <h3 className="card-title">{t('profile.useful')}</h3>
 
-        <div className="profile-info">
-          <div className="profile-field">
-            <label>Никнейм:</label>
-            <span className="profile-value">{user.username}</span>
-          </div>
-          <div className="profile-field">
-            <label>Email:</label>
-            <span className="profile-value">{user.email}</span>
-          </div>
-          <div className="profile-field">
-            <label>UID:</label>
-            <span className="uid-value">{user.uid || `AZ-${new Date(user.registeredAt).getFullYear()}-${user.id.toString().padStart(3, '0')}`}</span>
-          </div>
-          <div className="profile-field">
-            <label>Статус:</label>
-            <span className="status-active">Активен</span>
-          </div>
-          <div className="profile-field">
-            <label>Подписка:</label>
-            <span className={`subscription-${user.subscription}`}>
-              {subscriptionLabel}
-            </span>
-          </div>
-          <div className="profile-field">
-            <label>Дата регистрации:</label>
-            <span className="profile-value">
-              {new Date(user.registeredAt).toLocaleDateString('ru-RU')}
-            </span>
-          </div>
-        </div>
-
-        <div className="profile-actions">
-          <button className="btn-logout" onClick={onLogout}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" strokeWidth="2" strokeLinecap="round" />
-              <polyline points="16 17 21 12 16 7" strokeWidth="2" strokeLinecap="round" />
-              <line x1="21" y1="12" x2="9" y2="12" strokeWidth="2" strokeLinecap="round" />
-            </svg>
-            Выйти из аккаунта
+        <div className="actions-grid">
+          <button className="action-btn" onClick={handleOpenPersonalCabinet}>
+            {t('profile.personal_cabinet')}
+          </button>
+          <button className="action-btn" onClick={handleExtendSubscription}>
+            {t('profile.extend_subscription')}
+          </button>
+          <button className="action-btn full-width" onClick={handleActivateKey}>
+            {t('profile.activate_key')}
           </button>
         </div>
       </div>

@@ -40,10 +40,13 @@ pub fn run() {
         minecraft::check_mods_installed,
         minecraft::check_client_updates,
         minecraft::install_mods,
+        minecraft::install_and_launch,
         minecraft::get_client_dirs,
         minecraft::list_mods_folder,
+        minecraft::wipe_client_data,
         auth::start_oauth_server,
-        auth::stop_oauth_server
+        auth::stop_oauth_server,
+        auth::get_hwid
     ])
     .run(tauri::generate_context!());
     

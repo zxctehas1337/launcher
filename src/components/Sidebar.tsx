@@ -1,73 +1,68 @@
+import { useLanguage } from '../contexts/LanguageContext'
 import type { User } from '../types'
 import '../styles/Sidebar.css'
 
 interface SidebarProps {
-  activeTab: 'home' | 'profile' | 'settings' | 'news'
-  onTabChange: (tab: 'home' | 'profile' | 'settings' | 'news') => void
+  activeTab: 'home' | 'profile' | 'settings'
+  onTabChange: (tab: 'home' | 'profile' | 'settings') => void
   user: User
+  onLogout?: () => void
 }
 
-export default function Sidebar({ activeTab, onTabChange, user }: SidebarProps) {
+export default function Sidebar({ activeTab, onTabChange, onLogout }: SidebarProps) {
+  const { t } = useLanguage()
+
   return (
     <div className="sidebar">
-      <div className="sidebar-user">
-        <div className="sidebar-avatar">
-          {user.avatar ? (
-            <img src={user.avatar} alt={user.username} />
-          ) : (
-            <svg width="40" height="40" viewBox="0 0 60 60" fill="currentColor">
-              <circle cx="30" cy="20" r="12" />
-              <path d="M30 35C18 35 10 40 10 50H50C50 40 42 35 30 35Z" />
-            </svg>
-          )}
+      <div className="sidebar-nav">
+        {/* Home */}
+        <div
+          className={`nav-item ${activeTab === 'home' ? 'active' : ''}`}
+          onClick={() => onTabChange('home')}
+          title={t('sidebar.home')}
+        >
+          <svg className="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 3L4 9V21H9V14H15V21H20V9L12 3Z" />
+          </svg>
         </div>
-        <div className="sidebar-user-info">
-          <div className="sidebar-username">{user.username}</div>
-          <div className="sidebar-uid">{user.uid || `AZ-${new Date(user.registeredAt).getFullYear()}-${user.id.toString().padStart(3, '0')}`}</div>
+
+        {/* Profile */}
+        <div
+          className={`nav-item ${activeTab === 'profile' ? 'active' : ''}`}
+          onClick={() => onTabChange('profile')}
+          title={t('sidebar.profile')}
+        >
+          <svg className="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+            <circle cx="12" cy="8" r="4" />
+            <path d="M12 14C7.58 14 4 16.69 4 20V21H20V20C20 16.69 16.42 14 12 14Z" />
+          </svg>
+        </div>
+
+        {/* Settings */}
+        <div
+          className={`nav-item ${activeTab === 'settings' ? 'active' : ''}`}
+          onClick={() => onTabChange('settings')}
+          title={t('sidebar.settings')}
+        >
+          <svg className="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19.14 12.94c.04-.31.06-.63.06-.94 0-.31-.02-.63-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" />
+          </svg>
         </div>
       </div>
-      <div
-        className={`nav-item ${activeTab === 'home' ? 'active' : ''}`}
-        onClick={() => onTabChange('home')}
-      >
-        <svg className="nav-icon" width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
-          <path d="M10 2L2 8V18C2 18.5304 2.21071 19.0391 2.58579 19.4142C2.96086 19.7893 3.46957 20 4 20H16C16.5304 20 17.0391 19.7893 17.4142 19.4142C17.7893 19.0391 18 18.5304 18 18V8L10 2Z" />
-          <path d="M8 20V12H12V20" fill="currentColor" />
-        </svg>
-        <span>Главная</span>
-      </div>
-      <div
-        className={`nav-item ${activeTab === 'profile' ? 'active' : ''}`}
-        onClick={() => onTabChange('profile')}
-      >
-        <svg className="nav-icon" width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
-          <circle cx="10" cy="6" r="4" />
-          <path d="M10 12C5.58172 12 2 14.6863 2 18H18C18 14.6863 14.4183 12 10 12Z" />
-        </svg>
-        <span>Профиль</span>
-      </div>
-      <div
-        className={`nav-item ${activeTab === 'settings' ? 'active' : ''}`}
-        onClick={() => onTabChange('settings')}
-      >
-        <svg className="nav-icon" width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
-          <circle cx="10" cy="4" r="1.5" />
-          <circle cx="10" cy="10" r="1.5" />
-          <circle cx="10" cy="16" r="1.5" />
-        </svg>
-        <span>Настройки</span>
-      </div>
-      <div
-        className={`nav-item ${activeTab === 'news' ? 'active' : ''}`}
-        onClick={() => onTabChange('news')}
-      >
-        <svg className="nav-icon" width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
-          <path d="M2 4C2 2.89543 2.89543 2 4 2H16C17.1046 2 18 2.89543 18 4V16C18 17.1046 17.1046 18 16 18H4C2.89543 18 2 17.1046 2 16V4Z" />
-          <rect x="5" y="5" width="6" height="4" fill="#0A0A0F" />
-          <rect x="5" y="11" width="10" height="1" fill="#0A0A0F" />
-          <rect x="5" y="14" width="10" height="1" fill="#0A0A0F" />
-        </svg>
-        <span>Новости</span>
+
+      {/* Logout at bottom */}
+      <div className="sidebar-bottom">
+        <button
+          className="logout-btn"
+          onClick={onLogout}
+          title={t('sidebar.logout')}
+        >
+          <svg className="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+        </button>
       </div>
     </div>
   )

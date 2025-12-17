@@ -26,8 +26,10 @@ declare global {
       checkModInstalled: () => Promise<{ installed: boolean; version?: string }>
       checkClientUpdate: (userId?: number) => Promise<any>
       installClient: (userId?: number) => Promise<any>
+      installAndLaunchClient: (userId: number | undefined, options: any) => Promise<any>
       launchClient: (options: any) => Promise<any>
       getClientDirs: () => Promise<any>
+      wipeClientData: () => Promise<{ success: boolean; deleted: string[]; errors: string[] }>
       
       ipcRenderer: {
         on: (channel: string, listener: (event: any, ...args: any[]) => void) => void

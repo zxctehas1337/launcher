@@ -1,63 +1,122 @@
+import { useState, useRef, useEffect } from 'react'
+import { useLanguage, type Language } from '../contexts/LanguageContext'
 import '../styles/TitleBar.css'
 
+// SVG Flag Components
+const RussianFlag = () => (
+  <svg width="20" height="15" viewBox="0 0 20 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="20" height="15" rx="2" fill="white"/>
+    <rect y="5" width="20" height="5" fill="#0039A6"/>
+    <rect y="10" width="20" height="5" fill="#D52B1E"/>
+  </svg>
+)
+
+const BritishFlag = () => (
+  <svg width="20" height="15" viewBox="0 0 20 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="20" height="15" rx="2" fill="#012169"/>
+    <path d="M0 0L20 15M20 0L0 15" stroke="white" strokeWidth="3"/>
+    <path d="M0 0L20 15M20 0L0 15" stroke="#C8102E" strokeWidth="2"/>
+    <path d="M10 0V15M0 7.5H20" stroke="white" strokeWidth="5"/>
+    <path d="M10 0V15M0 7.5H20" stroke="#C8102E" strokeWidth="3"/>
+  </svg>
+)
+
+const LANGUAGES = [
+  { code: 'ru' as Language, flag: <RussianFlag />, name: 'Русский' },
+  { code: 'en' as Language, flag: <BritishFlag />, name: 'English' },
+]
+
 export default function TitleBar() {
+  const { language, setLanguage, t } = useLanguage()
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const dropdownRef = useRef<HTMLDivElement>(null)
+
+  const currentLang = LANGUAGES.find(lang => lang.code === language) || LANGUAGES[0]
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false)
+      }
+    }
+
+    if (isDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [isDropdownOpen])
+
+  const handleLanguageSelect = (langCode: Language) => {
+    setLanguage(langCode)
+    setIsDropdownOpen(false)
+  }
+
   const handleMinimize = async () => {
     try {
-      console.log('🔽 Сворачивание окна...')
       if (window.electron?.minimize) {
         await window.electron.minimize()
-        console.log('✅ Окно свернуто')
-      } else {
-        console.error('❌ window.electron.minimize не доступен')
       }
     } catch (error) {
-      console.error('❌ Ошибка сворачивания окна:', error)
+      console.error('Error minimizing window:', error)
     }
   }
 
   const handleClose = async () => {
     try {
-      console.log('❌ Закрытие окна...')
       if (window.electron?.close) {
         await window.electron.close()
-        console.log('✅ Окно закрыто')
-      } else {
-        console.error('❌ window.electron.close не доступен')
       }
     } catch (error) {
-      console.error('❌ Ошибка закрытия окна:', error)
+      console.error('Error closing window:', error)
     }
   }
 
   return (
     <div className="titlebar" data-tauri-drag-region>
       <div className="titlebar-left" data-tauri-drag-region>
-        <svg className="app-logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none">
-          <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="url(#gradient1)"/>
-          <path d="M2 17L12 22L22 17V7L12 12L2 7V17Z" fill="url(#gradient2)"/>
-          <defs>
-            <linearGradient id="gradient1" x1="2" y1="2" x2="22" y2="12">
-              <stop offset="0%" stopColor="#8A4BFF"/>
-              <stop offset="100%" stopColor="#FF6B9D"/>
-            </linearGradient>
-            <linearGradient id="gradient2" x1="2" y1="7" x2="22" y2="22">
-              <stop offset="0%" stopColor="#6C37D7"/>
-              <stop offset="100%" stopColor="#8A4BFF"/>
-            </linearGradient>
-          </defs>
-        </svg>
-        <div className="app-logo">ShakeDown</div>
-        <div className="app-version">v3.1.9</div>
+        <div className="app-logo">SHAKEDOWN</div>
+        <div className="language-selector-wrapper" ref={dropdownRef}>
+          <div
+            className="language-selector"
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+          >
+            <span className="language-flag">{currentLang.flag}</span>
+            <span className="language-text">{currentLang.name}</span>
+            <span className={`language-arrow ${isDropdownOpen ? 'open' : ''}`}>▼</span>
+          </div>
+          {isDropdownOpen && (
+            <div className="language-dropdown">
+              {LANGUAGES.map(lang => (
+                <div
+                  key={lang.code}
+                  className={`language-option ${lang.code === language ? 'active' : ''}`}
+                  onClick={() => handleLanguageSelect(lang.code)}
+                >
+                  <span className="language-flag">{lang.flag}</span>
+                  <span className="language-text">{lang.name}</span>
+                  {lang.code === language && (
+                    <svg className="check-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M3 8L6 11L13 4" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
       <div className="titlebar-right">
-        <button className="title-btn" onClick={handleMinimize} title="Свернуть">
-          <svg width="10" height="2" viewBox="0 0 14 2" fill="currentColor">
-            <rect width="14" height="2"/>
+        <button className="title-btn" onClick={handleMinimize} title={t('titlebar.minimize')}>
+          <svg width="12" height="2" viewBox="0 0 12 2" fill="currentColor">
+            <rect width="12" height="2" rx="1" />
           </svg>
         </button>
-        <button className="title-btn close-btn" onClick={handleClose} title="Закрыть">
-          <svg width="10" height="10" viewBox="0 0 14 14" fill="currentColor">
-            <path d="M14 1.41L12.59 0L7 5.59L1.41 0L0 1.41L5.59 7L0 12.59L1.41 14L7 8.41L12.59 14L14 12.59L8.41 7L14 1.41Z"/>
+        <button className="title-btn close-btn" onClick={handleClose} title={t('titlebar.close')}>
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+            <path d="M11 1L1 11M1 1L11 11" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
           </svg>
         </button>
       </div>

@@ -4,15 +4,16 @@ import Sidebar from './components/Sidebar'
 import HomePage from './pages/HomePage'
 import ProfilePage from './pages/ProfilePage'
 import SettingsPage from './pages/SettingsPage'
-import NewsPage from './pages/NewsPage'
 import AuthPage from './pages/AuthPage'
 import UpdateNotification from './components/UpdateNotification'
+import { LanguageProvider } from './contexts/LanguageContext'
 import type { User } from './types'
 import { getUserInfo } from './utils/api'
 import './styles/App.css'
 
+
 export default function App() {
-  const [activeTab, setActiveTab] = useState<'home' | 'profile' | 'settings' | 'news'>('home')
+  const [activeTab, setActiveTab] = useState<'home' | 'profile' | 'settings'>('home')
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
@@ -33,7 +34,7 @@ export default function App() {
               getUserInfo(parsedUser.id),
               new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 5000))
             ]) as any
-            
+
             if (response.success && response.data) {
               console.log('✅ Данные пользователя обновлены:', response.data)
               const updatedUser = {
@@ -65,20 +66,41 @@ export default function App() {
 
     loadUser()
 
-    // Автоматическое обновление данных каждые 30 секунд
-    const intervalId = setInterval(async () => {
-      const savedUser = localStorage.getItem('user')
-      if (savedUser) {
-        try {
-          const parsedUser = JSON.parse(savedUser)
-          const response = await getUserInfo(parsedUser.id)
-          if (response.success && response.data) {
-            const updatedUser = {
-              ...parsedUser,
-              ...response.data,
-              registeredAt: response.data.registeredAt || parsedUser.registeredAt
-            }
+    // Переменные для управления частотой обновлений
+    let lastUpdateTime = 0
+    let isUpdating = false
+    let lastUserData = ''
 
+    // Функция для обновления данных пользователя
+    const updateUserData = async () => {
+      const now = Date.now()
+      const savedUser = localStorage.getItem('user')
+      
+      // Проверяем, что с момента последнего обновления прошла хотя бы 1 секунда
+      // и нет активного запроса на обновление
+      if (!savedUser || isUpdating || (now - lastUpdateTime < 1000)) {
+        return
+      }
+
+      try {
+        isUpdating = true
+        lastUpdateTime = now
+        
+        const parsedUser = JSON.parse(savedUser)
+        const response = await getUserInfo(parsedUser.id)
+        
+        if (response.success && response.data) {
+          const updatedUser = {
+            ...parsedUser,
+            ...response.data,
+            registeredAt: response.data.registeredAt || parsedUser.registeredAt
+          }
+
+          // Обновляем только если данные изменились
+          const userDataStr = JSON.stringify(updatedUser)
+          if (userDataStr !== lastUserData) {
+            lastUserData = userDataStr
+            
             // Логируем изменение подписки
             if (parsedUser.subscription !== response.data.subscription) {
               console.log('🔔 ПОДПИСКА ИЗМЕНЕНА!')
@@ -87,20 +109,28 @@ export default function App() {
             }
 
             setUser(updatedUser)
-            localStorage.setItem('user', JSON.stringify(updatedUser))
-            console.log('🔄 Данные автоматически обновлены:', {
+            localStorage.setItem('user', userDataStr)
+            console.log('🔄 Данные обновлены:', {
               id: updatedUser.id,
               username: updatedUser.username,
               subscription: updatedUser.subscription
             })
-          } else {
-            console.error('❌ Ошибка обновления данных:', response)
           }
-        } catch (e) {
-          console.error('Auto-update failed:', e)
+        } else {
+          console.error('❌ Ошибка обновления данных:', response)
         }
+      } catch (e) {
+        console.error('Auto-update failed:', e)
+      } finally {
+        isUpdating = false
       }
-    }, 30000) // 30 секунд
+    }
+
+    // Запускаем обновление каждую секунду
+    const intervalId = setInterval(updateUserData, 1000)
+    
+    // Первое обновление
+    updateUserData()
 
     return () => clearInterval(intervalId)
   }, [])
@@ -130,29 +160,37 @@ export default function App() {
 
   if (isLoading) {
     return (
-      <div className="app loading">
-        <div className="loader"></div>
-      </div>
+      <LanguageProvider>
+        <div className="app loading">
+          <div className="loader"></div>
+        </div>
+      </LanguageProvider>
     )
   }
 
   if (!user) {
-    return <AuthPage onLogin={handleLogin} />
+    return (
+      <LanguageProvider>
+        <AuthPage onLogin={handleLogin} />
+      </LanguageProvider>
+    )
   }
 
   return (
-    <div className="app">
-      <TitleBar />
-      <UpdateNotification />
-      <div className="app-main">
-        <Sidebar activeTab={activeTab} onTabChange={setActiveTab} user={user} />
-        <div className="app-content">
-          {activeTab === 'home' && <HomePage user={user} />}
-          {activeTab === 'profile' && <ProfilePage user={user} onLogout={handleLogout} onUserUpdate={handleUserUpdate} />}
-          {activeTab === 'settings' && <SettingsPage />}
-          {activeTab === 'news' && <NewsPage />}
+    <LanguageProvider>
+      <div className="app">
+        <TitleBar />
+        <UpdateNotification />
+        <div className="app-main">
+          <Sidebar activeTab={activeTab} onTabChange={setActiveTab} user={user} onLogout={handleLogout} />
+          <div className="app-content">
+            {activeTab === 'home' && <HomePage user={user} />}
+            {activeTab === 'profile' && <ProfilePage user={user} onLogout={handleLogout} onUserUpdate={handleUserUpdate} />}
+            {activeTab === 'settings' && <SettingsPage />}
+          </div>
         </div>
       </div>
-    </div>
+    </LanguageProvider>
   )
 }
+

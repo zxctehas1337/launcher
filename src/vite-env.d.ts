@@ -43,15 +43,18 @@ interface Window {
     
     // Minecraft Launcher
     launchMinecraft: (options: MinecraftLaunchOptions) => Promise<MinecraftLaunchResult>
-    getMinecraftDir: () => Promise<string>
-    getModsDir: () => Promise<string>
-    openModsFolder: () => Promise<{ success: boolean; path: string }>
+    getLaunchDir: () => Promise<string>
+    openLaunchFolder: () => Promise<{ success: boolean; path: string }>
     
     // Client Installer
     checkClientInstalled: () => Promise<{ installed: boolean }>
-    checkModInstalled: () => Promise<{ installed: boolean }>
-    installClient: () => Promise<{ success: boolean; error?: string }>
+    checkModInstalled: () => Promise<{ installed: boolean; version?: string }>
+    checkClientUpdate: (userId?: number) => Promise<any>
+    installClient: (userId?: number) => Promise<any>
+    installAndLaunchClient: (userId: number | undefined, options: MinecraftLaunchOptions) => Promise<MinecraftLaunchResult>
     launchClient: (options: MinecraftLaunchOptions) => Promise<MinecraftLaunchResult>
+    getClientDirs: () => Promise<any>
+    wipeClientData: () => Promise<{ success: boolean; deleted: string[]; errors: string[] }>
     
     ipcRenderer: {
       on: (channel: string, listener: (...args: any[]) => void) => void

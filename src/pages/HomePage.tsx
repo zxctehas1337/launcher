@@ -1,336 +1,234 @@
 import { useState, useEffect } from 'react'
+import { useLanguage } from '../contexts/LanguageContext'
 import type { User } from '../types'
 import '../styles/HomePage.css'
+
 
 interface HomePageProps {
   user: User
 }
 
+interface Server {
+  id: string
+  name: string
+  version: string
+  badge?: string
+  isFree?: boolean
+  className: string
+  description: string
+  subtitle?: string
+}
+
 interface LaunchProgress {
+
   stage: string
   progress: number
-  current?: string
   message?: string
 }
 
 export default function HomePage({ user }: HomePageProps) {
-  const [isLaunching, setIsLaunching] = useState(false)
-  const [isInstalling, setIsInstalling] = useState(false)
-  const [isInstalled, setIsInstalled] = useState(false)
-  const [modInstalled, setModInstalled] = useState(false)
-  const [modVersion, setModVersion] = useState<string | null>(null)
-  const [updateAvailable, setUpdateAvailable] = useState(false)
-  const [latestVersion, setLatestVersion] = useState<string | null>(null)
+  const { t } = useLanguage()
+
+  const SERVERS: Server[] = [
+    {
+      id: 'main',
+      name: '1.21.4',
+      version: '1.21.4',
+      badge: t('home.client'),
+      className: 'server-main',
+      subtitle: 'Client',
+      description: 'We have created for you the best client that will give you a huge advantage in the game. This client has a huge functionality that will fit under all popular minecraft servers. This client is stable, which means that you will get the best gaming experience without bugs and various errors.'
+    },
+    {
+      id: 'alpha',
+      name: 'ALPHA 1.16.5',
+      version: '1.16.5',
+      badge: t('home.client'),
+      className: 'server-alpha',
+      subtitle: 'Client',
+      description: 'Experience the classic 1.16.5 version with our optimized client. Perfect for PVP and survival with enhanced FPS and custom features.'
+    },
+    {
+      id: 'legacy',
+      name: 'LEGACY 1.12.2',
+      version: '1.12.2',
+      badge: t('home.client'),
+      isFree: true,
+      className: 'server-legacy',
+      subtitle: 'Legacy',
+      description: 'The golden age of modding. 1.12.2 Legacy client provides the most stable environment for your favorite modpacks and classic servers.'
+    }
+  ]
+
+  const [launchingServer, setLaunchingServer] = useState<string | null>(null)
+  const [selectedServer, setSelectedServer] = useState<Server | null>(null)
+
   const [progress, setProgress] = useState<LaunchProgress | null>(null)
-  const [logs, setLogs] = useState<string[]>([])
-  const [showLogs, setShowLogs] = useState(false)
-  const [isMinecraftLoading, setIsMinecraftLoading] = useState(false)
 
   useEffect(() => {
     if (!window.electron) return
-
-    // Проверяем установлен ли клиент
-    const checkInstallation = async () => {
-      if (window.electron) {
-        const result = await window.electron.checkClientInstalled()
-        console.log('🔍 Проверка установки клиента:', result)
-        setIsInstalled(result.installed)
-
-        // Проверяем установлен ли мод через IPC
-        if (result.installed) {
-          try {
-            const modCheck = await window.electron.checkModInstalled() as { installed: boolean; version: string | null }
-            console.log('🔍 Проверка установки мода:', modCheck)
-            setModInstalled(modCheck.installed || false)
-            setModVersion(modCheck.version || null)
-
-            // Проверяем наличие обновлений
-            if (modCheck.installed && modCheck.version) {
-              const updateCheck = await (window.electron as any).checkClientUpdate(user.id) as { success: boolean; data?: any; error?: string }
-              console.log('🔍 Проверка обновлений чита:', updateCheck)
-
-              if (updateCheck.success && updateCheck.data) {
-                setLatestVersion(updateCheck.data.version)
-                // Сравниваем версии
-                if (updateCheck.data.version !== modCheck.version) {
-                  setUpdateAvailable(true)
-                  console.log(`📦 Доступно обновление: ${modCheck.version} -> ${updateCheck.data.version}`)
-                }
-              }
-            }
-          } catch (e) {
-            console.error('❌ Ошибка проверки мода:', e)
-            setModInstalled(false)
-          }
-        }
-      }
-    }
-    checkInstallation()
 
     const handleProgress = (_: any, data: LaunchProgress) => {
       setProgress(data)
     }
 
-    const handleLog = (_: any, data: any) => {
-      const log = typeof data === 'string' ? data : data.message
-      setLogs(prev => [...prev.slice(-50), log])
-    }
-
-    const handleInstallProgress = (_: any, data: LaunchProgress) => {
-      setProgress(data)
-    }
-
     const handleMinecraftLoading = (_: any, data: any) => {
-      console.log('🎮 Minecraft loading event:', data)
-      setIsMinecraftLoading(data.loading)
-      if (data.loading) {
-        setShowLogs(true) // Автоматически показываем логи
-        // Через 60 секунд скрываем индикатор загрузки
-        setTimeout(() => {
-          setIsMinecraftLoading(false)
-          setIsLaunching(false)
-        }, 60000)
+      if (!data.loading) {
+        setLaunchingServer(null)
+        setProgress(null)
       }
     }
 
     window.electron.ipcRenderer.on('minecraft-progress', handleProgress)
-    window.electron.ipcRenderer.on('minecraft-log', handleLog)
-    window.electron.ipcRenderer.on('client-install-progress', handleInstallProgress)
+    window.electron.ipcRenderer.on('client-install-progress', handleProgress)
     window.electron.ipcRenderer.on('minecraft-loading', handleMinecraftLoading)
 
     return () => {
       window.electron?.ipcRenderer.removeListener('minecraft-progress', handleProgress)
-      window.electron?.ipcRenderer.removeListener('minecraft-log', handleLog)
-      window.electron?.ipcRenderer.removeListener('client-install-progress', handleInstallProgress)
+      window.electron?.ipcRenderer.removeListener('client-install-progress', handleProgress)
       window.electron?.ipcRenderer.removeListener('minecraft-loading', handleMinecraftLoading)
     }
   }, [])
 
-  const handleInstall = async () => {
-    if (!window.electron) return
+  const handleLaunch = async (server: Server) => {
+    if (!window.electron || launchingServer) return
 
-    setIsInstalling(true)
-    setProgress({ stage: 'creating-folders', progress: 0, message: 'Создание папок...' })
-    setLogs([])
+    setLaunchingServer(server.id)
+    setProgress({ stage: 'init', progress: 0, message: t('home.init') })
 
     try {
-      const result = await window.electron.installClient()
+      // Check if installed
+      const installCheck = await window.electron.checkClientInstalled()
 
-      if (result.success) {
-        setIsInstalled(true)
-        setModInstalled(true)
-        // Обновляем версию после установки
-        const modCheck = await window.electron.checkModInstalled() as { installed: boolean; version: string | null }
-        setModVersion(modCheck.version || null)
-        setProgress({ stage: 'complete', progress: 100, message: 'Установка завершена!' })
-        setTimeout(() => {
-          setIsInstalling(false)
+      if (!installCheck.installed) {
+        setProgress({ stage: 'installing', progress: 0, message: t('home.installing') })
+        const installResult = await window.electron.installClient()
+
+        if (!installResult.success) {
+          alert(`${t('home.install_error')}: ${installResult.error}`)
+          setLaunchingServer(null)
           setProgress(null)
-        }, 2000)
-      } else {
-        alert(`Ошибка установки: ${result.error}`)
-        setIsInstalling(false)
-        setProgress(null)
+          return
+        }
       }
-    } catch (error) {
-      console.error('Ошибка установки:', error)
-      alert('Не удалось установить клиент')
-      setIsInstalling(false)
-      setProgress(null)
-    }
-  }
 
-  const handleLaunch = async () => {
-    if (!window.electron) return
-
-    // Если клиент не установлен или доступно обновление, запускаем установку
-    if (!isInstalled || updateAvailable) {
-      await handleInstall()
-      // После установки запускаем игру
-      if (!isInstalled) return
-      // Сбрасываем флаг обновления после установки
-      setUpdateAvailable(false)
-    }
-
-    setIsLaunching(true)
-    setProgress({ stage: 'launching', progress: 0, message: 'Запуск игры...' })
-    setLogs([])
-
-    try {
+      // Launch
+      setProgress({ stage: 'launching', progress: 50, message: t('home.launching') })
       const javaPath = localStorage.getItem('javaPath') || undefined
       const result = await window.electron.launchClient({
         username: user.username,
         javaPath
       })
 
-      if (result.success) {
-        // Не скрываем прогресс сразу - ждем пока Minecraft загрузится
-        setProgress({ stage: 'loading', progress: 50, message: 'Minecraft загружается...' })
-        // isLaunching будет сброшен через событие minecraft-loading или таймаут
-      } else {
-        alert(`Ошибка запуска: ${result.error}`)
-        setIsLaunching(false)
+      if (!result.success) {
+        alert(`${t('home.launch_error')}: ${result.error}`)
+        setLaunchingServer(null)
         setProgress(null)
+      } else {
+        setProgress({ stage: 'loading', progress: 100, message: t('home.minecraft_loading') })
+        // Will be reset by minecraft-loading event
+        setTimeout(() => {
+          setLaunchingServer(null)
+          setProgress(null)
+        }, 60000)
       }
     } catch (error) {
-      console.error('Ошибка запуска игры:', error)
-      alert(`Не удалось запустить игру: ${error}`)
-      setIsLaunching(false)
+      console.error('Launch error:', error)
+      alert(`${t('home.error')}: ${error}`)
+      setLaunchingServer(null)
       setProgress(null)
     }
   }
 
+  const handleCardClick = (server: Server) => {
+    setSelectedServer(server)
+  }
 
-
-  const getStageText = (stage: string, message?: string) => {
-    if (message) return message
-
-    const stages: Record<string, string> = {
-      'init': 'Инициализация...',
-      'creating-folders': 'Создание папок...',
-      'downloading': 'Скачивание клиента...',
-      'extracting': 'Распаковка файлов...',
-      'complete': 'Установка завершена!',
-      'fabric-json': 'Загрузка Fabric Loader...',
-      'minecraft-jar': 'Загрузка Minecraft...',
-      'libraries': 'Загрузка библиотек...',
-      'asset-index': 'Загрузка индекса ресурсов...',
-      'assets': 'Загрузка ресурсов...',
-      'launching': 'Запуск игры...',
-      'loading': 'Minecraft загружается, пожалуйста подождите...',
-      'running': ''
+  const handleReturn = () => {
+    if (!launchingServer) {
+      setSelectedServer(null)
     }
-    return stages[stage] || stage
   }
 
   return (
     <div className="page home-page">
-      <div className="home-center">
-        <div className="home-logo">
-          <svg width="80" height="80" viewBox="0 0 24 24" fill="none">
-            <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="url(#gradient1)" />
-            <path d="M2 17L12 22L22 17V7L12 12L2 7V17Z" fill="url(#gradient2)" />
-            <defs>
-              <linearGradient id="gradient1" x1="2" y1="2" x2="22" y2="12">
-                <stop offset="0%" stopColor="#8A4BFF" />
-                <stop offset="100%" stopColor="#FF6B9D" />
-              </linearGradient>
-              <linearGradient id="gradient2" x1="2" y1="7" x2="22" y2="22">
-                <stop offset="0%" stopColor="#6C37D7" />
-                <stop offset="100%" stopColor="#8A4BFF" />
-              </linearGradient>
-            </defs>
-          </svg>
-        </div>
-
-        <h1 className="home-title">ShakeDown Client</h1>
-        <p className="home-version">Minecraft 1.20.1</p>
-
-        {isInstalled && (
-          <div className="mod-status">
-            <div className={`status-indicator ${modInstalled ? 'status-active' : 'status-inactive'}`}>
-              <span className="status-dot"></span>
-              {modInstalled ? (
-                <>
-                  Чит установлен
-                  {modVersion && <span className="mod-version"> v{modVersion}</span>}
-                </>
-              ) : (
-                'Чит не найден'
-              )}
-            </div>
-            {updateAvailable && latestVersion && (
-              <div className="update-available">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M8 2V10M8 10L5 7M8 10L11 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  <path d="M3 14H13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                </svg>
-                Доступно обновление: v{latestVersion}
-              </div>
-            )}
-            {!modInstalled && (
-              <p className="status-hint">
-              </p>
-            )}
-          </div>
-        )}
-
-        {(progress || isMinecraftLoading) && (
-          <div className="launch-progress">
-            <div className="progress-stage">
-              {isMinecraftLoading ? 'Minecraft загружается...' : getStageText(progress?.stage || '', progress?.message)}
-            </div>
-            {isMinecraftLoading && (
-              <div className="progress-text" style={{ color: '#ffa500', marginTop: '8px' }}>
-                <span style={{ fontSize: '0.9em', opacity: 0.8 }}></span>
-              </div>
-            )}
-            {!isMinecraftLoading && progress && (
-              <>
-                <div className="progress-text">{progress.message || getStageText(progress.stage)}</div>
-                {progress.current && (
-                  <div className="progress-current">{progress.current}</div>
-                )}
-                <div className="progress-bar">
-                  <div
-                    className="progress-fill"
-                    style={{ width: `${progress.progress}%` }}
-                  />
-                </div>
-                <div className="progress-percent">{Math.round(progress.progress)}%</div>
-              </>
-            )}
-            {isMinecraftLoading && (
-              <div className="progress-bar">
-                <div
-                  className="progress-fill progress-fill-animated"
-                  style={{ width: '100%' }}
-                />
-              </div>
-            )}
-          </div>
-        )}
-
-        <div className="home-actions">
-          <button
-            className="home-launch-btn"
-            onClick={handleLaunch}
-            disabled={isLaunching || isInstalling}
-          >
-            {isLaunching || isInstalling ? (
-              <>
-                <div className="spinner" />
-                {isInstalling ? 'Установка...' : 'Запуск...'}
-              </>
-            ) : (
-              <>
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <path d="M5 4.5L15 10L5 15.5V4.5Z" fill="currentColor" />
-                </svg>
-                {updateAvailable ? 'Обновить и запустить' : (isInstalled ? 'Запустить' : 'Установить и запустить')}
-              </>
-            )}
-          </button>
-        </div>
-
-        {logs.length > 0 && (
-          <div className="logs-section">
-            <button
-              className="logs-toggle"
-              onClick={() => setShowLogs(!showLogs)}
-            >
-              {showLogs ? '▼' : '▶'} Логи ({logs.length})
+      {selectedServer ? (
+        <div className="game-details-container animate-fade-in">
+          <div className="game-details-header">
+            <button className="return-button" onClick={handleReturn} disabled={!!launchingServer}>
+              RETURN <span className="arrow">→</span>
             </button>
-            {showLogs && (
-              <div className="logs-container">
-                {logs.map((log, i) => (
-                  <div key={i} className="log-line">{log}</div>
-                ))}
-              </div>
-            )}
           </div>
-        )}
-      </div>
+
+          <div className="game-details-content">
+            <div className={`game-card-large ${selectedServer.className}`}>
+              <div className="game-card-bg" />
+            </div>
+
+            <div className="game-info">
+              <div className="game-title-group">
+                <h1 className="game-title">{selectedServer.name}</h1>
+                {selectedServer.subtitle && <h2 className="game-subtitle">{selectedServer.subtitle}</h2>}
+              </div>
+
+              <p className="game-description">
+                {selectedServer.description}
+              </p>
+
+              <div className="game-actions">
+                <button
+                  className={`launch-button-large ${launchingServer ? 'disabled' : ''}`}
+                  onClick={() => handleLaunch(selectedServer)}
+                  disabled={!!launchingServer}
+                >
+                  {launchingServer ? (
+                    <div className="launch-status">
+                      <div className="spinner-small" />
+                      <span>{progress?.message || t('home.loading')} {progress?.progress ? `${Math.round(progress.progress)}%` : ''}</span>
+                    </div>
+                  ) : (
+                    <>
+                      <svg viewBox="0 0 24 24" fill="currentColor" className="play-icon">
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                      LAUNCH
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="servers-grid">
+          {SERVERS.map(server => (
+            <div
+              key={server.id}
+              className={`server-card ${server.className} ${launchingServer === server.id ? 'launching' : ''}`}
+              onClick={() => handleCardClick(server)}
+            >
+              <div className="server-card-bg" />
+              <div className="server-card-overlay" />
+
+              <div className="server-card-content">
+                <div className="server-card-badges">
+                  {server.isFree && <span className="badge badge-free">{t('home.free')}</span>}
+                  {server.badge && <span className="badge badge-client">{server.badge}</span>}
+                </div>
+
+                <div className="server-card-footer">
+                  <span className="server-name">{server.name}</span>
+                  <div className="server-arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M5 12H19M19 12L12 5M19 12L12 19" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

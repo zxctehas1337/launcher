@@ -28,6 +28,9 @@
           "url": "https://oneshakedown.onrender.com/**"
         },
         {
+          "url": "https://shakedown.vercel.app/**"
+        },
+        {
           "url": "http://localhost:*/**"
         },
         {

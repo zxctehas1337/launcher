@@ -7,6 +7,7 @@ export interface User {
   uid?: string
   registeredAt: string
   settings?: UserSettings
+  hwid?: string
 }
 
 export interface UserSettings {

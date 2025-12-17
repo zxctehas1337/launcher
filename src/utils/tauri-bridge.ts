@@ -11,7 +11,16 @@ const electronAPI = {
     minimize: () => getCurrentWindow().minimize(),
     maximize: () => getCurrentWindow().toggleMaximize(),
     close: () => getCurrentWindow().close(),
-    openExternal: (url: string) => open(url),
+    openExternal: async (url: string) => {
+        // Используем openWith для возможной оптимизации
+        try {
+            await open(url);
+        } catch (error) {
+            console.error('Failed to open URL:', error);
+            // Fallback to стандартный метод
+            await open(url);
+        }
+    },
     getAppPath: () => appDataDir(),
     selectFolder: async () => {
         const selected = await openDialog({ directory: true });
@@ -49,8 +58,13 @@ const electronAPI = {
         const result: any = await invoke('install_mods', { userId: userId || null });
         return result;
     },
+    installAndLaunchClient: async (userId: number | undefined, options: any) => {
+        const result: any = await invoke('install_and_launch', { userId: userId || null, options });
+        return result;
+    },
     launchClient: (options: any) => invoke('launch_minecraft', { options }),
     getClientDirs: () => invoke('get_client_dirs'),
+    wipeClientData: () => invoke('wipe_client_data'),
 
     ipcRenderer: {
         on: (channel: string, listener: (event: any, ...args: any[]) => void) => {

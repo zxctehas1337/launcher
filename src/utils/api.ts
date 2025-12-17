@@ -1,7 +1,7 @@
 // API для работы с backend
 import { fetch } from '@tauri-apps/plugin-http'
 
-const API_URL = 'https://oneshakedown.onrender.com'
+const API_URL = 'https://shakedown.vercel.app'
 
 export interface ApiResponse<T> {
   success: boolean
@@ -14,15 +14,21 @@ export async function getUserInfo(userId: number) {
   try {
     const url = `${API_URL}/api/users/${userId}`
     console.log('🔍 API.getUserInfo: Fetching from URL:', url)
-    
+
     const controller = new AbortController()
     const timeoutId = setTimeout(() => controller.abort(), 10000) // 10 секунд таймаут
-    
+
     const response = await fetch(url, {
-      signal: controller.signal
+      method: 'GET',
+      headers: {
+        'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache'
+      },
+      cache: 'no-cache',
+      signal: controller.signal,
     })
     clearTimeout(timeoutId)
-    
+
     const data = await response.json()
     console.log('🔍 API.getUserInfo: Response:', data)
     return data
@@ -146,10 +152,10 @@ export async function getNews() {
   try {
     const url = `${API_URL}/api/news`
     console.log('🔍 API.getNews: Fetching from URL:', url)
-    
+
     const controller = new AbortController()
     const timeoutId = setTimeout(() => controller.abort(), 10000) // 10 секунд таймаут
-    
+
     const response = await fetch(url, {
       method: 'GET',
       headers: {
@@ -161,19 +167,19 @@ export async function getNews() {
       signal: controller.signal
     })
     clearTimeout(timeoutId)
-    
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
     }
-    
+
     const data = await response.json()
     console.log('🔍 API.getNews: Response:', data)
     return data
   } catch (error) {
     console.error('❌ Get news error:', error)
-    return { 
-      success: false, 
-      message: error instanceof Error ? error.message : 'Ошибка подключения к серверу' 
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : 'Ошибка подключения к серверу'
     }
   }
 }

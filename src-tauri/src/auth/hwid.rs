@@ -1,0 +1,101 @@
+use serde::Deserialize;
+use sha2::{Sha256, Digest};
+use wmi::{COMLibrary, WMIConnection};
+
+#[derive(Deserialize, Debug)]
+#[serde(rename_all = "PascalCase")]
+struct DiskDrive {
+    serial_number: Option<String>,
+}
+
+#[derive(Deserialize, Debug)]
+#[serde(rename_all = "PascalCase")]
+struct Processor {
+    processor_id: Option<String>,
+    name: Option<String>,
+}
+
+#[derive(Deserialize, Debug)]
+#[serde(rename_all = "PascalCase")]
+struct BaseBoard {
+    serial_number: Option<String>,
+    product: Option<String>,
+}
+
+pub async fn get_hwid() -> Result<String, String> {
+    let (tx, rx) = tokio::sync::oneshot::channel();
+
+    std::thread::spawn(move || {
+        let result = (|| -> Result<String, Box<dyn std::error::Error + Send + Sync>> {
+            let com = COMLibrary::new()?;
+            let wmi = WMIConnection::new(com.into())?;
+
+            let mut hwid_components = Vec::new();
+
+            // 1. Processor
+            match wmi.query::<Processor>() {
+                Ok(processors) => {
+                    for p in processors {
+                        if let Some(id) = p.processor_id { hwid_components.push(id); }
+                        if let Some(name) = p.name { hwid_components.push(name); }
+                    }
+                },
+                Err(e) => eprintln!("Failed to query Processor: {}", e),
+            }
+
+            // 2. BaseBoard
+            match wmi.query::<BaseBoard>() {
+                Ok(boards) => {
+                    for b in boards {
+                        if let Some(sn) = b.serial_number { hwid_components.push(sn); }
+                        if let Some(prod) = b.product { hwid_components.push(prod); }
+                    }
+                },
+                Err(e) => eprintln!("Failed to query BaseBoard: {}", e),
+            }
+
+            // 3. DiskDrive
+            match wmi.query::<DiskDrive>() {
+                Ok(disks) => {
+                    for d in disks {
+                        if let Some(sn) = d.serial_number { hwid_components.push(sn); }
+                    }
+                },
+                Err(e) => eprintln!("Failed to query DiskDrive: {}", e),
+            }
+            
+            if hwid_components.is_empty() {
+                // If WMI failed completely to find anything useful
+                return Ok(uuid::Uuid::new_v4().to_string());
+            }
+
+            let raw_hwid = hwid_components.join("|");
+            // Hash the combined string
+            let mut hasher = Sha256::new();
+            hasher.update(raw_hwid);
+            let result = hasher.finalize();
+            
+            Ok(hex::encode(result))
+        })();
+
+        // Send the result back
+        match result {
+            Ok(id) => { let _ = tx.send(Ok(id)); },
+            Err(e) => { let _ = tx.send(Err(e.to_string())); }
+        }
+    });
+
+    match rx.await {
+        Ok(thread_result) => match thread_result {
+            Ok(id) => Ok(id),
+            Err(e) => {
+                eprintln!("HWID generation failed: {}", e);
+                Ok(uuid::Uuid::new_v4().to_string())
+            }
+        },
+        Err(_) => {
+            eprintln!("Failed to receive HWID result");
+            Ok(uuid::Uuid::new_v4().to_string())
+        }
+    }
+}
