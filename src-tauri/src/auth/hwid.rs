@@ -1,6 +1,6 @@
 use serde::Deserialize;
 use sha2::{Sha256, Digest};
-use wmi::{COMLibrary, WMIConnection};
+use wmi::{COMLibrary, WMIConnection, WMIError};
 
 #[derive(Deserialize, Debug)]
 #[serde(rename_all = "PascalCase")]
@@ -27,13 +27,13 @@ pub async fn get_hwid() -> Result<String, String> {
 
     std::thread::spawn(move || {
         let result = (|| -> Result<String, Box<dyn std::error::Error + Send + Sync>> {
-            let com = COMLibrary::new()?;
-            let wmi = WMIConnection::new(com.into())?;
+            let com_con = COMLibrary::new()?;
+            let wmi_con = WMIConnection::new(com_con)?;
 
             let mut hwid_components = Vec::new();
 
             // 1. Processor
-            match wmi.query::<Processor>() {
+            match wmi_con.query::<Processor>() {
                 Ok(processors) => {
                     for p in processors {
                         if let Some(id) = p.processor_id { hwid_components.push(id); }
@@ -44,7 +44,7 @@ pub async fn get_hwid() -> Result<String, String> {
             }
 
             // 2. BaseBoard
-            match wmi.query::<BaseBoard>() {
+            match wmi_con.query::<BaseBoard>() {
                 Ok(boards) => {
                     for b in boards {
                         if let Some(sn) = b.serial_number { hwid_components.push(sn); }
@@ -55,7 +55,7 @@ pub async fn get_hwid() -> Result<String, String> {
             }
 
             // 3. DiskDrive
-            match wmi.query::<DiskDrive>() {
+            match wmi_con.query::<DiskDrive>() {
                 Ok(disks) => {
                     for d in disks {
                         if let Some(sn) = d.serial_number { hwid_components.push(sn); }
