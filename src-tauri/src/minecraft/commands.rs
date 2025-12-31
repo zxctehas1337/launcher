@@ -1,5 +1,4 @@
 use std::fs;
-use std::process::Command;
 
 use tauri::{AppHandle, Manager, Runtime};
 
@@ -48,13 +47,13 @@ pub async fn open_launch_folder<R: Runtime>(app: AppHandle<R>) -> Result<(), Str
     }
 
     #[cfg(target_os = "windows")]
-    Command::new("explorer")
+    std::process::Command::new("explorer")
         .arg(&launch_dir)
         .spawn()
         .map_err(|e| e.to_string())?;
 
     #[cfg(target_os = "linux")]
-    Command::new("xdg-open")
+    std::process::Command::new("xdg-open")
         .arg(&launch_dir)
         .spawn()
         .map_err(|e| e.to_string())?;
