@@ -46,3 +46,6 @@ md5 = "0.7"
 default = ["custom-protocol"]
 custom-protocol = ["tauri/custom-protocol"]
 windows = ["wmi"]
+
+[target.'cfg(windows)'.dependencies]
+wmi = "0.13"
