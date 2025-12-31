@@ -33,6 +33,9 @@ jobs:
             asset_name: 'ShakeDown-Launcher-windows.exe'
 
     runs-on: ${{ matrix.platform }}
+    defaults:
+      run:
+        working-directory: ./launcher
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
