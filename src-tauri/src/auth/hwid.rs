@@ -1,6 +1,6 @@
 use serde::Deserialize;
 use sha2::{Sha256, Digest};
-use wmi::{com::COMLibrary, WMIConnection};
+use wmi::*;
 
 #[derive(Deserialize, Debug)]
 #[serde(rename_all = "PascalCase")]
@@ -27,9 +27,7 @@ pub async fn get_hwid() -> Result<String, String> {
 
     std::thread::spawn(move || {
         let result = (|| -> Result<String, Box<dyn std::error::Error + Send + Sync>> {
-            let com_con = COMLibrary::new()?;
-            let wmi_con = WMIConnection::new(com_con)?;
-
+            let wmi_con = WMIConnection::new()?;
             let mut hwid_components = Vec::new();
 
             // 1. Processor
