@@ -1,14 +1,24 @@
+import 'dotenv/config';
 import nodemailer from 'nodemailer';
 
 function getTransporter() {
+  const host = process.env.SMTP_HOST || 'smtp.gmail.com';
+  const port = Number(process.env.SMTP_PORT) || 587;
+  const user = process.env.SMTP_USER;
+  const pass = process.env.SMTP_PASS;
+
+  if (!host) {
+    throw new Error('SMTP_HOST is not set');
+  }
+  if (!user || !pass) {
+    throw new Error('SMTP credentials are not set (SMTP_USER/SMTP_PASS)');
+  }
+
   return nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: Number(process.env.SMTP_PORT) || 587,
-    secure: Number(process.env.SMTP_PORT) === 465,
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS
-    }
+    host,
+    port,
+    secure: port === 465,
+    auth: { user, pass }
   });
 }
 
@@ -142,7 +152,15 @@ async function sendVerificationEmail(email, username, verificationCode) {
     
     return true;
   } catch (error) {
-    console.error('Email error:', error.message);
+    console.error('Email error:', {
+      message: error?.message,
+      code: error?.code,
+      errno: error?.errno,
+      address: error?.address,
+      port: error?.port,
+      smtpHost: process.env.SMTP_HOST,
+      smtpPort: process.env.SMTP_PORT
+    });
     return false;
   }
 }
