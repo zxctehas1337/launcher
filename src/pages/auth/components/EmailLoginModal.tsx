@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Database, setCurrentUser } from '../../../utils/database'
 import { NotificationType } from '../../../types'
+import { FiEye, FiEyeOff } from 'react-icons/fi'
 
 interface EmailLoginModalProps {
   isOpen: boolean
@@ -13,6 +14,7 @@ interface EmailLoginModalProps {
 export function EmailLoginModal({ isOpen, onClose, setNotification }: EmailLoginModalProps) {
   const [emailOrUsername, setEmailOrUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
 
@@ -88,15 +90,25 @@ export function EmailLoginModal({ isOpen, onClose, setNotification }: EmailLogin
 
           <div className="form-group-clean">
             <label htmlFor="password-login-modal">Пароль</label>
-            <input
-              id="password-login-modal"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              className="input-clean"
-              required
-            />
+            <div className="password-input-wrapper">
+              <input
+                id="password-login-modal"
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                className="input-clean"
+                required
+              />
+              <button 
+                type="button" 
+                className="password-toggle"
+                onClick={() => setShowPassword(!showPassword)}
+                tabIndex={-1}
+              >
+                {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+              </button>
+            </div>
           </div>
 
           <button type="submit" className="btn-primary-clean" disabled={isLoading}>

@@ -115,7 +115,7 @@ export default function Navigation({ onLanguageChange }: NavigationProps) {
         </div>
 
         <div className="nav-right">
-          <div className="nav-toggles" style={{ display: 'flex', gap: '8px', marginRight: '8px', alignItems: 'center' }}>
+          <div className="nav-toggles" style={{ display: 'flex', gap: '4px', marginRight: '8px', alignItems: 'center' }}>
             <button
               onClick={toggleSnow}
               className={`nav-icon-btn ${settings.snowEnabled ? 'active' : ''} ${isSnowflakeAnimating ? 'snowflake-click' : ''}`}
@@ -134,22 +134,26 @@ export default function Navigation({ onLanguageChange }: NavigationProps) {
             </button>
           </div>
 
-          <LanguageSelector onLanguageChange={onLanguageChange} />
-
           {currentUser ? (
-            <button onClick={() => navigate('/dashboard')} className="nav-signin-pill">
-              <img
-                src={getAvatarUrl(currentUser.avatar)}
-                alt="Avatar"
-                className="nav-avatar-pill"
-              />
-              <span>{currentUser.username}</span>
-            </button>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <LanguageSelector onLanguageChange={onLanguageChange} />
+              <div className="nav-user-divider"></div>
+              <button onClick={() => navigate('/dashboard')} className="nav-signin-pill" style={{ padding: '0.5rem 0.75rem' }}>
+                <img
+                  src={getAvatarUrl(currentUser.avatar)}
+                  alt="Avatar"
+                  className="nav-avatar-pill"
+                />
+                <span>{currentUser.username}</span>
+              </button>
+            </div>
           ) : (
-            <>
-              <button onClick={() => navigate('/login')} className="nav-signin-pill">Sign In</button>
-              <button onClick={() => navigate('/register')} className="nav-signup-pill">Sign Up</button>
-            </>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <LanguageSelector onLanguageChange={onLanguageChange} />
+              <div className="nav-user-divider"></div>
+              <button onClick={() => navigate('/login')} className="nav-signin-pill" style={{ padding: '0.5rem 0.75rem' }}>Sign In</button>
+              <button onClick={() => navigate('/register')} className="nav-signup-pill" style={{ padding: '0.5rem 1.25rem' }}>Sign Up</button>
+            </div>
           )}
         </div>
       </div>

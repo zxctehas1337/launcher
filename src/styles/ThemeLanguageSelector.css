@@ -32,7 +32,12 @@
 .lang-toggle:not(.active):hover {
   background: var(--button-hover-bg);
   border-color: var(--primary-color);
-  color: var(--primary-color);
+  color: #ffffff; /* Keep text white on hover */
+}
+
+/* Remove hover effect when menu is open */
+.language-selector:not(:hover) .lang-toggle.active {
+  color: #ffffff; /* Keep text white when active */
 }
 
 .lang-flag {
@@ -51,6 +56,7 @@
   position: absolute;
   right: 0;
   background: var(--bg-secondary);
+  color: var(--text-primary);
   border: 1px solid var(--border-color);
   border-radius: 12px;
   padding: 6px;
@@ -58,6 +64,21 @@
   z-index: 1000;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   overflow: hidden;
+}
+
+/* Light theme specific styles */
+[data-theme="light"] .lang-menu {
+  background: #ffffff;
+  color: #000000;
+}
+
+[data-theme="light"] .lang-option {
+  color: #000000;
+}
+
+[data-theme="light"] .lang-option:hover {
+  background-color: #f5f5f5;
+  color: #000000;
 }
 
 /* Меню открывается вверх */
@@ -144,29 +165,26 @@
 .lang-option {
   display: flex;
   align-items: center;
-  gap: 10px;
-  width: 100%;
+  gap: 8px;
   padding: 8px 12px;
-  background: transparent;
-  border: none;
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
-  transition: all 0.15s ease;
-  color: var(--dropdown-text, #ffffff); /* Text color changes with theme */
+  transition: all 0.2s ease;
+  color: var(--text-primary);
   font-size: 14px;
   text-align: left;
   margin: 2px 0;
 }
 
 .lang-option:hover:not(.active) {
-  background: var(--bg-hover);
-  color: var(--dropdown-text-hover, #ffffff);
-  opacity: 0.9;
+  background: var(--bg-hover, rgba(255, 255, 255, 0.1));
+  color: var(--text-primary, #ffffff) !important;
+  opacity: 1;
 }
 
 .lang-option.active {
-  background: var(--bg-active);
-  color: var(--dropdown-text-active, #ffffff);
+  background: var(--bg-active, rgba(255, 255, 255, 0.15));
+  color: var(--text-primary, #ffffff) !important;
   font-weight: 500;
   opacity: 1;
   cursor: default;
@@ -180,16 +198,17 @@
 
 /* Light theme styles */
 [data-theme="light"] .lang-option {
-  color: #111827;
+  color: #111827 !important;
 }
 
-[data-theme="light"] .lang-option:hover:not(.active) {
-  background: rgba(0, 0, 0, 0.05);
+[data-theme="light"] .lang-option:hover {
+  color: #111827 !important;
+  background: rgba(0, 0, 0, 0.05) !important;
 }
 
 [data-theme="light"] .lang-option.active {
-  color: #111827;
-  background: rgba(0, 0, 0, 0.1);
+  color: #111827 !important;
+  background: rgba(0, 0, 0, 0.1) !important;
 }
 
 /* Responsive styles */

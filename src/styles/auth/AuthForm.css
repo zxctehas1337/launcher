@@ -50,6 +50,36 @@
     margin-bottom: 8px;
 }
 
+.password-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-input-wrapper input[type="password"],
+.password-input-wrapper input[type="text"] {
+    width: 100%;
+    padding-right: 40px;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 12px;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+}
+
+.password-toggle:hover {
+    color: rgba(255, 255, 255, 0.9);
+}
+
 .input-clean {
     width: 100%;
     padding: 12px 14px;

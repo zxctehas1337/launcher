@@ -5,6 +5,7 @@ import { NotificationType } from '../../types'
 import LogoWithHat from '../../components/LogoWithHat'
 import Navigation from '../../components/Navigation'
 import { getCurrentUser, Database, setCurrentUser } from '../../utils/database'
+import { FiEye, FiEyeOff } from 'react-icons/fi'
 import '../../styles/auth/AuthBase.css'
 import '../../styles/auth/AuthForm.css'
 import '../../styles/auth/AuthModal.css'
@@ -13,6 +14,7 @@ export default function LoginPage() {
     const [notification, setNotification] = useState<{ message: string; type: NotificationType } | null>(null)
     const [login, setLogin] = useState('')
     const [password, setPassword] = useState('')
+    const [showPassword, setShowPassword] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
 
     const navigate = useNavigate()
@@ -92,14 +94,24 @@ export default function LoginPage() {
 
                             <div className="form-group-clean">
                                 <label>Password</label>
-                                <input
-                                    type="password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    placeholder="••••••••"
-                                    className="input-clean"
-                                    required
-                                />
+                                <div className="password-input-wrapper">
+                                    <input
+                                        type={showPassword ? 'text' : 'password'}
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        placeholder="••••••••"
+                                        className="input-clean"
+                                        required
+                                    />
+                                    <button 
+                                        type="button" 
+                                        className="password-toggle"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        tabIndex={-1}
+                                    >
+                                        {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+                                    </button>
+                                </div>
                             </div>
 
                             <button type="submit" className="btn-primary-clean" disabled={isLoading}>

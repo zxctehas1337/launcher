@@ -6,6 +6,11 @@
 
 .logoWithHat__logo {
   display: block;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  pointer-events: none;
 }
 
 .logoWithHat__hat {

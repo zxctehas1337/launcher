@@ -13,9 +13,6 @@ export const LogoutModal: React.FC<LogoutModalProps> = ({ isOpen, onConfirm, onC
   return (
     <div className="modal-overlay" onClick={onCancel}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-header">
-          <h3>Подтверждение выхода</h3>
-        </div>
         <div className="modal-body">
           <p>Вы уверены, что хотите выйти из аккаунта?</p>
         </div>
