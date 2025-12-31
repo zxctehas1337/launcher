@@ -2,6 +2,8 @@ import { useEffect } from 'react'
 import { getCurrentUser } from '../utils/database'
 import { updateUser } from '../utils/api'
 import { useTranslation } from '../hooks/useTranslation'
+import '../styles/auth/AuthBase.css'
+import '../styles/auth/AuthForm.css'
 
 export default function LauncherAuthPage() {
     const { t } = useTranslation()
@@ -65,40 +67,26 @@ export default function LauncherAuthPage() {
     }, [])
 
     return (
-        <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '100vh',
-            background: '#0a0a0f',
-            color: 'white',
-            fontFamily: 'sans-serif'
-        }}>
-            <div style={{
-                padding: '30px',
-                borderRadius: '16px',
-                background: 'rgba(255,255,255,0.05)',
-                border: '1px solid rgba(255,255,255,0.1)',
-                textAlign: 'center'
-            }}>
-                <div style={{
-                    width: '40px',
-                    height: '40px',
-                    border: '3px solid rgba(138, 75, 255, 0.3)',
-                    borderTopColor: '#8A4BFF',
-                    borderRadius: '50%',
-                    animation: 'spin 1s linear infinite',
-                    margin: '0 auto 20px'
-                }} />
-                <h2 style={{ margin: '0 0 10px 0', fontSize: '20px' }}>{t.auth.checkingAuth}</h2>
-                <p style={{ margin: 0, opacity: 0.6 }}>{t.auth.pleaseWait}</p>
+        <div className="auth-fullscreen">
+            <div className="auth-page-centered">
+                <div className="auth-box-clean" style={{ maxWidth: '420px' }}>
+                    <div style={{
+                        padding: '30px',
+                        borderRadius: '24px',
+                        background: '#000000',
+                        border: '1px solid rgba(255, 255, 255, 0.08)',
+                        textAlign: 'center',
+                        boxShadow: '0 20px 60px rgba(0, 0, 0, 0.6)',
+                        color: '#ffffff'
+                    }}>
+                        <div className="launcher-auth-spinner" />
+                        <div className="auth-title-clean">
+                            <h2 style={{ marginBottom: '6px' }}>{t.auth.checkingAuth}</h2>
+                            <p style={{ margin: 0 }}>{t.auth.pleaseWait}</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <style>{`
-        @keyframes spin {
-          to { transform: rotate(360deg); }
-        }
-      `}</style>
         </div>
     )
 }
