@@ -1,0 +1,104 @@
+name: Build Launcher
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - 'launcher/**'
+  pull_request:
+    branches: [ master ]
+    paths:
+      - 'launcher/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: 'macos-latest'
+            args: '--target aarch64-apple-darwin'
+            artifact_name: 'ShakeDown_Launcher_aarch64.dmg'
+            asset_name: 'ShakeDown-Launcher-macOS-arm64.dmg'
+          - platform: 'macos-latest' 
+            args: '--target x86_64-apple-darwin'
+            artifact_name: 'ShakeDown_Launcher_x86_64.dmg'
+            asset_name: 'ShakeDown-Launcher-macOS-x64.dmg'
+          - platform: 'ubuntu-22.04'
+            args: ''
+            artifact_name: 'ShakeDown_Launcher.AppImage'
+            asset_name: 'ShakeDown-Launcher-linux.AppImage'
+          - platform: 'windows-latest'
+            args: ''
+            artifact_name: 'ShakeDown_Launcher.exe'
+            asset_name: 'ShakeDown-Launcher-windows.exe'
+
+    runs-on: ${{ matrix.platform }}
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Install dependencies (ubuntu only)
+      if: matrix.platform == 'ubuntu-22.04'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev libappindicator3-dev librsvg2-dev patchelf
+
+    - name: Rust setup
+      uses: dtolnay/rust-toolchain@stable
+      with:
+        targets: ${{ matrix.platform == 'macos-latest' && matrix.args || '' }}
+
+    - name: Rust cache
+      uses: swatinem/rust-cache@v2
+      with:
+        workspaces: launcher/src-tauri
+
+    - name: Sync node version and setup cache
+      uses: actions/setup-node@v4
+      with:
+        node-version: 'lts/*'
+        cache: 'npm'
+        cache-dependency-path: launcher/package-lock.json
+
+    - name: Install frontend dependencies
+      run: npm install
+      working-directory: launcher
+
+    - name: Build the app
+      uses: tauri-apps/tauri-action@v0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tauriScript: npm run tauri
+        projectPath: launcher
+        args: ${{ matrix.args }}
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ matrix.asset_name }}
+        path: launcher/src-tauri/target/${{ matrix.args != '' && format('{0}/release/', matrix.args) || 'release/' }}${{ matrix.artifact_name }}
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/')
+    permissions:
+      contents: write
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download all artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: artifacts
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v2
+      with:
+        files: artifacts/**/*
+        generate_release_notes: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

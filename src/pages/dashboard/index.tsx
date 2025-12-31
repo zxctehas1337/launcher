@@ -18,13 +18,11 @@ import {
   IconGrid,
   IconChip,
   IconLogout,
-  IconDownload,
-  IconCpu,
-  IconRam,
-  IconWindows,
 } from '../../components/Icons'
+import { WindowsIcon, MacIcon, LinuxIcon } from '../../components/icons/OSIcons'
 
 import '../../styles/dashboard/DashboardBase.css'
+import '../../styles/dashboard/DownloadButtons.css'
 
 export default function DashboardPage() {
   const {
@@ -218,36 +216,21 @@ export default function DashboardPage() {
 
               {activeTab === 'overview' && (
                 <div className="launcher-view">
-                  {/* System Information Cards */}
-                  <div className="system-info-cards-grid">
-                    <div className="glass-card system-info-card-item">
-                      <div className="system-info-header">
-                        <IconWindows size={20} />
-                        <span>{t.dashboard.system}</span>
-                      </div>
-                      <p>{t.dashboard.windowsInfo}</p>
-                    </div>
-                    <div className="glass-card system-info-card-item">
-                      <div className="system-info-header">
-                        <IconCpu size={20} />
-                        <span>{t.dashboard.processor}</span>
-                      </div>
-                      <p>{t.dashboard.processorInfo}</p>
-                    </div>
-                    <div className="glass-card system-info-card-item">
-                      <div className="system-info-header">
-                        <IconRam size={20} />
-                        <span>RAM</span>
-                      </div>
-                      <p>{t.dashboard.ramInfo}</p>
-                    </div>
+                  {/* Download Buttons */}
+                  <div className="download-buttons-grid">
+                    <button className="download-os-btn windows" onClick={handleDownloadLauncher}>
+                      <WindowsIcon size={20} />
+                      <span>Windows</span>
+                    </button>
+                    <button className="download-os-btn macos" onClick={() => setShowSoonModal(true)}>
+                      <MacIcon size={20} />
+                      <span>macOS</span>
+                    </button>
+                    <button className="download-os-btn linux" onClick={() => setShowSoonModal(true)}>
+                      <LinuxIcon size={20} />
+                      <span>Linux</span>
+                    </button>
                   </div>
-
-                  {/* Download Launcher Button */}
-                  <button className="download-launcher-btn" onClick={handleDownloadLauncher}>
-                    <IconDownload size={24} />
-                    <span>{t.dashboard.downloadLauncherText}</span>
-                  </button>
                 </div>
               )}
 

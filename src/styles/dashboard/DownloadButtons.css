@@ -1,0 +1,43 @@
+.download-buttons-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.download-os-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem 0.75rem;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  color: white;
+  cursor: pointer;
+  transition: none;
+  min-height: 60px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.download-os-btn span {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .download-buttons-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .download-os-btn {
+    min-height: 50px;
+    padding: 0.75rem;
+  }
+}
