@@ -48,10 +48,13 @@
   gap: 0.5rem;
 }
 
-.nav-link-pill:hover,
+.nav-link-pill:hover {
+  color: #ffffff;
+}
+
 .nav-link-pill.active {
   color: #ffffff;
-  background: rgba(255, 255, 255, 0.05);
+  background: transparent;
 }
 
 .nav-right {
@@ -75,7 +78,6 @@
 }
 
 .nav-signin-pill:hover {
-  background: rgba(255, 255, 255, 0.05);
 }
 
 .nav-signup-pill {
