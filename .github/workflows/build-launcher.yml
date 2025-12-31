@@ -17,18 +17,22 @@ jobs:
         include:
           - platform: 'macos-latest' 
             args: '--target x86_64-apple-darwin'
-            artifact_name: 'ShakeDown_Launcher_x86_64.dmg'
+            target_triple: 'x86_64-apple-darwin'
+            artifact_name: 'ShakeDown Launcher_0.1.0_x64.dmg'
             asset_name: 'ShakeDown-Launcher-macOS-x64.dmg'
           - platform: 'macos-latest'
             args: '--target aarch64-apple-darwin'
-            artifact_name: 'ShakeDown_Launcher_aarch64.dmg'
+            target_triple: 'aarch64-apple-darwin'
+            artifact_name: 'ShakeDown Launcher_0.1.0_aarch64.dmg'
             asset_name: 'ShakeDown-Launcher-macOS-arm64.dmg'
           - platform: 'ubuntu-22.04'
             args: ''
+            target_triple: ''
             artifact_name: 'ShakeDown_Launcher.AppImage'
             asset_name: 'ShakeDown-Launcher-linux.AppImage'
           - platform: 'windows-latest'
             args: ''
+            target_triple: ''
             artifact_name: 'ShakeDown_Launcher.exe'
             asset_name: 'ShakeDown-Launcher-windows.exe'
 
@@ -55,7 +59,7 @@ jobs:
     - name: Rust setup
       uses: dtolnay/rust-toolchain@stable
       with:
-        targets: ${{ matrix.platform == 'macos-latest' && (matrix.args == '--target aarch64-apple-darwin' && 'aarch64-apple-darwin' || 'x86_64-apple-darwin') || '' }}
+        targets: ${{ matrix.platform == 'macos-latest' && matrix.target_triple || '' }}
 
     - name: Rust cache
       uses: swatinem/rust-cache@v2
@@ -108,7 +112,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: ${{ matrix.asset_name }}
-        path: src-tauri/target/${{ matrix.args != '' && format('{0}/release/', matrix.args) || 'release/' }}${{ matrix.artifact_name }}
+        path: src-tauri/target/${{ matrix.target_triple != '' && format('{0}/release/bundle/{1}', matrix.target_triple, contains(matrix.target_triple, 'darwin') && 'dmg' || (contains(matrix.target_triple, 'windows') && 'nsis' || 'appimage')) || 'release/bundle/' }}${{ matrix.artifact_name }}
 
   release:
     if: startsWith(github.ref, 'refs/tags/')
