@@ -20,6 +20,7 @@ import {
   IconLogout,
 } from '../../components/Icons'
 import { WindowsIcon, MacIcon, LinuxIcon } from '../../components/icons/OSIcons'
+import { DOWNLOAD_LINKS } from '../../utils/constants'
 
 import '../../styles/dashboard/DashboardBase.css'
 import '../../styles/dashboard/DownloadButtons.css'
@@ -44,21 +45,30 @@ export default function DashboardPage() {
   } = useDashboard()
 
 
-  const handleDownloadLauncher = () => {
-    // Create a sample launcher download
-    const link = document.createElement('a')
-    link.href = '#' // Placeholder for actual download URL
-    link.download = 'launcher.exe'
-    link.click()
-    
-    // Show notification
-    setNotification({
-      message: t.dashboard.launcherDownloadStarted || 'Launcher download started...',
-      type: 'success'
-    })
-    
-    // Clear notification after 3 seconds
-    setTimeout(() => setNotification(null), 3000)
+  const handleDownloadLauncher = (platform: 'windows' | 'macos' | 'linux') => {
+    const downloadUrl = DOWNLOAD_LINKS[platform]
+    if (downloadUrl) {
+      const link = document.createElement('a')
+      link.href = downloadUrl
+      link.target = '_blank'
+      link.rel = 'noopener noreferrer'
+      link.click()
+      
+      // Show notification
+      setNotification({
+        message: `${platform.charAt(0).toUpperCase() + platform.slice(1)} ${t.dashboard.launcherDownloadStarted || 'download started...'}`,
+        type: 'success'
+      })
+      
+      // Clear notification after 3 seconds
+      setTimeout(() => setNotification(null), 3000)
+    } else {
+      setNotification({
+        message: `${platform.charAt(0).toUpperCase() + platform.slice(1)} download not available`,
+        type: 'error'
+      })
+      setTimeout(() => setNotification(null), 3000)
+    }
   }
 
   const handleLanguageChange = () => {
@@ -218,15 +228,15 @@ export default function DashboardPage() {
                 <div className="launcher-view">
                   {/* Download Buttons */}
                   <div className="download-buttons-grid">
-                    <button className="download-os-btn windows" onClick={handleDownloadLauncher}>
+                    <button className="download-os-btn windows" onClick={() => handleDownloadLauncher('windows')}>
                       <WindowsIcon size={20} />
                       <span>Windows</span>
                     </button>
-                    <button className="download-os-btn macos" onClick={() => setShowSoonModal(true)}>
+                    <button className="download-os-btn macos" onClick={() => handleDownloadLauncher('macos')}>
                       <MacIcon size={20} />
                       <span>macOS</span>
                     </button>
-                    <button className="download-os-btn linux" onClick={() => setShowSoonModal(true)}>
+                    <button className="download-os-btn linux" onClick={() => handleDownloadLauncher('linux')}>
                       <LinuxIcon size={20} />
                       <span>Linux</span>
                     </button>

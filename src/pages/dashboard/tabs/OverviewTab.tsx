@@ -6,7 +6,7 @@ interface Props {
   badge: { text: string; class: string }
   formatDate: (date: string) => string
   handleBuyClient: (productId?: string) => void
-  handleDownloadLauncher: () => void
+  handleDownloadLauncher: (platform: 'windows' | 'macos' | 'linux') => void
   setActiveTab: (tab: 'overview' | 'profile' | 'subscription' | 'settings') => void
   t: any
 }
@@ -76,7 +76,7 @@ export function OverviewTab({
             <span className="action-title">{t.dashboard.buyClient}</span>
           </button>
 
-          <button className="action-card" onClick={handleDownloadLauncher}>
+          <button className="action-card" onClick={() => handleDownloadLauncher('windows')}>
             <div className="action-icon">
               <IconDownload size={28} />
             </div>

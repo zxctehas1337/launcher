@@ -10,7 +10,9 @@ export const CLIENT_INFO = {
 
 // Ссылки на скачивание лаунчера
 export const DOWNLOAD_LINKS = {
-  launcher: 'https://www.dropbox.com/scl/fi/kba2qnxug1lr7r0893y6t/ShakeDown-Launcher_0.1.0_x64-setup.exe?rlkey=e84vj49yiiosi76w5dn7eldus&st=le42exs4&dl=1',
+  windows: 'https://drive.usercontent.google.com/download?id=1zn7RdiX3bUiXoD2cETzpgb2ugLMUk8Bf&export=download&authuser=0&confirm=t&uuid=94dbbdfa-6c50-4624-9708-639b6652a0b2&at=ANTm3cyzG46EBttP3QNamm2oHsYZ%3A1767207546351',
+  macos: 'https://drive.usercontent.google.com/download?id=1WXhkw2GFXUGazCNc1Gl7612OUItMlaTb&export=download&authuser=0&confirm=t&uuid=29df9e39-f2bb-4254-9d21-f21f9d3538f8&at=ANTm3cyh6uT_8nveubxS1xu6slG8%3A1767207185484',
+  linux: 'https://drive.usercontent.google.com/download?id=1vV9Wl48soTX1uZauEq1z_0ytYk1qzFN-&export=download&authuser=0',
 }
 
 // Социальные сети (заполнишь позже)
