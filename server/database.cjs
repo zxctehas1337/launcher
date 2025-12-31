@@ -3,10 +3,28 @@ const { Pool } = require('pg');
 // Singleton для connection pooling в serverless
 let pool;
 
+function getPgConfigFromDatabaseUrl(databaseUrl) {
+  if (!databaseUrl) {
+    return null;
+  }
+
+  const url = new URL(databaseUrl);
+  const database = url.pathname ? url.pathname.replace(/^\//, '') : '';
+
+  return {
+    host: url.hostname,
+    port: url.port ? Number(url.port) : undefined,
+    user: url.username ? decodeURIComponent(url.username) : undefined,
+    password: url.password ? decodeURIComponent(url.password) : undefined,
+    database,
+  };
+}
+
 function getPool() {
   if (!pool) {
+    const parsedConfig = getPgConfigFromDatabaseUrl(process.env.DATABASE_URL);
     pool = new Pool({
-      connectionString: process.env.DATABASE_URL,
+      ...(parsedConfig || { connectionString: process.env.DATABASE_URL }),
       ssl: { rejectUnauthorized: false },
       max: 1, // Reduce max connections for serverless
       idleTimeoutMillis: 10000, // Reduce idle timeout

@@ -7,7 +7,7 @@ import readline from 'readline';
 
 // Database connection configuration
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL || 'postgresql://nihmadev:PdRLZGRdUGylo6Q8qCW1B1sbaoXNwqmh@dpg-d4bp826uk2gs73de38qg-a.oregon-postgres.render.com/looser',
+  connectionString: process.env.DATABASE_URL,
   ssl: {
     rejectUnauthorized: false
   },

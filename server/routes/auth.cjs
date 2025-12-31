@@ -67,14 +67,20 @@ const passwordsMatch = async (user, inputPassword) => {
 router.post('/register', async (req, res) => {
   const { username, email, password } = req.body;
 
+  const client = await pool.connect();
+
   try {
-    const existingUser = await pool.query(
+    await client.query('BEGIN');
+
+    const existingUser = await client.query(
       'SELECT * FROM users WHERE username = $1 OR email = $2',
       [username, email]
     );
 
     if (existingUser.rows.length > 0) {
       const existing = existingUser.rows[0];
+      await client.query('ROLLBACK');
+
       if (existing.username === username) {
         return res.json({ success: false, message: 'Пользователь с таким логином уже существует' });
       }
@@ -88,7 +94,7 @@ router.post('/register', async (req, res) => {
 
     const hashedPassword = await hashPassword(password);
 
-    const result = await pool.query(
+    const result = await client.query(
       `INSERT INTO users (username, email, password, verification_code, verification_code_expires, email_verified) 
        VALUES ($1, $2, $3, $4, $5, false) 
        RETURNING id, username, email, subscription, registered_at, is_admin, is_banned, email_verified, settings`,
@@ -96,24 +102,34 @@ router.post('/register', async (req, res) => {
     );
 
     const user = mapUserFromDb(result.rows[0]);
+
     const emailSent = await sendVerificationEmail(email, username, verificationCode);
-    
-    if (emailSent) {
-      res.json({ 
-        success: true, 
-        message: 'Код подтверждения отправлен на email', 
-        requiresVerification: true,
-        data: user 
-      });
-    } else {
-      res.json({ 
-        success: false, 
+    if (!emailSent) {
+      await client.query('ROLLBACK');
+      return res.json({
+        success: false,
         message: 'Ошибка отправки кода. Попробуйте позже.'
       });
     }
+
+    await client.query('COMMIT');
+
+    return res.json({
+      success: true,
+      message: 'Код подтверждения отправлен на email',
+      requiresVerification: true,
+      data: user
+    });
   } catch (error) {
+    try {
+      await client.query('ROLLBACK');
+    } catch (rollbackError) {
+      // ignore rollback errors
+    }
     console.error('Registration error:', error);
-    res.status(500).json({ success: false, message: 'Ошибка сервера' });
+    return res.status(500).json({ success: false, message: 'Ошибка сервера' });
+  } finally {
+    client.release();
   }
 });
 
