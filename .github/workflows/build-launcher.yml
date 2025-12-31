@@ -15,14 +15,14 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - platform: 'macos-latest'
-            args: '--target aarch64-apple-darwin'
-            artifact_name: 'ShakeDown_Launcher_aarch64.dmg'
-            asset_name: 'ShakeDown-Launcher-macOS-arm64.dmg'
           - platform: 'macos-latest' 
             args: '--target x86_64-apple-darwin'
             artifact_name: 'ShakeDown_Launcher_x86_64.dmg'
             asset_name: 'ShakeDown-Launcher-macOS-x64.dmg'
+          - platform: 'macos-latest'
+            args: '--target aarch64-apple-darwin'
+            artifact_name: 'ShakeDown_Launcher_aarch64.dmg'
+            asset_name: 'ShakeDown-Launcher-macOS-arm64.dmg'
           - platform: 'ubuntu-22.04'
             args: ''
             artifact_name: 'ShakeDown_Launcher.AppImage'
