@@ -1,6 +1,6 @@
 use serde::Deserialize;
 use sha2::{Sha256, Digest};
-use wmi::{COMLibrary, WMIConnection, error::WMIError};
+use wmi::{COMLibrary, WMIConnection};
 
 #[derive(Deserialize, Debug)]
 #[serde(rename_all = "PascalCase")]
