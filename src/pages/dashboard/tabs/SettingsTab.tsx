@@ -1,14 +1,14 @@
-import { User } from '../../../types'
 import { useState } from 'react'
 import '../../../styles/dashboard/Settings.css'
+import { User } from '../../../types'
 
-interface Props {
+interface SettingsTabProps {
   user: User
   formatDate: (date: string) => string
   t: any
 }
 
-export function SettingsTab({ user, formatDate: _formatDate, t }: Props) {
+export function SettingsTab({ user: _user, formatDate: _formatDate, t }: SettingsTabProps) {
   const [friendUsername, setFriendUsername] = useState('')
 
   const handleAddFriend = () => {

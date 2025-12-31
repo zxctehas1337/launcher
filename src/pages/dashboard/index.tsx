@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect } from 'react'
 import Notification from '../../components/Notification'
 import { LogoutModal } from '../../components/LogoutModal'
 import { SoonModal } from '../../components/SoonModal'
