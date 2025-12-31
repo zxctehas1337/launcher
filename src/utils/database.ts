@@ -71,7 +71,8 @@ export class Database {
         notifications: true,
         autoUpdate: true,
         theme: 'dark',
-        language: 'ru'
+        language: 'ru',
+        snowEnabled: true
       }
     }
 
@@ -97,7 +98,8 @@ export class Database {
           notifications: true,
           autoUpdate: true,
           theme: 'dark',
-          language: 'ru'
+          language: 'ru',
+          snowEnabled: true
         }
       }
       return { success: true, message: 'Добро пожаловать, администратор!', user: adminUser }

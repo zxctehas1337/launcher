@@ -151,7 +151,6 @@ export const ruTranslations: TranslationStructure = {
     addFriendDesc: 'Введите имя друга для добавления',
     send: 'Отправить',
     theme: 'Тема',
-    themeDesc: 'Выберите предпочитаемую тему',
     dark: 'Тёмная',
     light: 'Светлая',
     auto: 'Авто',
@@ -220,9 +219,6 @@ export const ruTranslations: TranslationStructure = {
     accountCreated: 'Аккаунт создан!',
     codeSent: 'Код подтверждения отправлен на email',
     incorrectPassword: 'Неверный пароль для этого аккаунта',
-    googleLoginError: 'Ошибка входа через Google',
-    yandexLoginError: 'Ошибка входа через Yandex',
-    githubLoginError: 'Ошибка входа через GitHub',
     loginError: 'Ошибка при входе',
     loginSuccessMessage: 'Вход выполнен успешно!'
   },

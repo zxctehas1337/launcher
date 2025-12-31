@@ -144,12 +144,10 @@ export const enTranslations: TranslationStructure = {
     addFriendDesc: 'Enter friend username to add',
     send: 'Send',
     theme: 'Theme',
-    themeDesc: 'Choose your preferred theme',
     dark: 'Dark',
     light: 'Light',
     auto: 'Auto',
     snowEffect: 'Snow Effect',
-    snowEffectDesc: 'Toggle snow animation',
     enterFriendUsername: 'Enter friend username...'
   },
   payment: {
@@ -212,9 +210,6 @@ export const enTranslations: TranslationStructure = {
     accountCreated: 'Account created!',
     codeSent: 'Verification code sent to email',
     incorrectPassword: 'Incorrect password for this account',
-    googleLoginError: 'Google login failed',
-    yandexLoginError: 'Yandex login failed',
-    githubLoginError: 'GitHub login failed',
     loginError: 'Login error',
     loginSuccessMessage: 'Login successful!'
   },

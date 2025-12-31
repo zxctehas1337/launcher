@@ -147,12 +147,10 @@ export interface TranslationStructure {
     addFriendDesc: string
     send: string
     theme: string
-    themeDesc: string
     dark: string
     light: string
     auto: string
     snowEffect: string
-    snowEffectDesc: string
     enterFriendUsername: string
   }
   payment: {
@@ -215,9 +213,6 @@ export interface TranslationStructure {
     accountCreated: string
     codeSent: string
     incorrectPassword: string,
-    googleLoginError: string,
-    yandexLoginError: string,
-    githubLoginError: string,
     loginError: string,
     loginSuccessMessage: string
   }

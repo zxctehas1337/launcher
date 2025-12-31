@@ -1,5 +1,5 @@
 import { User } from '../../../types'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import '../../../styles/dashboard/Settings.css'
 
 interface Props {
@@ -8,7 +8,7 @@ interface Props {
   t: any
 }
 
-export function SettingsTab({ user, formatDate, t }: Props) {
+export function SettingsTab({ user: _user, formatDate: _formatDate, t }: Props) {
   const [friendUsername, setFriendUsername] = useState('')
 
   const handleAddFriend = () => {
