@@ -3,12 +3,8 @@ name: Build Launcher
 on:
   push:
     branches: [ master ]
-    paths:
-      - 'launcher/**'
   pull_request:
     branches: [ master ]
-    paths:
-      - 'launcher/**'
   workflow_dispatch:
 
 jobs:
@@ -55,18 +51,17 @@ jobs:
     - name: Rust cache
       uses: swatinem/rust-cache@v2
       with:
-        workspaces: launcher/src-tauri
+        workspaces: src-tauri
 
     - name: Sync node version and setup cache
       uses: actions/setup-node@v4
       with:
         node-version: 'lts/*'
         cache: 'npm'
-        cache-dependency-path: 'launcher/package-lock.json'
+        cache-dependency-path: 'package-lock.json'
 
     - name: Install frontend dependencies
       run: npm install
-      working-directory: launcher
 
     - name: Build the app
       uses: tauri-apps/tauri-action@v0
@@ -74,14 +69,14 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tauriScript: npm run tauri
-        projectPath: launcher
+        projectPath: .
         args: ${{ matrix.args }}
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
         name: ${{ matrix.asset_name }}
-        path: launcher/src-tauri/target/${{ matrix.args != '' && format('{0}/release/', matrix.args) || 'release/' }}${{ matrix.artifact_name }}
+        path: src-tauri/target/${{ matrix.args != '' && format('{0}/release/', matrix.args) || 'release/' }}${{ matrix.artifact_name }}
 
   release:
     if: startsWith(github.ref, 'refs/tags/')
