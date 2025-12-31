@@ -17,5 +17,5 @@ set current_date=%year%-%month%-%day%
 :: Git команды
 git add .
 git commit -m "Update: %current_date%"
-git push origin main --force
+git push origin master
 echo Successfully pushed with date: %current_date%
