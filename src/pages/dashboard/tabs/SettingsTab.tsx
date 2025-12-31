@@ -8,7 +8,7 @@ interface Props {
   t: any
 }
 
-export function SettingsTab({ user: _user, formatDate: _formatDate, t }: Props) {
+export function SettingsTab({ user, formatDate: _formatDate, t }: Props) {
   const [friendUsername, setFriendUsername] = useState('')
 
   const handleAddFriend = () => {
@@ -17,6 +17,7 @@ export function SettingsTab({ user: _user, formatDate: _formatDate, t }: Props) 
     console.log('Adding friend:', friendUsername)
     setFriendUsername('')
   }
+
 
   return (
     <div className="dashboard-content">
@@ -34,8 +35,16 @@ export function SettingsTab({ user: _user, formatDate: _formatDate, t }: Props) 
               onChange={(e) => setFriendUsername(e.target.value)}
             />
             <button className="setting-btn" onClick={handleAddFriend}>
-              {t.dashboard?.send || 'Send'}
+              <img src="/send-mail.png" alt="Send" className="send-icon" />
             </button>
+            <img 
+              src="/12.png" 
+              alt="Friend" 
+              className="friend-avatar"
+              draggable={false}
+              onContextMenu={(e) => e.preventDefault()}
+              onDragStart={(e) => e.preventDefault()}
+            />
           </div>
         </div>
       </div>

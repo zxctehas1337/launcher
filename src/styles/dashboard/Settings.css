@@ -47,6 +47,12 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.04);
 }
 
+.setting-item:has(.friend-add-group) {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+}
+
 .setting-item:last-child {
   border-bottom: none;
   padding-bottom: 0;
@@ -73,17 +79,35 @@
   background: rgba(255, 140, 0, 0.1);
   border: 1px solid rgba(255, 140, 0, 0.3);
   color: #ff8c00;
-  padding: 8px 16px;
+  padding: 8px 32px;
   border-radius: 8px;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
+  min-width: 180px;
+  flex: 1;
 }
 
 .setting-btn:hover {
   background: rgba(255, 140, 0, 0.2);
   border-color: rgba(255, 140, 0, 0.5);
+}
+
+.setting-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.setting-btn.danger {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #ef4444;
+}
+
+.setting-btn.danger:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.5);
 }
 
 .setting-select {
@@ -182,7 +206,31 @@ input:checked+.toggle-slider:before {
 .friend-add-group {
   display: flex;
   gap: 8px;
-  align-items: center;
+  align-items: flex-start;
+  position: relative;
+}
+
+.send-icon {
+  width: 16px;
+  height: 16px;
+  filter: brightness(0) invert(1);
+}
+
+.friend-avatar {
+  position: absolute;
+  right: 8px;
+  top: -100px;
+  height: 150px;
+  width: 100px;
+  object-fit: contain;
+  z-index: 1;
+}
+
+.friend-add-group .setting-btn {
+  min-width: auto;
+  flex: 0;
+  padding: 8px 28px;
+  width: auto;
 }
 
 .friend-input {
@@ -192,7 +240,9 @@ input:checked+.toggle-slider:before {
   padding: 8px 12px;
   border-radius: 8px;
   font-size: 14px;
-  width: 200px;
+  flex: 1.5;
+  min-width: 250px;
+  max-width: 550px;
   transition: all 0.2s ease;
 }
 
@@ -225,8 +275,10 @@ input:checked+.toggle-slider:before {
   }
 
   .friend-input {
-    flex: 1;
+    flex: 1.5;
     width: auto;
+    min-width: 200px;
+    max-width: 300px;
   }
 }
 
@@ -300,4 +352,18 @@ input:checked+.toggle-slider:before {
 [data-theme="light"] .setting-btn:hover {
   background: var(--orange-500);
   color: #ffffff;
+}
+
+[data-theme="light"] .send-icon {
+  filter: none;
+}
+
+.setting-description {
+  font-size: 12px !important;
+  color: rgba(255, 255, 255, 0.5) !important;
+  margin-top: 4px !important;
+}
+
+[data-theme="light"] .setting-description {
+  color: var(--text-tertiary) !important;
 }

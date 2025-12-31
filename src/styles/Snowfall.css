@@ -31,6 +31,12 @@
   will-change: transform;
 }
 
+/* Light theme - make snow visible with light blue color */
+[data-theme="light"] .snowfall__flakeInner {
+  background: rgba(173, 216, 230, 0.8);
+  box-shadow: 0 0 6px rgba(173, 216, 230, 0.3);
+}
+
 @keyframes snowfall-fall {
   from {
     transform: translate3d(-30vw, -10vh, 0);

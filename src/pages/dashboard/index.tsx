@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import Notification from '../../components/Notification'
 import { LogoutModal } from '../../components/LogoutModal'
 import { SoonModal } from '../../components/SoonModal'
@@ -21,7 +21,7 @@ import {
   IconDownload,
   IconCpu,
   IconRam,
-  IconWindows
+  IconWindows,
 } from '../../components/Icons'
 
 import '../../styles/dashboard/DashboardBase.css'
@@ -44,6 +44,7 @@ export default function DashboardPage() {
     handleActivateKey,
     formatDate,
   } = useDashboard()
+
 
   const handleDownloadLauncher = () => {
     // Create a sample launcher download

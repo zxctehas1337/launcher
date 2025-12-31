@@ -48,3 +48,11 @@ export const IconTarget: React.FC<IconProps> = ({ size = 20, className }) => (
         <circle cx="12" cy="12" r="10" /><circle cx="12" cy="12" r="6" /><circle cx="12" cy="12" r="2" />
     </svg>
 )
+
+export const IconSend: React.FC<IconProps> = ({ size = 20, className }) => (
+    <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+        <polyline points="17 8 21 12 17 16" />
+        <line x1="3" y1="12" x2="21" y2="12" />
+    </svg>
+)
