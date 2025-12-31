@@ -1,0 +1,181 @@
+/* Language Selector */
+
+.language-selector {
+  position: relative;
+}
+
+/* Стили для контейнера в сайдбаре */
+.sidebar-language-selector .language-selector {
+  position: relative;
+  width: 100%;
+}
+
+.lang-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #ffffff;
+  pointer-events: auto;
+}
+
+.lang-toggle:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(59, 130, 246, 0.5);
+}
+
+.lang-flag {
+  font-size: 1.25rem;
+}
+
+.lang-code {
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* Меню языков */
+.lang-menu {
+  position: absolute;
+  right: 0;
+  background: rgba(15, 15, 25, 0.98);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 0.5rem;
+  min-width: 180px;
+  z-index: 1000;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* Меню открывается вверх */
+.lang-menu-up {
+  bottom: calc(100% + 0.75rem);
+  animation: menuSlideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Меню открывается вниз */
+.lang-menu-down {
+  top: calc(100% + 0.75rem);
+  animation: menuSlideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Меню для мобильного сайдбара - прямо под кнопкой */
+.lang-menu-sidebar-mobile {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0 !important;
+  right: 0 !important;
+  width: auto !important;
+  min-width: auto;
+  margin: 0;
+  animation: menuSlideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1001;
+}
+
+/* Улучшение для мобильных устройств */
+@media (max-width: 768px) {
+  .lang-menu-sidebar-mobile {
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  }
+  
+  .lang-menu-sidebar-mobile .lang-option {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.85rem;
+  }
+  
+  .lang-menu-sidebar-mobile .lang-flag {
+    font-size: 1.1rem;
+  }
+  
+  .lang-menu-sidebar-mobile .lang-name {
+    font-size: 0.85rem;
+  }
+}
+
+@keyframes menuSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes menuSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes menuSlideRight {
+  from {
+    opacity: 0;
+    transform: translateX(-10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+.lang-option {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.85rem 1rem;
+  background: transparent;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #ffffff;
+  text-align: left;
+}
+
+.lang-option:hover {
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.lang-option.active {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.lang-name {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .lang-toggle {
+    padding: 0.5rem 0.75rem;
+  }
+
+  /* Keep lang-code visible in sidebar on mobile */
+  .sidebar-language-selector .lang-code {
+    display: inline;
+  }
+
+  /* Hide lang-code only when not in sidebar */
+  .lang-toggle:not(.sidebar-language-selector .lang-toggle) .lang-code {
+    display: none;
+  }
+}

@@ -1,0 +1,196 @@
+/* Admin Keys - Key Generator & Keys Table */
+
+/* Key Generator */
+.key-generator-card {
+    background: var(--bg-secondary);
+    border: 1px solid rgba(138, 75, 255, 0.2);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.key-generator-card h3 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 24px;
+    color: var(--purple-500);
+}
+
+.generator-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Keys Stats */
+.keys-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.key-stat-card {
+    background: var(--bg-secondary);
+    border: 1px solid rgba(138, 75, 255, 0.2);
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: all 0.3s;
+}
+
+.key-stat-card:hover {
+    border-color: var(--purple-500);
+    transform: translateY(-2px);
+}
+
+.key-stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.key-stat-icon.total {
+    background: rgba(138, 75, 255, 0.2);
+    color: var(--purple-500);
+}
+
+.key-stat-icon.available {
+    background: rgba(50, 200, 100, 0.2);
+    color: #32C864;
+}
+
+.key-stat-icon.used {
+    background: rgba(255, 77, 77, 0.2);
+    color: #FF4D4D;
+}
+
+.key-stat-info {
+    flex: 1;
+}
+
+.key-stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 4px;
+}
+
+.key-stat-label {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+/* Keys List */
+.keys-list {
+    background: var(--bg-secondary);
+    border: 1px solid rgba(138, 75, 255, 0.2);
+    border-radius: 16px;
+    padding: 24px;
+}
+
+.keys-list h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.keys-table {
+    overflow-x: auto;
+}
+
+.keys-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.keys-table thead {
+    background: rgba(18, 18, 26, 0.8);
+}
+
+.keys-table th {
+    padding: 14px 16px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    border-bottom: 1px solid rgba(138, 75, 255, 0.2);
+}
+
+.keys-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.keys-table tr:last-child td {
+    border-bottom: none;
+}
+
+.keys-table tr:hover {
+    background: rgba(138, 75, 255, 0.05);
+}
+
+.keys-table tr.used {
+    opacity: 0.6;
+}
+
+.key-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.key-code {
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 13px;
+    padding: 6px 10px;
+    background: rgba(18, 18, 26, 0.8);
+    border: 1px solid rgba(138, 75, 255, 0.2);
+    border-radius: 6px;
+    color: var(--purple-400);
+    letter-spacing: 0.5px;
+}
+
+/* Product Badges */
+.product-badge {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.product-badge.purple {
+    background: rgba(138, 75, 255, 0.2);
+    color: var(--purple-500);
+}
+
+.product-badge.pink {
+    background: rgba(255, 107, 157, 0.2);
+    color: var(--pink-500);
+}
+
+.product-badge.blue {
+    background: rgba(59, 130, 246, 0.2);
+    color: #3B82F6;
+}
+
+.product-badge.orange {
+    background: rgba(255, 184, 77, 0.2);
+    color: #FFB84D;
+}
+
+.product-badge.green {
+    background: rgba(50, 200, 100, 0.2);
+    color: #32C864;
+}

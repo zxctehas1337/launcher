@@ -1,0 +1,113 @@
+/* Auth Toggle Switch */
+.auth-toggle-container {
+    margin-bottom: 20px;
+}
+
+.auth-toggle-switch {
+    display: flex;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 4px;
+    position: relative;
+}
+
+.toggle-option {
+    flex: 1;
+    padding: 10px 16px;
+    background: none;
+    border: none;
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    z-index: 2;
+}
+
+.toggle-option.active {
+    color: white;
+    background: rgba(255, 140, 0, 0.2);
+    box-shadow: 0 2px 8px rgba(255, 140, 0, 0.3);
+}
+
+.toggle-option:hover:not(.active) {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Form Elements */
+.form-group-clean {
+    margin-bottom: 12px;
+}
+
+.form-group-clean label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 8px;
+}
+
+.input-clean {
+    width: 100%;
+    padding: 12px 14px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    color: white;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.input-clean:focus {
+    outline: none;
+    border-color: #ff8c00;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 0 4px rgba(255, 140, 0, 0.1);
+}
+
+.btn-primary-clean {
+    width: 100%;
+    padding: 14px;
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 6px;
+}
+
+.btn-primary-clean:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.25);
+    color: white;
+}
+
+.btn-text-only {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 14px;
+    cursor: pointer;
+    width: 100%;
+    padding: 8px;
+    transition: color 0.2s;
+}
+
+.btn-text-only:hover {
+    color: #ff8c00;
+}
+
+@media (hover: none) {
+
+    .btn-primary-clean:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.15);
+    }
+}

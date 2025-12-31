@@ -1,0 +1,301 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg-primary: #000000;
+    --bg-secondary: #080808;
+    --bg-tertiary: #101010;
+    --orange-500: #FF8C00;
+    --orange-600: #E67E00;
+    --orange-400: #FFA500;
+    --purple-500: #FF8C00;
+    /* Редирект старых переменных на оранжевый */
+    --purple-600: #E67E00;
+    --pink-500: #FFB347;
+    --text-primary: #FFFFFF;
+    --text-secondary: #A1A1AA;
+    --text-tertiary: #71717A;
+}
+
+/* Принудительно делаем светлую тему темной, но с оранжевыми акцентами */
+[data-theme="light"] {
+    --bg-primary: #F9FAFB;
+    --bg-secondary: #FFFFFF;
+    --bg-tertiary: #F3F4F6;
+    --text-primary: #111827;
+    --text-secondary: #4B5563;
+    --text-tertiary: #9CA3AF;
+}
+
+[data-theme="light"] body {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+/* Обновляем фон для всех страниц */
+.home-page,
+.dashboard-page,
+.auth-page {
+    background: var(--bg-primary);
+}
+
+[data-theme="light"] .home-page,
+[data-theme="light"] .dashboard-page,
+[data-theme="light"] .auth-page {
+    background: var(--bg-primary);
+}
+
+.navbar,
+.dashboard-navbar {
+    background: rgba(0, 0, 0, 0.8) !important;
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 140, 0, 0.1) !important;
+}
+
+[data-theme="light"] .navbar,
+[data-theme="light"] .dashboard-navbar {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+.nav-link,
+.nav-btn {
+    color: #A1A1AA !important;
+}
+
+.nav-link:hover,
+.nav-btn:hover {
+    color: #FF8C00 !important;
+}
+
+.profile-section,
+.actions-section,
+.product-card,
+.stat-card,
+.profile-field,
+.feature-item {
+    background: rgba(255, 140, 0, 0.03) !important;
+    border: 1px solid rgba(255, 140, 0, 0.1) !important;
+}
+
+.profile-section:hover,
+.product-card:hover,
+.stat-card:hover,
+.profile-field:hover,
+.feature-item:hover {
+    background: rgba(255, 140, 0, 0.05) !important;
+    border-color: rgba(255, 140, 0, 0.4) !important;
+    box-shadow: 0 0 20px rgba(255, 140, 0, 0.1);
+}
+
+.section-title,
+.hero-title,
+.product-name,
+.field-value {
+    color: #FFFFFF !important;
+}
+
+.hero-subtitle,
+.about-text,
+.product-description,
+.field-label {
+    color: #A1A1AA !important;
+}
+
+.footer {
+    background: var(--bg-primary) !important;
+    border-top: 1px solid rgba(255, 140, 0, 0.1) !important;
+}
+
+[data-theme="light"] .footer {
+    background: var(--bg-secondary) !important;
+    border-top-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+.footer-links a,
+.footer-social a {
+    color: #9CA3AF !important;
+}
+
+[data-theme="light"] .footer-links a,
+[data-theme="light"] .footer-social a {
+    color: var(--text-secondary) !important;
+}
+
+.footer-links a:hover,
+.footer-social a:hover {
+    color: #FF8C00 !important;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    overflow-x: hidden;
+    line-height: 1.6;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Плавный скролл */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Кастомный скроллбар */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #000000;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #FF8C00 0%, #FF4500 100%);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #FFA500 0%, #FF8C00 100%);
+}
+
+[data-theme="light"] ::-webkit-scrollbar-track {
+    background: #F3F4F6;
+}
+
+/* Выделение текста */
+::selection {
+    background: rgba(255, 140, 0, 0.3);
+    color: #ffffff;
+}
+
+[data-theme="light"] ::selection {
+    background: rgba(255, 140, 0, 0.2);
+    color: #000000;
+}
+
+.no-user-drag {
+    user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-touch-callout: none;
+}
+
+/* Фокус для доступности */
+:focus-visible {
+    outline: 2px solid #FF8C00;
+    outline-offset: 2px;
+}
+
+/* Анимация загрузки страницы */
+@keyframes pageLoad {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+body {
+    animation: pageLoad 0.5s ease;
+}
+
+/* Утилиты для анимаций */
+.animate-spin {
+    animation: spin 2s linear infinite;
+}
+
+/* ========================================
+   NAVIGATION ICONS FIX
+   ======================================== */
+
+/* Fix for navigation icons color across all pages */
+.nav-icon-btn {
+  color: var(--text-primary) !important;
+}
+
+.nav-icon-btn svg {
+  color: inherit !important;
+}
+
+/* Ensure sun and moon icons are always visible - MOST SPECIFIC RULES */
+.nav-icon-btn svg.IconSun,
+.nav-icon-btn svg.IconMoon {
+  color: var(--text-primary) !important;
+  fill: none !important;
+  stroke: currentColor !important;
+}
+
+/* Dark theme specific - WHITE ICONS */
+[data-theme="dark"] .nav-icon-btn {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .nav-icon-btn svg.IconSun,
+[data-theme="dark"] .nav-icon-btn svg.IconMoon {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+/* Light theme specific - DARK ICONS */
+[data-theme="light"] .nav-icon-btn {
+  color: #111827 !important;
+}
+
+[data-theme="light"] .nav-icon-btn svg.IconSun,
+[data-theme="light"] .nav-icon-btn svg.IconMoon {
+  color: #111827 !important;
+  stroke: #111827 !important;
+}
+
+/* Hover states - ORANGE */
+.nav-icon-btn:hover {
+  color: #FF8C00 !important;
+}
+
+.nav-icon-btn:hover svg.IconSun,
+.nav-icon-btn:hover svg.IconMoon {
+  color: #FF8C00 !important;
+  stroke: #FF8C00 !important;
+}
+
+/* Override any conflicting rules */
+.nav-link,
+.nav-btn {
+  color: #A1A1AA !important;
+}
+
+.nav-link:hover,
+.nav-btn:hover {
+  color: #FF8C00 !important;
+}
+
+/* ========================================
+   HOME PAGE SPECIFIC - MOON ICON ALWAYS WHITE
+   ======================================== */
+
+/* Force moon icon to be always white on home page */
+.home-page .nav-icon-btn svg.IconMoon {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+/* Even on light theme, moon icon stays white on home page */
+[data-theme="light"] .home-page .nav-icon-btn svg.IconMoon {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+/* Hover state for moon icon on home page - still orange */
+.home-page .nav-icon-btn:hover svg.IconMoon {
+  color: #FF8C00 !important;
+  stroke: #FF8C00 !important;
+}

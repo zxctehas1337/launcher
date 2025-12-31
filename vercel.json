@@ -1,0 +1,32 @@
+{
+  "outputDirectory": "dist",
+  "rewrites": [
+    { "source": "/api/auth/login", "destination": "/api/auth?action=login" },
+    { "source": "/api/auth/register", "destination": "/api/auth?action=register" },
+    { "source": "/api/auth/resend-code", "destination": "/api/auth?action=resend-code" },
+    { "source": "/api/auth/verify-code", "destination": "/api/auth?action=verify-code" },
+    { "source": "/api/users/:id", "destination": "/api/users?id=:id" },
+    { "source": "/api/auth/github", "destination": "/api/oauth?provider=github" },
+    { "source": "/api/auth/github/callback", "destination": "/api/oauth?provider=github&action=callback" },
+    { "source": "/api/auth/google", "destination": "/api/oauth?provider=google" },
+    { "source": "/api/auth/google/callback", "destination": "/api/oauth?provider=google&action=callback" },
+    { "source": "/api/auth/yandex", "destination": "/api/oauth?provider=yandex" },
+    { "source": "/api/auth/yandex/callback", "destination": "/api/oauth?provider=yandex&action=callback" },
+    { "source": "/api/hwid/set", "destination": "/api/hwid?action=set" },
+    { "source": "/api/hwid/reset", "destination": "/api/hwid?action=reset" },
+    { "source": "/api/hwid/verify", "destination": "/api/hwid?action=verify" },
+    { "source": "/api/hwid/:userId", "destination": "/api/hwid?action=get&userId=:userId" },
+    { "source": "/api/products/:id", "destination": "/api/products?id=:id" },
+    { "source": "/api/versions/:id", "destination": "/api/versions?id=:id" },
+    { "source": "/api/(.*)", "destination": "/api/$1" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-cache" }
+      ]
+    }
+  ]
+}

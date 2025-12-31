@@ -1,0 +1,32 @@
+.pixel-background-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 95%;
+    max-width: 1200px;
+    height: 600px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.pixel-background-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .pixel-background-container {
+        width: 98%;
+        height: 500px;
+    }
+}
+
+@media (max-width: 480px) {
+    .pixel-background-container {
+        width: 100%;
+        height: 450px;
+    }
+}

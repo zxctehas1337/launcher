@@ -1,0 +1,103 @@
+/* Auth Page Layout */
+.auth-fullscreen {
+    background: #0f0f13;
+    min-height: 100vh;
+}
+
+.auth-page-centered {
+    display: flex;
+    min-height: 100vh;
+    max-width: 100%;
+    width: 100%;
+    background: transparent;
+    overflow-y: auto;
+    position: relative;
+    margin: 0 auto;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 24px 24px;
+    box-sizing: border-box;
+}
+
+/* Left Panel - Slider */
+.auth-left-panel {
+    flex: 1;
+    background: #12121a;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    overflow: hidden;
+}
+
+.auth-left-panel::before {
+    display: none;
+}
+
+/* Right Panel - Form */
+.auth-right-panel {
+    flex: 1;
+    background: #0f0f13;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    position: relative;
+}
+
+.auth-box-clean {
+    width: 100%;
+    max-width: 380px;
+    animation: fadeIn 0.8s ease-out;
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.auth-logo-small {
+    margin-bottom: -60px;
+}
+
+.auth-logo-small .logoWithHat__logo {
+}
+
+.auth-title-clean h2 {
+    font-size: 24px;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 6px;
+}
+
+.auth-title-clean p {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 14px;
+}
+
+.auth-footer-clean {
+    margin-top: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.back-link-clean {
+    color: rgba(255, 255, 255, 0.5);
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.2s;
+}
+
+.back-link-clean:hover {
+    color: white;
+}
+
+.version-tag {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.3);
+    font-family: monospace;
+}

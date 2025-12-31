@@ -1,0 +1,103 @@
+/* ========================================
+   ПРЕИМУЩЕСТВА
+   ======================================== */
+.features-section {
+  padding: 0;
+  background: #000000;
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid rgba(255, 140, 0, 0.1);
+  border-bottom: 1px solid rgba(255, 140, 0, 0.1);
+}
+
+.features-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.features-header {
+  padding: 2rem 2rem 1.5rem;
+  text-align: center;
+}
+
+.features-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 0.75rem;
+  background: linear-gradient(135deg, #ffffff 0%, #ff8c00 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.features-subtitle {
+  font-size: 0.875rem;
+  color: #6b7280;
+  line-height: 1.6;
+}
+
+/* Сетка 4x2 */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  overflow: visible;
+  border-top: 1px solid rgba(255, 140, 0, 0.1);
+}
+
+.feature-card {
+  padding: 1.5rem;
+  background: transparent;
+  transition: all 0.3s ease;
+  border-right: 1px solid rgba(255, 140, 0, 0.1);
+}
+
+.feature-card:nth-child(4n) {
+  border-right: none;
+}
+
+.feature-card:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* Второй ряд карточек */
+.features-grid .feature-card:nth-child(n+5) {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.feature-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.feature-card:hover .feature-card-icon {
+  color: #ff8c00;
+  transform: scale(1.1);
+}
+
+.feature-card-icon {
+  font-size: 1rem;
+  color: #ffffff;
+  opacity: 0.9;
+  transition: all 0.3s ease;
+}
+
+.feature-card-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.feature-card-desc {
+  font-size: 0.85rem;
+  color: #6b7280;
+  line-height: 1.5;
+  margin: 0;
+}

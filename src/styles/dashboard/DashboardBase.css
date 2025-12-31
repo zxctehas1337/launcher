@@ -1,0 +1,732 @@
+/* ========================================
+   New Dashboard Design
+   ======================================== */
+
+.new-dashboard {
+  min-height: 100vh;
+  background: #000000;
+  color: #ffffff;
+  padding: 160px 20px 60px;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+}
+
+.dashboard-wrapper {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 20px;
+  width: 100%;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 600px 1fr;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+/* Glass Card Foundation */
+.glass-card {
+  background: rgba(13, 13, 13, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 24px;
+  backdrop-filter: blur(24px);
+  padding: 24px;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.glass-card:hover {
+  border-color: rgba(255, 140, 0, 0.2);
+  transform: translateY(-2px);
+  background: rgba(25, 25, 25, 0.85);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* Left Column */
+.dashboard-left {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  width: 100%;
+}
+
+.profile-info-card {
+  min-height: 140px;
+}
+
+.profile-info-card .profile-main {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+}
+
+.profile-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(255, 140, 0, 0.08);
+  border: 1px solid rgba(255, 140, 0, 0.15);
+  box-shadow: 0 0 16px rgba(255, 140, 0, 0.08);
+}
+
+.profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-text h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #ff8c00;
+}
+
+.profile-uid {
+  font-size: 14px;
+  color: #ffa500;
+  font-weight: 600;
+}
+
+.profile-text p {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.profile-logout-btn {
+  position: absolute;
+  right: 0px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #fff;
+  opacity: 0.4;
+  cursor: pointer;
+  transition: all 0.2s;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-logout-btn:hover {
+  opacity: 1;
+  color: #ff8c00;
+}
+
+.icon-dimmed {
+  color: #fff;
+}
+
+/* License Activation */
+.license-activation-card {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-height: 140px;
+  justify-content: center;
+}
+
+.card-label {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.4);
+  font-weight: 400;
+  margin-bottom: -10px;
+}
+
+.license-input-group {
+  display: flex;
+  gap: 16px;
+  align-items: stretch;
+  width: 100%;
+  height: 60px;
+}
+
+.input-with-icon {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-with-icon svg {
+  position: absolute;
+  left: 20px;
+  color: rgba(255, 255, 255, 0.4);
+  width: 18px;
+  height: 18px;
+}
+
+.input-with-icon input {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 18px 20px 18px 52px;
+  color: #fff;
+  font-size: 16px;
+  transition: all 0.2s;
+  height: 60px;
+  box-sizing: border-box;
+}
+
+.pink-btn {
+  flex: 0 0 160px;
+  background: #ff8c00;
+  color: #000;
+  border: none;
+  border-radius: 16px;
+  padding: 0 24px;
+  font-weight: 600;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  height: 54px;
+  box-sizing: border-box;
+}
+
+.pink-btn svg {
+  width: 16px;
+  height: 16px;
+  color: inherit;
+}
+
+.pink-btn:hover {
+  background: #ffa500;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255, 140, 0, 0.2);
+}
+
+/* Right Column */
+.dashboard-right {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  width: 100%;
+}
+
+.dashboard-nav {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  height: 54px;
+}
+
+.nav-tab {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 14px;
+  padding: 0 24px;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 500;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  height: 54px;
+}
+
+.nav-tab svg {
+  color: rgba(255, 255, 255, 0.6);
+  width: 18px;
+  height: 18px;
+}
+
+.nav-tab:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.nav-tab.active {
+  background: #ff8c00;
+  color: #000;
+  border-color: transparent;
+  font-weight: 600;
+}
+
+.nav-tab.active svg {
+  color: #000;
+}
+
+.tab-content-wrapper {
+  animation: fadeIn 0.4s ease;
+}
+
+.account-details-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.info-box {
+  flex: 1;
+  background: rgba(13, 13, 13, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  border-radius: 20px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  transition: all 0.2s ease;
+  min-height: 110px;
+  justify-content: center;
+}
+
+.info-box:hover {
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.info-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.35);
+  font-weight: 500;
+}
+
+.info-text {
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+/* System Information Cards Grid */
+.system-info-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.system-info-card-item {
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+}
+
+.system-info-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 500;
+}
+
+.system-info-header svg {
+  color: #ff8c00;
+  width: 20px;
+  height: 20px;
+}
+
+.system-info-card-item p {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+  line-height: 1.4;
+}
+
+/* Download Launcher Button */
+.download-launcher-btn {
+  width: 100%;
+  background: #ff8c00;
+  color: #000;
+  border: none;
+  border-radius: 16px;
+  padding: 24px;
+  font-weight: 600;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  cursor: pointer;
+  transition: all 0.3s;
+  min-height: 80px;
+}
+
+.download-launcher-btn svg {
+  width: 24px;
+  height: 24px;
+  color: inherit;
+}
+
+.download-launcher-btn:hover {
+  background: #ffa500;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 140, 0, 0.3);
+}
+
+/* Launcher View */
+.launcher-view {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.download-full-btn {
+  width: 100%;
+  background: rgba(255, 140, 0, 0.08);
+  border: 1px solid rgba(255, 140, 0, 0.15);
+  color: #ff8c00;
+  padding: 16px;
+  border-radius: 14px;
+  font-weight: 600;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.download-full-btn svg {
+  width: 18px;
+  height: 18px;
+  color: inherit;
+}
+
+.download-full-btn:hover {
+  background: rgba(255, 140, 0, 0.15);
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+/* Bottom Cards */
+.bottom-row-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.friends-box {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 32px 24px;
+  min-height: 140px;
+  justify-content: center;
+  position: relative;
+}
+
+.friends-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.friends-value {
+  font-size: 38px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.friends-arrow {
+  position: absolute;
+  right: 24px;
+  bottom: 24px;
+  color: #ff8c00;
+  opacity: 0.8;
+}
+
+.diagonal-soon-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.02);
+  position: relative;
+  overflow: hidden;
+  min-height: 140px;
+}
+
+.diagonal-soon-card::before {
+  content: '';
+  position: absolute;
+  width: 250%;
+  height: 48px;
+  background: rgba(0, 0, 0, 0.6);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  transform: rotate(-12deg);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.soon-diagonal-text {
+  font-size: 24px;
+  font-weight: 500;
+  color: #fff;
+  opacity: 0.9;
+  z-index: 1;
+}
+
+/* Badge Styles */
+.badge-text {
+  font-weight: 700;
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  text-transform: uppercase;
+}
+
+.badge-text.badge-free {
+  color: #aaa;
+}
+
+.badge-text.badge-premium {
+  color: #ff8c00;
+  text-shadow: 0 0 10px rgba(255, 140, 0, 0.5);
+}
+
+.badge-text.badge-alpha {
+  color: #ffa500;
+  text-shadow: 0 0 10px rgba(255, 165, 0, 0.5);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 1200px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .new-dashboard {
+    padding: 120px 15px;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .account-grid,
+  .bottom-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ========================================
+   LIGHT THEME OVERRIDES
+   ======================================== */
+
+[data-theme="light"] .new-dashboard {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  border-color: rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+}
+
+[data-theme="light"] .glass-card:hover {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(255, 140, 0, 0.4);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+}
+
+[data-theme="light"] .profile-text p,
+[data-theme="light"] .card-label,
+[data-theme="light"] .input-with-icon svg,
+[data-theme="light"] .info-header,
+[data-theme="light"] .system-info-header,
+[data-theme="light"] .friends-label {
+  color: var(--text-secondary);
+}
+
+[data-theme="light"] .profile-logout-btn {
+  color: var(--text-secondary);
+}
+
+[data-theme="light"] .profile-logout-btn:hover {
+  color: #ff8c00;
+}
+
+[data-theme="light"] .input-with-icon input {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.1);
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .nav-tab {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.05);
+  color: var(--text-secondary);
+}
+
+[data-theme="light"] .nav-tab svg {
+  color: var(--text-tertiary);
+}
+
+[data-theme="light"] .nav-tab:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .nav-tab.active {
+  background: #ff8c00;
+  color: #ffffff;
+}
+
+[data-theme="light"] .nav-tab.active svg {
+  color: #ffffff;
+}
+
+[data-theme="light"] .info-box {
+  background: rgba(255, 255, 255, 0.5);
+  border-color: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .info-text,
+[data-theme="light"] .system-info-card-item p,
+[data-theme="light"] .friends-value {
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .download-full-btn {
+  background: rgba(255, 140, 0, 0.05);
+  border-color: rgba(255, 140, 0, 0.2);
+}
+
+[data-theme="light"] .download-full-btn:hover {
+  background: #ff8c00;
+  color: #ffffff;
+}
+
+[data-theme="light"] .diagonal-soon-card {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+[data-theme="light"] .soon-diagonal-text {
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .profile-avatar {
+  background: rgba(255, 140, 0, 0.1);
+  border-color: rgba(255, 140, 0, 0.2);
+}
+
+/* ========================================
+   NAVIGATION ICONS FIX
+   ======================================== */
+
+/* Fix for navigation icons color on dashboard */
+.nav-icon-btn {
+  color: var(--text-primary) !important;
+}
+
+.nav-icon-btn svg {
+  color: inherit !important;
+}
+
+/* Ensure sun and moon icons are always visible - MOST SPECIFIC RULES */
+.nav-icon-btn svg.IconSun,
+.nav-icon-btn svg.IconMoon {
+  color: var(--text-primary) !important;
+  fill: none !important;
+  stroke: currentColor !important;
+}
+
+/* Dark theme specific - WHITE ICONS */
+[data-theme="dark"] .nav-icon-btn {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .nav-icon-btn svg.IconSun,
+[data-theme="dark"] .nav-icon-btn svg.IconMoon {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+/* Light theme specific - DARK ICONS */
+[data-theme="light"] .nav-icon-btn {
+  color: #111827 !important;
+}
+
+[data-theme="light"] .nav-icon-btn svg.IconSun,
+[data-theme="light"] .nav-icon-btn svg.IconMoon {
+  color: #111827 !important;
+  stroke: #111827 !important;
+}
+
+/* ========================================
+   MOON ICON ALWAYS WHITE - OVERWRITE LIGHT THEME
+   ======================================== */
+
+/* Force moon icon to be always white even in light theme */
+[data-theme="light"] .nav-icon-btn svg.IconMoon {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+/* Force moon icon to be always white even in dark theme */
+[data-theme="dark"] .nav-icon-btn svg.IconMoon {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+/* Hover states - ORANGE */
+.nav-icon-btn:hover {
+  color: #FF8C00 !important;
+}
+
+.nav-icon-btn:hover svg.IconSun {
+  color: #FF8C00 !important;
+  stroke: #FF8C00 !important;
+}
+
+/* Keep moon icon white even on hover */
+.nav-icon-btn:hover svg.IconMoon {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+/* ========================================
+   MOON ICON ALWAYS WHITE - OVERWRITE ALL THEMES
+   ======================================== */
+
+/* Force moon icon to be always white regardless of theme */
+.nav-icon-btn svg.IconMoon {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+/* Even on hover, keep moon icon white */
+.nav-icon-btn:hover svg.IconMoon {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}

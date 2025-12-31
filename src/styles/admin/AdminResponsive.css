@@ -1,0 +1,78 @@
+/* Admin Responsive - Media Queries */
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 48px 24px;
+    color: var(--text-tertiary);
+}
+
+.empty-state svg {
+    margin-bottom: 16px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .admin-sidebar {
+        width: 240px;
+    }
+    
+    .admin-main {
+        margin-left: 240px;
+    }
+    
+    .users-table {
+        overflow-x: auto;
+    }
+    
+    .users-table table {
+        min-width: 900px;
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-sidebar {
+        width: 80px;
+    }
+    
+    .admin-main {
+        margin-left: 80px;
+        padding: 16px;
+    }
+    
+    .admin-brand div {
+        display: none;
+    }
+    
+    .admin-nav-item span {
+        display: none;
+    }
+    
+    .admin-nav-item .badge {
+        display: none;
+    }
+    
+    .btn-logout span {
+        display: none;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .radio-group {
+        flex-direction: column;
+    }
+    
+    .keys-table table {
+        min-width: 700px;
+    }
+    
+    .keys-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+}
