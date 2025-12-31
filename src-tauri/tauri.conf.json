@@ -35,10 +35,7 @@
   },
   "plugins": {
     "updater": {
-      "active": true,
-      "endpoints": ["https://your-update-server.com/update"],
-      "dialog": true,
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDQ5MEM0MjNEMEE4NjY5RkUK"
+      "active": false
     }
   },
   "bundle": {
@@ -59,6 +56,6 @@
         "languages": ["English"]
       }
     },
-    "createUpdaterArtifacts": true
+    "createUpdaterArtifacts": false
   }
 }
