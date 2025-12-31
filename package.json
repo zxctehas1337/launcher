@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "vite --config vite.config.ts",
     "build": "tsc && vite build",
-    "postbuild": "node migrations/apply-migrations.js",
     "start": "vite preview",
     "preview": "vite preview",
     "test:email": "node server/scripts/test-email.js",
