@@ -31,11 +31,22 @@ export default async (req, res) => {
   if (id) {
     if (req.method === 'GET') {
       try {
-        const result = await pool.query(
-          `SELECT id, username, email, password, subscription, subscription_end_date, avatar, registered_at, is_admin, is_banned, email_verified, settings, hwid 
-           FROM users WHERE id = $1`,
-          [id]
-        );
+        let result;
+        try {
+          // Try to query with subscription_end_date
+          result = await pool.query(
+            `SELECT id, username, email, password, subscription, subscription_end_date, avatar, registered_at, is_admin, is_banned, email_verified, settings, hwid 
+             FROM users WHERE id = $1`,
+            [id]
+          );
+        } catch (columnError) {
+          // Fallback to query without subscription_end_date if column doesn't exist
+          result = await pool.query(
+            `SELECT id, username, email, password, subscription, avatar, registered_at, is_admin, is_banned, email_verified, settings, hwid 
+             FROM users WHERE id = $1`,
+            [id]
+          );
+        }
 
         if (result.rows.length === 0) {
           return res.json({ success: false, message: 'Пользователь не найден' });
@@ -70,12 +81,27 @@ export default async (req, res) => {
 
         values.push(id);
 
-        const result = await pool.query(
-          `UPDATE users SET ${fields.join(', ')} 
-           WHERE id = $${paramCount} 
-           RETURNING id, username, email, password, subscription, subscription_end_date, avatar, registered_at, is_admin, is_banned, email_verified, settings, hwid`,
-          values
-        );
+        let result;
+        try {
+          // Try to update with subscription_end_date
+          result = await pool.query(
+            `UPDATE users SET ${fields.join(', ')} 
+             WHERE id = $${paramCount} 
+             RETURNING id, username, email, password, subscription, subscription_end_date, avatar, registered_at, is_admin, is_banned, email_verified, settings, hwid`,
+            values
+          );
+        } catch (columnError) {
+          // Fallback to update without subscription_end_date if column doesn't exist
+          const filteredFields = fields.filter(field => !field.includes('subscription_end_date'));
+          const filteredValues = values.filter((_, index) => index !== values.length - 2 || !updates.subscriptionEndDate);
+          
+          result = await pool.query(
+            `UPDATE users SET ${filteredFields.join(', ')} 
+             WHERE id = $${paramCount} 
+             RETURNING id, username, email, password, subscription, avatar, registered_at, is_admin, is_banned, email_verified, settings, hwid`,
+            filteredValues
+          );
+        }
 
         if (result.rows.length === 0) {
           return res.json({ success: false, message: 'Пользователь не найден' });
@@ -92,10 +118,20 @@ export default async (req, res) => {
   }
 
   try {
-    const result = await pool.query(
-      `SELECT id, username, email, subscription, subscription_end_date, registered_at, is_admin, is_banned, email_verified, settings, hwid 
-       FROM users ORDER BY id DESC`
-    );
+    let result;
+    try {
+      // Try to query with subscription_end_date
+      result = await pool.query(
+        `SELECT id, username, email, subscription, subscription_end_date, registered_at, is_admin, is_banned, email_verified, settings, hwid 
+         FROM users ORDER BY id DESC`
+      );
+    } catch (columnError) {
+      // Fallback to query without subscription_end_date if column doesn't exist
+      result = await pool.query(
+        `SELECT id, username, email, subscription, registered_at, is_admin, is_banned, email_verified, settings, hwid 
+         FROM users ORDER BY id DESC`
+      );
+    }
 
     const users = result.rows.map(dbUser => ({
       id: dbUser.id,

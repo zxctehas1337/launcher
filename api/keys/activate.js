@@ -62,10 +62,16 @@ export default async function handler(req, res) {
       subscriptionEndDate = endDate.toISOString();
     }
 
-    await pool.query(
-      'UPDATE users SET subscription = $1, subscription_end_date = $2 WHERE id = $3', 
-      [newSubscription, subscriptionEndDate, userId]
-    );
+    try {
+      // Try to update with subscription_end_date
+      await pool.query(
+        'UPDATE users SET subscription = $1, subscription_end_date = $2 WHERE id = $3', 
+        [newSubscription, subscriptionEndDate, userId]
+      );
+    } catch (columnError) {
+      // Fallback to update without subscription_end_date if column doesn't exist
+      await pool.query('UPDATE users SET subscription = $1 WHERE id = $2', [newSubscription, userId]);
+    }
 
     res.json({
       success: true,
