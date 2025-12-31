@@ -116,13 +116,24 @@ export default async (req, res) => {
 async function handleLogin(req, res, pool) {
   const { usernameOrEmail, password, hwid } = req.body;
 
-  const result = await pool.query(
-    `SELECT id, username, email, password, subscription, registered_at, is_admin, is_banned, email_verified, settings, avatar, hwid
-     FROM users 
-     WHERE (username = $1 OR email = $1)
-     LIMIT 1`,
-    [usernameOrEmail]
-  );
+  let result;
+  try {
+    result = await pool.query(
+      `SELECT id, username, email, password, subscription, subscription_end_date, registered_at, is_admin, is_banned, email_verified, settings, avatar, hwid
+       FROM users 
+       WHERE (username = $1 OR email = $1)
+       LIMIT 1`,
+      [usernameOrEmail]
+    );
+  } catch (columnError) {
+    result = await pool.query(
+      `SELECT id, username, email, password, subscription, registered_at, is_admin, is_banned, email_verified, settings, avatar, hwid
+       FROM users 
+       WHERE (username = $1 OR email = $1)
+       LIMIT 1`,
+      [usernameOrEmail]
+    );
+  }
 
   if (result.rows.length === 0) {
     return res.json({ success: false, message: 'Неверный логин или пароль' });
@@ -179,12 +190,22 @@ async function handleRegister(req, res, pool) {
 
     const hashedPassword = await hashPassword(password);
 
-    const result = await client.query(
-      `INSERT INTO users (username, email, password, verification_code, verification_code_expires, email_verified, hwid) 
-       VALUES ($1, $2, $3, $4, $5, false, $6) 
-       RETURNING id, username, email, subscription, registered_at, is_admin, is_banned, email_verified, settings, avatar, hwid`,
-      [username, email, hashedPassword, verificationCode, codeExpires, hwid]
-    );
+    let result;
+    try {
+      result = await client.query(
+        `INSERT INTO users (username, email, password, verification_code, verification_code_expires, email_verified, hwid) 
+         VALUES ($1, $2, $3, $4, $5, false, $6) 
+         RETURNING id, username, email, subscription, subscription_end_date, registered_at, is_admin, is_banned, email_verified, settings, avatar, hwid`,
+        [username, email, hashedPassword, verificationCode, codeExpires, hwid]
+      );
+    } catch (columnError) {
+      result = await client.query(
+        `INSERT INTO users (username, email, password, verification_code, verification_code_expires, email_verified, hwid) 
+         VALUES ($1, $2, $3, $4, $5, false, $6) 
+         RETURNING id, username, email, subscription, registered_at, is_admin, is_banned, email_verified, settings, avatar, hwid`,
+        [username, email, hashedPassword, verificationCode, codeExpires, hwid]
+      );
+    }
 
     const user = mapUserFromDb(result.rows[0]);
     const emailSent = await sendVerificationEmail(email, username, verificationCode);

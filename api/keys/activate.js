@@ -60,18 +60,21 @@ export default async function handler(req, res) {
     // - duration_days > 0 => extend from current subscription_end_date if it's in the future
     if (licenseKey.duration_days > 0) {
       let baseDate = new Date();
+      let hasLifetime = false;
 
       try {
         const currentResult = await pool.query(
-          'SELECT subscription_end_date FROM users WHERE id = $1',
+          'SELECT subscription, subscription_end_date FROM users WHERE id = $1',
           [userId]
         );
 
-        const currentEnd = currentResult.rows?.[0]?.subscription_end_date;
+        const currentRow = currentResult.rows?.[0];
+        const currentSub = String(currentRow?.subscription || 'free').trim().toLowerCase();
+        const currentEnd = currentRow?.subscription_end_date;
 
-        // If user already has lifetime access, keep it lifetime
-        if (currentEnd === null) {
-          subscriptionEndDate = null;
+        // Treat NULL end date as lifetime only for already-paid subs
+        if (currentEnd === null && (currentSub === 'premium' || currentSub === 'alpha')) {
+          hasLifetime = true;
         } else if (currentEnd) {
           const currentEndDate = new Date(currentEnd);
           if (!Number.isNaN(currentEndDate.getTime()) && currentEndDate > baseDate) {
@@ -82,10 +85,12 @@ export default async function handler(req, res) {
         // Backwards compatibility: if subscription_end_date doesn't exist, fall back to now
       }
 
-      if (subscriptionEndDate !== null) {
+      if (!hasLifetime) {
         const endDate = new Date(baseDate);
         endDate.setDate(endDate.getDate() + licenseKey.duration_days);
         subscriptionEndDate = endDate.toISOString();
+      } else {
+        subscriptionEndDate = null;
       }
     }
 
