@@ -1,5 +1,5 @@
 /* ========================================
-   Страница цен - Новый дизайн
+   Страница цен - Новый дизайн (Orange Theme)
    ======================================== */
 
 /* Import base styles for proper navbar rendering */
@@ -12,25 +12,26 @@
 }
 
 .nav-currency .currency-selector-button {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: white;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
   backdrop-filter: blur(10px);
 }
 
 .nav-currency .currency-selector-button:hover {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--orange-500);
+  color: var(--text-primary);
 }
 
 .nav-currency .currency-selector-arrow {
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-tertiary);
 }
 
 .pricing-page {
   min-height: 100vh;
-  background: #0d1117;
-  color: #fff;
+  background: var(--bg-primary);
+  color: var(--text-primary);
 }
 
 .pricing-section {
@@ -42,70 +43,72 @@
 .pricing-title {
   text-align: center;
   font-size: 1.75rem;
-  font-weight: 400;
+  font-weight: 700;
   margin-bottom: 2rem;
-  color: #fff;
+  color: var(--text-primary);
 }
 
 /* Сетка продуктов */
 .pricing-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
+  gap: 16px;
 }
 
-/* Карточка продукта */
+/* Карточка продукта - Matching index.css .product-card style */
 .pricing-card {
-  background: #0d1117;
+  background: rgba(255, 140, 0, 0.03);
+  border: 1px solid rgba(255, 140, 0, 0.1);
   border-radius: 12px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border: 1px solid #30363d;
-  max-width: 240px;
+  transition: all 0.3s ease;
+  max-width: 260px;
 }
 
 .pricing-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
-  border-color: #484f58;
+  transform: translateY(-5px);
+  background: rgba(255, 140, 0, 0.05);
+  border-color: rgba(255, 140, 0, 0.4);
+  box-shadow: 0 0 20px rgba(255, 140, 0, 0.15);
 }
 
 /* Изображение/превью карточки */
 .pricing-card-image {
   width: 100%;
   aspect-ratio: 1 / 1;
-  background: #161b22;
+  background: var(--bg-secondary);
   position: relative;
   overflow: hidden;
-  border-bottom: 1px solid #30363d;
+  border-bottom: 1px solid rgba(255, 140, 0, 0.05);
 }
 
 .pricing-card-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
+  transition: transform 0.5s ease;
 }
 
 .pricing-card:hover .pricing-card-img {
-  transform: scale(1.02);
+  transform: scale(1.05);
 }
 
 /* Контент карточки */
 .pricing-card-content {
-  padding: 0.5rem 0.65rem 0.65rem;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
-  background: #0d1117;
+  gap: 0.5rem;
+  background: transparent;
+  flex-grow: 1;
 }
 
 .pricing-card-name {
-  font-size: 0.8rem;
+  font-size: 1rem;
   font-weight: 600;
-  color: #e6edf3;
+  color: var(--text-primary);
   margin: 0;
 }
 
@@ -113,24 +116,25 @@
 .pricing-card-price {
   display: flex;
   align-items: center;
-  gap: 0.3rem;
+  gap: 0.5rem;
   flex-wrap: wrap;
+  margin-top: auto;
 }
 
 .pricing-card-price-label {
-  color: #8b949e;
-  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
 }
 
 .pricing-card-price-current {
-  color: #58a6ff;
-  font-size: 0.8rem;
-  font-weight: 600;
+  color: var(--orange-500);
+  font-size: 1rem;
+  font-weight: 700;
 }
 
 .pricing-card-price-original {
-  color: #f85149;
-  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  font-size: 0.8rem;
   text-decoration: line-through;
 }
 
@@ -138,13 +142,13 @@
 .pricing-discount-badge {
   display: inline-flex;
   align-items: center;
-  padding: 0.1rem 0.3rem;
-  background: rgba(46, 160, 67, 0.2);
-  border: 1px solid #2ea043;
-  border-radius: 8px;
-  font-size: 0.6rem;
-  color: #3fb950;
-  font-weight: 500;
+  padding: 0.15rem 0.4rem;
+  background: rgba(255, 140, 0, 0.1);
+  border: 1px solid rgba(255, 140, 0, 0.3);
+  border-radius: 6px;
+  font-size: 0.7rem;
+  color: var(--orange-500);
+  font-weight: 600;
 }
 
 /* Кнопка оплаты */
@@ -152,89 +156,100 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.3rem;
+  gap: 0.5rem;
   width: 100%;
-  padding: 0.45rem 0.5rem;
-  background: linear-gradient(135deg, #1f6feb 0%, #388bfd 100%);
+  padding: 0.6rem;
+  background: linear-gradient(135deg, var(--orange-600) 0%, var(--orange-500) 100%);
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
   color: #fff;
-  font-size: 0.72rem;
-  font-weight: 500;
+  font-size: 0.9rem;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
-  margin-top: 0.2rem;
+  margin-top: 0.8rem;
 }
 
 .pricing-card-button:hover {
-  background: linear-gradient(135deg, #388bfd 0%, #58a6ff 100%);
-  box-shadow: 0 3px 10px rgba(56, 139, 253, 0.3);
+  background: linear-gradient(135deg, var(--orange-500) 0%, var(--orange-400) 100%);
+  box-shadow: 0 4px 12px rgba(255, 140, 0, 0.3);
+  transform: translateY(-1px);
 }
 
 .pricing-card-button svg {
-  width: 13px;
-  height: 13px;
+  width: 16px;
+  height: 16px;
+}
+
+/* Light Theme Support */
+[data-theme="light"] .pricing-page {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .pricing-card {
+  background: #fff;
+  border-color: rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .pricing-card:hover {
+  border-color: var(--orange-500);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .pricing-card-image {
+  background: var(--bg-tertiary);
+  border-bottom-color: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .pricing-card-name {
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .pricing-card-price-label {
+  color: var(--text-secondary);
+}
+
+[data-theme="light"] .nav-currency .currency-selector-button {
+  background: #fff;
+  border-color: rgba(0, 0, 0, 0.1);
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .nav-currency .currency-selector-button:hover {
+  border-color: var(--orange-500);
 }
 
 /* Адаптивность */
-@media (max-width: 950px) {
+@media (max-width: 1024px) {
   .pricing-grid {
     grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-  }
-  
-  .pricing-card {
-    max-width: none;
   }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 768px) {
   .pricing-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
   }
-  
+
   .pricing-section {
     padding: 90px 1rem 2rem;
   }
 }
 
 @media (max-width: 480px) {
-  .pricing-section {
-    padding: 85px 0.6rem 1.5rem;
-  }
-  
   .pricing-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 6px;
+    grid-template-columns: repeat(1, 1fr);
+    max-width: 320px;
+    margin: 0 auto;
   }
-  
+
+  .pricing-card {
+    max-width: none;
+  }
+
   .pricing-title {
-    font-size: 1.4rem;
-    margin-bottom: 1.5rem;
-  }
-  
-  .pricing-card-content {
-    padding: 0.4rem 0.5rem 0.5rem;
-  }
-  
-  .pricing-card-name {
-    font-size: 0.72rem;
-  }
-  
-  .pricing-card-price-label,
-  .pricing-card-price-current,
-  .pricing-card-price-original {
-    font-size: 0.68rem;
-  }
-  
-  .pricing-card-button {
-    padding: 0.4rem;
-    font-size: 0.68rem;
-  }
-  
-  .pricing-card-button svg {
-    width: 11px;
-    height: 11px;
+    font-size: 1.5rem;
   }
 }

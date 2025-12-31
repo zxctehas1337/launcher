@@ -1,56 +1,63 @@
 /* Language Selector */
-
 .language-selector {
   position: relative;
+  margin-left: 8px;
 }
 
 /* Стили для контейнера в сайдбаре */
 .sidebar-language-selector .language-selector {
   position: relative;
   width: 100%;
+  margin: 8px 0;
 }
 
 .lang-toggle {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.6rem 1rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: var(--button-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  color: #ffffff;
-  pointer-events: auto;
+  transition: all 0.2s ease;
+  color: #ffffff; /* Always white text */
+  font-size: 14px;
+  font-weight: 500;
+  height: 36px;
+  min-width: 60px;
 }
 
 .lang-toggle:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(59, 130, 246, 0.5);
+  background: var(--button-hover-bg);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
 }
 
 .lang-flag {
-  font-size: 1.25rem;
+  font-size: 1.1rem;
+  line-height: 1;
 }
 
 .lang-code {
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 0.5px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
 }
 
-/* Меню языков */
+/* Language Menu */
 .lang-menu {
   position: absolute;
   right: 0;
-  background: rgba(15, 15, 25, 0.98);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
-  padding: 0.5rem;
-  min-width: 180px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 6px;
+  min-width: 160px;
   z-index: 1000;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
 }
 
 /* Меню открывается вверх */
@@ -137,36 +144,72 @@
 .lang-option {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 10px;
   width: 100%;
-  padding: 0.85rem 1rem;
+  padding: 8px 12px;
   background: transparent;
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  color: #ffffff;
+  transition: all 0.15s ease;
+  color: var(--dropdown-text, #ffffff); /* Text color changes with theme */
+  font-size: 14px;
   text-align: left;
+  margin: 2px 0;
 }
 
 .lang-option:hover {
-  background: rgba(59, 130, 246, 0.1);
+  background: var(--bg-hover);
+  color: var(--dropdown-text-hover, #ffffff);
+  opacity: 0.9;
 }
 
 .lang-option.active {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%);
-  border: 1px solid rgba(59, 130, 246, 0.3);
+  background: var(--bg-active);
+  color: var(--dropdown-text-active, #ffffff);
+  font-weight: 500;
+  opacity: 1;
 }
 
 .lang-name {
-  font-size: 0.9rem;
-  font-weight: 500;
+  font-size: 13px;
+  font-weight: 400;
+  white-space: nowrap;
 }
 
-/* Адаптивность */
+/* Light theme styles */
+[data-theme="light"] .lang-option {
+  color: #111827;
+}
+
+[data-theme="light"] .lang-option:hover {
+  color: #111827;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .lang-option.active {
+  color: #111827;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive styles */
 @media (max-width: 768px) {
+  .language-selector {
+    margin-left: 4px;
+  }
+  
   .lang-toggle {
-    padding: 0.5rem 0.75rem;
+    padding: 6px 10px;
+    min-width: 50px;
+    height: 32px;
+  }
+
+  .lang-flag {
+    font-size: 1rem;
+  }
+
+  .lang-code {
+    font-size: 12px;
   }
 
   /* Keep lang-code visible in sidebar on mobile */
@@ -177,5 +220,23 @@
   /* Hide lang-code only when not in sidebar */
   .lang-toggle:not(.sidebar-language-selector .lang-toggle) .lang-code {
     display: none;
+  }
+  
+  /* Adjust menu position for mobile */
+  .lang-menu {
+    position: fixed;
+    top: auto !important;
+    bottom: 16px;
+    left: 16px;
+    right: 16px;
+    width: auto;
+    max-width: 300px;
+    margin: 0 auto;
+    z-index: 9999;
+  }
+  
+  .lang-menu-up,
+  .lang-menu-down {
+    animation: menuSlideUp 0.25s ease-out;
   }
 }

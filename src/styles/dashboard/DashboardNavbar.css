@@ -194,12 +194,13 @@
   bottom: 0;
   height: 1px;
   background: rgba(255, 255, 255, 0.1);
-  transform: scaleX(0);
-  transition: transform 0.2s ease;
+  opacity: 0;
+  transition: opacity 0.2s ease;
 }
 
 .link-item:hover::after {
-  transform: scaleX(1);
+  opacity: 1;
+  /* Removed transform scale */
 }
 
 /* Smooth Animations */

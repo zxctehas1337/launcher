@@ -20,8 +20,41 @@
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 2rem;
+}
+
+.footer-links-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.footer-logo-top {
+  display: flex;
+  align-items: center;
+  gap: -10%;
+  margin-left: -15px; /* Move the logo and name to the left */
+
+}
+
+.footer-logo-top img {
+  width: 80px;
+  height: 80px;
+  border-radius: 15px;
+}
+
+.footer-name-top {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-left: -15px;
+}
+
+.footer-links-section,
+.footer-legal,
+.footer-social {
+  flex: 1;
 }
 
 .footer-brand {
@@ -130,6 +163,10 @@
   text-align: center;
   padding-top: 2rem;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
 }
 
 /* Light theme override for footer bottom */
@@ -145,4 +182,23 @@
 /* Light theme override for footer bottom text */
 [data-theme="light"] .footer-bottom p {
   color: var(--text-secondary);
+}
+
+.footer-brand-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.footer-logo-bottom {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  transform: translateX(20px) translateY(2px);
+}
+
+.footer-name-bottom {
+  font-size: 1.5rem;
+  font-weight: 700;
 }

@@ -36,6 +36,7 @@
   border-radius: 16px;
   backdrop-filter: blur(24px);
   padding: 20px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
 .setting-item {
@@ -83,7 +84,6 @@
 .setting-btn:hover {
   background: rgba(255, 140, 0, 0.2);
   border-color: rgba(255, 140, 0, 0.5);
-  transform: translateY(-1px);
 }
 
 .setting-select {

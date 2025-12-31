@@ -32,19 +32,18 @@
   border-radius: 24px;
   backdrop-filter: blur(24px);
   padding: 24px;
-  transition: all 0.2s ease;
+  transition: background 0.2s ease, border-color 0.2s ease;
   position: relative;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
 }
 
 .glass-card:hover {
   border-color: rgba(255, 140, 0, 0.2);
-  transform: translateY(-2px);
   background: rgba(25, 25, 25, 0.85);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
 }
 
 /* Left Column */
@@ -206,8 +205,6 @@
 
 .pink-btn:hover {
   background: #ffa500;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(255, 140, 0, 0.2);
 }
 
 /* Right Column */
@@ -291,7 +288,6 @@
 }
 
 .info-box:hover {
-  transform: translateY(-4px);
   background: rgba(255, 255, 255, 0.03);
 }
 
@@ -376,8 +372,6 @@
 
 .download-launcher-btn:hover {
   background: #ffa500;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(255, 140, 0, 0.3);
 }
 
 /* Launcher View */
@@ -413,7 +407,6 @@
 .download-full-btn:hover {
   background: rgba(255, 140, 0, 0.15);
   color: #fff;
-  transform: translateY(-2px);
 }
 
 /* Bottom Cards */
@@ -556,7 +549,6 @@
 [data-theme="light"] .glass-card:hover {
   background: rgba(255, 255, 255, 0.9);
   border-color: rgba(255, 140, 0, 0.4);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
 }
 
 [data-theme="light"] .profile-text p,

@@ -122,8 +122,7 @@
 }
 
 .activate-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.25);
+  opacity: 0.9;
 }
 
 .key-hint {
@@ -158,11 +157,11 @@
   padding: 1.5rem;
   position: relative;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
 .plan-card:hover {
   background: rgba(30, 30, 40, 0.9);
-  transform: translateY(-3px);
 }
 
 .plan-card.featured {
@@ -243,8 +242,7 @@
 }
 
 .plan-btn.primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.25);
+  opacity: 0.9;
 }
 
 /* Settings */

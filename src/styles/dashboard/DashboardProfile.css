@@ -50,13 +50,12 @@
   gap: 1rem;
   transition: all 0.3s ease;
   min-height: 100px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
 .stat-card:hover {
   background: rgba(10, 10, 10, 0.9);
   border-color: rgba(255, 140, 0, 0.3);
-  transform: translateY(-2px);
-  box-shadow: 0 0 20px rgba(255, 140, 0, 0.05);
 }
 
 .stat-icon {
@@ -178,13 +177,12 @@
   gap: 0.875rem;
   cursor: pointer;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
 .action-card:hover {
   background: rgba(10, 10, 10, 0.9);
   border-color: rgba(255, 140, 0, 0.4);
-  transform: translateY(-3px);
-  box-shadow: 0 0 20px rgba(255, 140, 0, 0.1);
 }
 
 .action-card.primary {
