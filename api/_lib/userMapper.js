@@ -6,7 +6,7 @@ export function mapUserFromDb(dbUser) {
     username: dbUser.username,
     email: dbUser.email,
     subscription,
-    subscriptionEndDate: dbUser.subscription_end_date,
+    subscriptionEndDate: dbUser.subscription_end_date || null,
     avatar: dbUser.avatar,
     registeredAt: dbUser.registered_at,
     isAdmin: dbUser.is_admin,
