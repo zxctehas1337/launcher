@@ -23,7 +23,6 @@ async function sendVerificationEmail(email, username, verificationCode) {
     await transporter.sendMail({
       from: process.env.SMTP_FROM,
       to: email,
-      subject: 'Код подтверждения регистрации - Inside',
       subject: 'Код подтверждения - SHAKEDOWN',
       html: `
         <!DOCTYPE html>

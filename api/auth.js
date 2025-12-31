@@ -129,45 +129,59 @@ async function handleLogin(req, res, pool) {
 async function handleRegister(req, res, pool) {
   const { username, email, password, hwid } = req.body;
 
-  const existingUser = await pool.query(
-    'SELECT * FROM users WHERE username = $1 OR email = $2',
-    [username, email]
-  );
+  try {
+    const existingUser = await pool.query(
+      'SELECT * FROM users WHERE username = $1 OR email = $2',
+      [username, email]
+    );
 
-  if (existingUser.rows.length > 0) {
-    const existing = existingUser.rows[0];
-    if (existing.username === username) {
-      return res.json({ success: false, message: 'Пользователь с таким логином уже существует' });
+    if (existingUser.rows.length > 0) {
+      const existing = existingUser.rows[0];
+      if (existing.username === username) {
+        return res.json({ success: false, message: 'Пользователь с таким логином уже существует' });
+      }
+      if (existing.email === email) {
+        return res.json({ success: false, message: 'Email уже зарегистрирован' });
+      }
     }
-    if (existing.email === email) {
-      return res.json({ success: false, message: 'Email уже зарегистрирован' });
+
+    const verificationCode = generateVerificationCode();
+    const codeExpires = new Date(Date.now() + 10 * 60 * 1000);
+
+    const hashedPassword = await hashPassword(password);
+
+    const result = await pool.query(
+      `INSERT INTO users (username, email, password, verification_code, verification_code_expires, email_verified, hwid) 
+       VALUES ($1, $2, $3, $4, $5, false, $6) 
+       RETURNING id, username, email, subscription, registered_at, is_admin, is_banned, email_verified, settings, avatar, hwid`,
+      [username, email, hashedPassword, verificationCode, codeExpires, hwid]
+    );
+
+    const user = mapUserFromDb(result.rows[0]);
+    const emailSent = await sendVerificationEmail(email, username, verificationCode);
+
+    if (emailSent) {
+      res.json({
+        success: true,
+        message: 'Код подтверждения отправлен на email',
+        requiresVerification: true,
+        data: user
+      });
+    } else {
+      res.json({ success: false, message: 'Ошибка отправки кода. Попробуйте позже.' });
     }
-  }
-
-  const verificationCode = generateVerificationCode();
-  const codeExpires = new Date(Date.now() + 10 * 60 * 1000);
-
-  const hashedPassword = await hashPassword(password);
-
-  const result = await pool.query(
-    `INSERT INTO users (username, email, password, verification_code, verification_code_expires, email_verified, hwid) 
-     VALUES ($1, $2, $3, $4, $5, false, $6) 
-     RETURNING id, username, email, subscription, registered_at, is_admin, is_banned, email_verified, settings, avatar, hwid`,
-    [username, email, hashedPassword, verificationCode, codeExpires, hwid]
-  );
-
-  const user = mapUserFromDb(result.rows[0]);
-  const emailSent = await sendVerificationEmail(email, username, verificationCode);
-
-  if (emailSent) {
-    res.json({
-      success: true,
-      message: 'Код подтверждения отправлен на email',
-      requiresVerification: true,
-      data: user
-    });
-  } else {
-    res.json({ success: false, message: 'Ошибка отправки кода. Попробуйте позже.' });
+  } catch (error) {
+    console.error('Registration database error:', error);
+    
+    // Handle connection errors specifically
+    if (error.code === 'ECONNRESET' || error.code === 'CONNECTION_TERMINATED' || error.message.includes('Connection terminated')) {
+      return res.status(503).json({ 
+        success: false, 
+        message: 'Сервис временно недоступен. Попробуйте позже.' 
+      });
+    }
+    
+    throw error; // Re-throw for general error handler
   }
 }
 
