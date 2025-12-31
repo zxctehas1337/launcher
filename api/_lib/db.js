@@ -2,6 +2,7 @@ import { Pool } from 'pg';
 
 // Singleton для connection pooling в serverless
 let pool;
+let ensureUserSchemaPromise;
 
 function getPgConfigFromDatabaseUrl(databaseUrl) {
   if (!databaseUrl) {
@@ -51,4 +52,19 @@ function getPool() {
   return pool;
 }
 
-export { getPool };
+async function ensureUserSchema(pgPool) {
+  if (ensureUserSchemaPromise) return ensureUserSchemaPromise;
+  ensureUserSchemaPromise = (async () => {
+    const activePool = pgPool || getPool();
+    try {
+      await activePool.query(
+        'ALTER TABLE users ADD COLUMN IF NOT EXISTS subscription_end_date TIMESTAMP WITH TIME ZONE'
+      );
+    } catch (error) {
+      console.error('Ensure user schema error:', error);
+    }
+  })();
+  return ensureUserSchemaPromise;
+}
+
+export { getPool, ensureUserSchema };

@@ -1,4 +1,4 @@
-import { getPool } from '../_lib/db.js';
+import { getPool, ensureUserSchema } from '../_lib/db.js';
 import { mapUserFromDb } from '../_lib/userMapper.js';
 
 const setCorsHeaders = (req, res) => {
@@ -52,6 +52,8 @@ export default async (req, res) => {
 
   const { id } = req.query;
   const pool = getPool();
+
+  await ensureUserSchema(pool);
 
   if (req.method === 'GET') {
     try {

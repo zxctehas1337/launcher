@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-import { getPool } from './_lib/db.js';
+import { getPool, ensureUserSchema } from './_lib/db.js';
 import { generateVerificationCode, sendVerificationEmail } from './_lib/email.js';
 import { mapUserFromDb } from './_lib/userMapper.js';
 
@@ -87,6 +87,8 @@ export default async (req, res) => {
 
   const { action } = req.query;
   const pool = getPool();
+
+  await ensureUserSchema(pool);
 
   if (req.method !== 'POST') {
     return res.status(405).json({ success: false, message: 'Method not allowed' });

@@ -1,7 +1,9 @@
-import { getPool } from '../_lib/db.js';
+import { getPool, ensureUserSchema } from '../_lib/db.js';
 
 export default async function handler(req, res) {
   const pool = getPool();
+
+  await ensureUserSchema(pool);
 
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
