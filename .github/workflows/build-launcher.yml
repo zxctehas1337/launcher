@@ -37,6 +37,15 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
+    - name: Cache Ubuntu dependencies
+      if: matrix.platform == 'ubuntu-22.04'
+      uses: actions/cache@v4
+      with:
+        path: /var/cache/apt
+        key: ${{ runner.os }}-apt-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-apt-
+
     - name: Install dependencies (ubuntu only)
       if: matrix.platform == 'ubuntu-22.04'
       run: |
@@ -52,6 +61,9 @@ jobs:
       uses: swatinem/rust-cache@v2
       with:
         workspaces: src-tauri
+        cache-on-failure: true
+        cache-all-crates: true
+        shared-key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
     - name: Sync node version and setup cache
       uses: actions/setup-node@v4
@@ -59,6 +71,26 @@ jobs:
         node-version: 'lts/*'
         cache: 'npm'
         cache-dependency-path: 'package-lock.json'
+
+    - name: Cache Tauri dependencies
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cache/tauri
+          ~/.local/share/tauri
+        key: ${{ runner.os }}-tauri-${{ hashFiles('**/Cargo.lock', '**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-tauri-
+
+    - name: Cache frontend build
+      uses: actions/cache@v4
+      with:
+        path: |
+          src/dist
+          node_modules/.cache
+        key: ${{ runner.os }}-frontend-${{ hashFiles('src/**', 'package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-frontend-
 
     - name: Install frontend dependencies
       run: npm install
