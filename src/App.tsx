@@ -38,9 +38,23 @@ function App() {
       setShowVerificationModal(true)
     }
 
+    // Обработчик для тестового показа модалки
+    const handleShowVerificationModal = (e: Event) => {
+      const customEvent = e as CustomEvent<{ userId: string; email?: string }>;
+      setPendingUserId(customEvent.detail.userId);
+      setShowVerificationModal(true);
+      
+      if (customEvent.detail.email) {
+        console.log(`Тестовая модалка: Пользователь ${customEvent.detail.userId}, email: ${customEvent.detail.email}`);
+      }
+    };
+
+    window.addEventListener('showVerificationModal', handleShowVerificationModal as EventListener);
+
     return () => {
-      delete (window as any).execute_verification_modal
-    }
+      delete (window as any).execute_verification_modal;
+      window.removeEventListener('showVerificationModal', handleShowVerificationModal as EventListener);
+    };
   }, [])
 
   return (

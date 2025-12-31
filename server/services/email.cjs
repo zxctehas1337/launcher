@@ -41,9 +41,10 @@ async function sendVerificationEmail(email, username, verificationCode) {
               max-width: 500px; 
               margin: 0 auto; 
               background-color: #0a0a0a; 
-              border: 1px solid #1a1a1a; 
-              border-radius: 8px; 
+              border: 1px solid #333333; 
+              border-radius: 24px; 
               overflow: hidden;
+              box-shadow: 0 4px 24px rgba(0,0,0,0.5);
             }
             .header { 
               background-color: #000000; 
@@ -52,42 +53,44 @@ async function sendVerificationEmail(email, username, verificationCode) {
               border-bottom: 1px solid #1a1a1a;
             }
             .logo { 
-              font-size: 20px; 
-              font-weight: 600; 
-              color: #ffffff; 
+              font-size: 24px; 
+              font-weight: 700; 
+              color: #ff8c00; 
               letter-spacing: 2px;
               margin: 0;
+              text-transform: uppercase;
             }
             .content { 
               padding: 40px 24px; 
               text-align: center; 
             }
             .title { 
-              font-size: 18px; 
-              font-weight: 500; 
+              font-size: 20px; 
+              font-weight: 600; 
               color: #ffffff; 
               margin: 0 0 16px 0;
             }
             .description { 
               font-size: 15px; 
-              line-height: 1.5; 
+              line-height: 1.6; 
               color: #888888; 
               margin: 0 0 32px 0;
             }
             .code-container { 
-              background-color: #111111; 
-              border: 1px solid #2a2a2a; 
-              border-radius: 6px; 
+              background-color: rgba(255, 140, 0, 0.05); 
+              border: 1px solid rgba(255, 140, 0, 0.2); 
+              border-radius: 16px; 
               padding: 24px; 
               margin: 24px 0;
             }
             .code { 
-              font-size: 32px; 
-              font-weight: 600; 
-              letter-spacing: 6px; 
-              color: #ffffff; 
+              font-size: 36px; 
+              font-weight: 700; 
+              letter-spacing: 8px; 
+              color: #ff8c00; 
               font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace; 
               margin: 0;
+              text-shadow: 0 0 20px rgba(255, 140, 0, 0.3);
             }
             .expiry { 
               font-size: 13px; 
@@ -97,15 +100,16 @@ async function sendVerificationEmail(email, username, verificationCode) {
             .footer { 
               padding: 24px; 
               text-align: center; 
-              color: #666666; 
+              color: #444444; 
               font-size: 12px; 
               border-top: 1px solid #1a1a1a;
             }
             .icon { 
-              width: 16px; 
-              height: 16px; 
+              width: 20px; 
+              height: 20px; 
               margin-right: 8px; 
               vertical-align: middle;
+              color: #ff8c00;
             }
           </style>
         </head>
@@ -117,18 +121,15 @@ async function sendVerificationEmail(email, username, verificationCode) {
             <div class="content">
               <h2 class="title">Код подтверждения</h2>
               <p class="description">
-                <svg class="icon" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
-                  <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
-                </svg>
-                Код отправлен на ${email}
+                Используйте этот код для входа в аккаунт
               </p>
               <div class="code-container">
                 <div class="code">${verificationCode}</div>
-                <p class="expiry">Код действителен 10 минут</p>
               </div>
-              <p class="description">
-                Если вы не запрашивали код, проигнорируйте это письмо.
+              <p class="expiry">Код действителен 10 минут</p>
+              
+              <p class="description" style="font-size: 13px; margin-top: 32px;">
+                Если вы не запрашивали код, просто проигнорируйте это письмо.
               </p>
             </div>
             <div class="footer">
@@ -143,7 +144,7 @@ async function sendVerificationEmail(email, username, verificationCode) {
     await transporter.sendMail(mailOptions);
     console.log(`Код подтверждения отправлен на ${email}`);
     console.log(`Код: ${verificationCode}`);
-    
+
     return true;
   } catch (error) {
     console.error('❌ Ошибка отправки email:', error.message);
