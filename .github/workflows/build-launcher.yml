@@ -62,7 +62,7 @@ jobs:
       with:
         node-version: 'lts/*'
         cache: 'npm'
-        cache-dependency-path: launcher/package-lock.json
+        cache-dependency-path: 'launcher/package-lock.json'
 
     - name: Install frontend dependencies
       run: npm install
