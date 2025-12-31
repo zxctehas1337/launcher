@@ -5,6 +5,23 @@ import { mapUserFromDb } from './_lib/userMapper.js';
 
 const SALT_ROUNDS = 10;
 
+const setCorsHeaders = (req, res) => {
+  const origin = req.headers.origin;
+  const allowedOriginPatterns = [
+    /^http:\/\/localhost(?::\d+)?$/,
+    /^http:\/\/127\.0\.0\.1(?::\d+)?$/,
+    /^https:\/\/shakedown\.vercel\.app$/,
+  ];
+
+  const isAllowedOrigin =
+    typeof origin === 'string' && allowedOriginPatterns.some((pattern) => pattern.test(origin));
+
+  res.setHeader('Access-Control-Allow-Origin', isAllowedOrigin ? origin : '*');
+  res.setHeader('Vary', 'Origin');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+};
+
 const hashPassword = (password) =>
   new Promise((resolve, reject) => {
     bcrypt.hash(password, SALT_ROUNDS, (error, hashed) => {
@@ -62,6 +79,12 @@ const passwordsMatch = async (pool, user, inputPassword) => {
 };
 
 export default async (req, res) => {
+  setCorsHeaders(req, res);
+
+  if (req.method === 'OPTIONS') {
+    return res.status(204).end();
+  }
+
   const { action } = req.query;
   const pool = getPool();
 
