@@ -3,6 +3,7 @@ export interface User {
   username: string
   email: string
   subscription: 'free' | 'premium' | 'alpha'
+  subscriptionEndDate?: string | null
   avatar?: string
   uid?: string
   registeredAt: string

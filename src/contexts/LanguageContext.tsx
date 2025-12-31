@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react'
 
 
-export type Language = 'ru' | 'en'
+export type Language = 'ru' | 'en' | 'uk' | 'pl' | 'tr' | 'kk'
 
 interface LanguageContextType {
     language: Language
@@ -18,7 +18,7 @@ interface LanguageProviderProps {
 export function LanguageProvider({ children }: LanguageProviderProps) {
     const [language, setLanguageState] = useState<Language>(() => {
         const saved = localStorage.getItem('language')
-        return (saved === 'en' || saved === 'ru') ? saved : 'ru'
+        return (saved === 'en' || saved === 'ru' || saved === 'uk' || saved === 'pl' || saved === 'tr' || saved === 'kk') ? saved : 'ru'
     })
 
     const [translations, setTranslations] = useState<Record<string, string>>({})

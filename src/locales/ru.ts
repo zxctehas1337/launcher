@@ -2,6 +2,12 @@ export default {
     // Language selector
     'lang.russian': 'Русский',
     'lang.english': 'English',
+    'lang.ukrainian': 'Українська',
+    'lang.polish': 'Polski',
+    'lang.turkish': 'Türkçe',
+    'lang.kazakh': 'Қазақша',
+
+    'dashboard.forever': 'Навсегда',
 
     // TitleBar
     'titlebar.minimize': 'Свернуть',
@@ -88,6 +94,7 @@ export default {
     'profile.hwid_reset_error': 'Ошибка при сбросе HWID',
     'profile.enter_activation_key': 'Введите ключ активации:',
     'profile.key_activation_soon': 'Функция активации ключа будет добавлена',
+    'profile.notLinked': 'Не привязан',
 
     // AuthPage
     'auth.title': 'Авторизация',
@@ -95,7 +102,7 @@ export default {
     'auth.username': 'Логин',
     'auth.password': 'Пароль',
     'auth.login': 'ВОЙТИ',
-    'auth.or': 'Или войдите через',
+    'auth.or': 'Или',
     'auth.website_login': 'ВОЙТИ ЧЕРЕЗ САЙТ',
     'auth.logging_in': 'Вход...',
     'auth.success': 'Вход выполнен успешно!',

@@ -21,9 +21,47 @@ const BritishFlag = () => (
   </svg>
 )
 
+const UkrainianFlag = () => (
+  <svg width="20" height="15" viewBox="0 0 20 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="20" height="15" rx="2" fill="#0057B7"/>
+    <rect y="7.5" width="20" height="7.5" fill="#FFD700"/>
+  </svg>
+)
+
+const PolishFlag = () => (
+  <svg width="20" height="15" viewBox="0 0 20 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="20" height="15" rx="2" fill="white"/>
+    <rect y="7.5" width="20" height="7.5" fill="#DC143C"/>
+  </svg>
+)
+
+const TurkishFlag = () => (
+  <svg width="20" height="15" viewBox="0 0 20 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="20" height="15" rx="2" fill="#E30A17"/>
+    <path
+      d="M9.4 7.5c0 2.3-1.7 4.1-3.8 4.1S1.8 9.8 1.8 7.5 3.5 3.4 5.6 3.4c1 0 1.9.4 2.6 1.1-.8-.3-1.7-.2-2.5.2-1.6.8-2.2 2.8-1.4 4.4.8 1.6 2.8 2.2 4.4 1.4.5-.2.9-.6 1.3-1.1.1-.3.2-.6.2-1Z"
+      fill="white"
+      fillRule="evenodd"
+      clipRule="evenodd"
+    />
+    <path d="M12.7 7.5l1.6.5-1 1.3v-1.6l1-.2-1.6.5Z" fill="white"/>
+  </svg>
+)
+
+const KazakhFlag = () => (
+  <svg width="20" height="15" viewBox="0 0 20 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="20" height="15" rx="2" fill="#00AFCA"/>
+    <circle cx="10" cy="7.5" r="2" fill="#FEC50C"/>
+  </svg>
+)
+
 const LANGUAGES = [
-  { code: 'ru' as Language, flag: <RussianFlag />, name: 'Русский' },
-  { code: 'en' as Language, flag: <BritishFlag />, name: 'English' },
+  { code: 'ru' as Language, flag: <RussianFlag />, nameKey: 'lang.russian' },
+  { code: 'en' as Language, flag: <BritishFlag />, nameKey: 'lang.english' },
+  { code: 'uk' as Language, flag: <UkrainianFlag />, nameKey: 'lang.ukrainian' },
+  { code: 'pl' as Language, flag: <PolishFlag />, nameKey: 'lang.polish' },
+  { code: 'tr' as Language, flag: <TurkishFlag />, nameKey: 'lang.turkish' },
+  { code: 'kk' as Language, flag: <KazakhFlag />, nameKey: 'lang.kazakh' },
 ]
 
 export default function TitleBar() {
@@ -84,7 +122,7 @@ export default function TitleBar() {
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           >
             <span className="language-flag">{currentLang.flag}</span>
-            <span className="language-text">{currentLang.name}</span>
+            <span className="language-text">{t(currentLang.nameKey)}</span>
             <span className={`language-arrow ${isDropdownOpen ? 'open' : ''}`}>▼</span>
           </div>
           {isDropdownOpen && (
@@ -96,7 +134,7 @@ export default function TitleBar() {
                   onClick={() => handleLanguageSelect(lang.code)}
                 >
                   <span className="language-flag">{lang.flag}</span>
-                  <span className="language-text">{lang.name}</span>
+                  <span className="language-text">{t(lang.nameKey)}</span>
                   {lang.code === language && (
                     <svg className="check-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="M3 8L6 11L13 4" strokeLinecap="round" strokeLinejoin="round" />

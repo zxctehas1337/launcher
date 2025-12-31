@@ -1,6 +1,7 @@
 import type { User } from '../types'
 import { useLanguage } from '../contexts/LanguageContext'
-import { useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { updateUser } from '../utils/api'
 import '../styles/ProfilePage.css'
 
 interface ProfilePageProps {
@@ -9,15 +10,18 @@ interface ProfilePageProps {
   onUserUpdate?: (user: User) => void
 }
 
-export default function ProfilePage({ user }: ProfilePageProps) {
+export default function ProfilePage({ user, onUserUpdate }: ProfilePageProps) {
   const { t } = useLanguage()
+  const avatarInputRef = useRef<HTMLInputElement | null>(null)
+  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false)
+  const [avatarError, setAvatarError] = useState<string | null>(null)
 
   // Предзагружаем часто используемые ссылки при монтировании компонента
   useEffect(() => {
     const urls = [
       'https://shakedown.vercel.app/pricing',
       'https://shakedown.vercel.app/dashboard',
-      'https://shakedown.vercel.app/dashboard/subscription'
+      'https://shakedown.vercel.app/dashboard/'
     ]
     
     urls.forEach(url => {
@@ -28,11 +32,21 @@ export default function ProfilePage({ user }: ProfilePageProps) {
     })
   }, [])
 
-  const subscriptionEndDate = user.subscription === 'premium'
-    ? t('profile.active')
-    : user.subscription === 'alpha'
-      ? t('profile.alpha_access')
-      : t('profile.not_purchased')
+  const formatSubscriptionEndDate = (dateString: string) => {
+    const date = new Date(dateString)
+    if (Number.isNaN(date.getTime())) return t('profile.active')
+    return date.toLocaleDateString(undefined, {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    })
+  }
+
+  const subscriptionEndDate = user.subscription === 'free'
+    ? t('profile.not_purchased')
+    : user.subscriptionEndDate
+      ? formatSubscriptionEndDate(user.subscriptionEndDate)
+      : t('dashboard.forever')
 
   const handleOpenPersonalCabinet = () => {
     window.electron?.openExternal('https://shakedown.vercel.app/dashboard')
@@ -44,7 +58,56 @@ export default function ProfilePage({ user }: ProfilePageProps) {
 
 
   const handleActivateKey = () => {
-    window.electron?.openExternal('https://shakedown.vercel.app/dashboard/subscription')
+    window.electron?.openExternal('https://shakedown.vercel.app/dashboard/')
+  }
+
+  const handleAvatarPick = () => {
+    setAvatarError(null)
+    avatarInputRef.current?.click()
+  }
+
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    if (file.size > 15 * 1024 * 1024) {
+      setAvatarError('Файл слишком большой (макс 15MB)')
+      e.target.value = ''
+      return
+    }
+
+    setIsUploadingAvatar(true)
+    setAvatarError(null)
+
+    try {
+      const base64 = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onload = () => resolve(String(reader.result || ''))
+        reader.onerror = () => reject(new Error('FileReader error'))
+        reader.readAsDataURL(file)
+      })
+
+      const response = await updateUser(user.id, { avatar: base64 })
+
+      if (!response?.success || !response.data) {
+        setAvatarError(response?.message || 'Не удалось обновить аватар')
+        return
+      }
+
+      const updatedUser: User = {
+        ...user,
+        ...response.data,
+        registeredAt: response.data.registeredAt || user.registeredAt,
+      }
+
+      onUserUpdate?.(updatedUser)
+    } catch (error) {
+      console.error('Avatar upload failed:', error)
+      setAvatarError('Ошибка при загрузке аватара')
+    } finally {
+      setIsUploadingAvatar(false)
+      e.target.value = ''
+    }
   }
 
   return (
@@ -57,16 +120,26 @@ export default function ProfilePage({ user }: ProfilePageProps) {
 
           <div className="avatar-container">
             <img
-              src={user.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.username)}&background=random&color=fff&size=256&bold=true`}
+              src={user.avatar || '/default-avatar.jpg'}
               alt={user.username}
             />
           </div>
 
           <p className="avatar-text">{t('profile.upload_change_avatar')}</p>
 
-          <button className="avatar-upload-btn">
-            {t('profile.upload')}
+          <button className="avatar-upload-btn" onClick={handleAvatarPick} disabled={isUploadingAvatar}>
+            {isUploadingAvatar ? 'Загрузка...' : t('profile.upload')}
           </button>
+
+          <input
+            ref={avatarInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleAvatarChange}
+            style={{ display: 'none' }}
+          />
+
+          {avatarError ? <p className="avatar-text">{avatarError}</p> : null}
         </div>
 
         {/* Profile Info Section */}

@@ -9,6 +9,7 @@ import UpdateNotification from './components/UpdateNotification'
 import { LanguageProvider } from './contexts/LanguageContext'
 import type { User } from './types'
 import { getUserInfo } from './utils/api'
+import Snowfall from './components/Snowfall'
 import './styles/App.css'
 
 
@@ -171,6 +172,7 @@ export default function App() {
   if (!user) {
     return (
       <LanguageProvider>
+        <Snowfall />
         <AuthPage onLogin={handleLogin} />
       </LanguageProvider>
     )
@@ -178,6 +180,7 @@ export default function App() {
 
   return (
     <LanguageProvider>
+      <Snowfall />
       <div className="app">
         <TitleBar />
         <UpdateNotification />

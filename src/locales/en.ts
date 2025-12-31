@@ -2,6 +2,12 @@ export default {
     // Language selector
     'lang.russian': 'Русский',
     'lang.english': 'English',
+    'lang.ukrainian': 'Українська',
+    'lang.polish': 'Polski',
+    'lang.turkish': 'Türkçe',
+    'lang.kazakh': 'Қазақша',
+
+    'dashboard.forever': 'Forever',
 
     // TitleBar
     'titlebar.minimize': 'Minimize',
@@ -96,8 +102,9 @@ export default {
     'auth.username': 'Login',
     'auth.password': 'Password',
     'auth.login': 'LOG IN',
-    'auth.or': 'Or sign in with',
+    'auth.or': 'Or',
     'auth.website_login': 'LOG IN VIA THE WEBSITE',
+    'auth.logging_in': 'Logging in...',
     'auth.success': 'Login successful!',
     'auth.error': 'Login error',
     'auth.connection_error': 'Server connection error',

@@ -51,18 +51,7 @@ export async function checkServerHealth() {
 // Загрузка пользовательской аватарки
 export async function uploadAvatar(userId: number, avatarBase64: string) {
   try {
-    const url = `${API_URL}/api/users/${userId}/avatar`
-    console.log('🔍 API.uploadAvatar: Uploading to URL:', url)
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ avatar: avatarBase64 })
-    })
-    const data = await response.json()
-    console.log('🔍 API.uploadAvatar: Response:', data)
-    return data
+    return await updateUser(userId, { avatar: avatarBase64 })
   } catch (error) {
     console.error('❌ Upload avatar error:', error)
     return { success: false, message: 'Ошибка подключения к серверу' }
@@ -72,14 +61,7 @@ export async function uploadAvatar(userId: number, avatarBase64: string) {
 // Удаление пользовательской аватарки
 export async function deleteAvatar(userId: number) {
   try {
-    const url = `${API_URL}/api/users/${userId}/avatar`
-    console.log('🔍 API.deleteAvatar: Deleting from URL:', url)
-    const response = await fetch(url, {
-      method: 'DELETE'
-    })
-    const data = await response.json()
-    console.log('🔍 API.deleteAvatar: Response:', data)
-    return data
+    return await updateUser(userId, { avatar: null })
   } catch (error) {
     console.error('❌ Delete avatar error:', error)
     return { success: false, message: 'Ошибка подключения к серверу' }

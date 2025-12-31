@@ -6,22 +6,22 @@
 
 :root {
   /* Blue-Purple Theme */
-  --bg-primary: #0d1117;
-  --bg-secondary: #161b22;
-  --bg-tertiary: #1c2128;
-  --bg-card: #1a1f2e;
-  --bg-card-hover: #222839;
+  --bg-primary: #000000;
+  --bg-secondary: #080808;
+  --bg-tertiary: #101010;
+  --bg-card: rgba(255, 140, 0, 0.03);
+  --bg-card-hover: rgba(255, 140, 0, 0.05);
   
   --text-primary: #FFFFFF;
-  --text-secondary: #8b949e;
-  --text-muted: #6e7681;
+  --text-secondary: #A1A1AA;
+  --text-muted: #71717A;
   
   /* Accent Colors */
-  --accent: #00b4d8;
-  --accent-hover: #0096c7;
-  --accent-light: #48cae4;
-  --accent-dark: #0077b6;
-  --accent-gradient: linear-gradient(135deg, #00b4d8 0%, #7c3aed 100%);
+  --accent: #FF8C00;
+  --accent-hover: #E67E00;
+  --accent-light: #FFA500;
+  --accent-dark: #C96A00;
+  --accent-gradient: linear-gradient(135deg, #FF8C00 0%, #FF4500 100%);
   
   /* Status Colors */
   --success: #22c55e;
@@ -29,15 +29,15 @@
   --error: #ef4444;
   
   /* Borders & Effects */
-  --border: rgba(0, 180, 216, 0.2);
-  --border-subtle: rgba(139, 148, 158, 0.1);
-  --glow: rgba(0, 180, 216, 0.3);
+  --border: rgba(255, 140, 0, 0.2);
+  --border-subtle: rgba(255, 140, 0, 0.1);
+  --glow: rgba(255, 140, 0, 0.25);
   --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
   
   /* Sidebar */
   --sidebar-width: 60px;
-  --sidebar-bg: #0d1117;
-  --sidebar-active: #00b4d8;
+  --sidebar-bg: #000000;
+  --sidebar-active: #FF8C00;
   
   /* Card */
   --card-radius: 12px;
@@ -96,7 +96,7 @@ body {
 
 .app-content {
   flex: 1;
-  overflow-y: auto;
+  overflow: hidden;
   background: var(--bg-primary);
   padding: 24px;
 }
@@ -154,20 +154,3 @@ body {
   background: var(--bg-card-hover);
 }
 
-/* Scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--bg-secondary);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--bg-tertiary);
-  border-radius: 3px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
-}

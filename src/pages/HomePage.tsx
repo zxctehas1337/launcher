@@ -184,7 +184,7 @@ export default function HomePage({ user }: HomePageProps) {
                   {launchingServer ? (
                     <div className="launch-status">
                       <div className="spinner-small" />
-                      <span>{progress?.message || t('home.loading')} {progress?.progress ? `${Math.round(progress.progress)}%` : ''}</span>
+                      <span>{progress?.message || t('home.loading')} {progress?.progress !== undefined ? `${Math.round(Number(progress.progress))}%` : ''}</span>
                     </div>
                   ) : (
                     <>
