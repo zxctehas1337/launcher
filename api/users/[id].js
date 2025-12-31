@@ -1,7 +1,55 @@
 import { getPool } from '../_lib/db.js';
 import { mapUserFromDb } from '../_lib/userMapper.js';
 
+const setCorsHeaders = (req, res) => {
+  const origin = req.headers.origin;
+  const allowedOriginPatterns = [
+    /^http:\/\/localhost(?::\d+)?$/,
+    /^http:\/\/127\.0\.0\.1(?::\d+)?$/,
+    /^https:\/\/shakedown\.vercel\.app$/,
+  ];
+
+  const isAllowedOrigin =
+    typeof origin === 'string' && allowedOriginPatterns.some((pattern) => pattern.test(origin));
+
+  res.setHeader('Access-Control-Allow-Origin', isAllowedOrigin ? origin : '*');
+  res.setHeader('Vary', 'Origin');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,PATCH,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+};
+
+const normalizeAvatarUpdate = (updates) => {
+  if (!updates || typeof updates !== 'object') return updates;
+
+  if (typeof updates.avatar === 'undefined') return updates;
+
+  if (updates.avatar === null || updates.avatar === '') {
+    return { ...updates, avatar: null };
+  }
+
+  if (typeof updates.avatar !== 'string') {
+    throw new Error('Invalid avatar');
+  }
+
+  if (!updates.avatar.startsWith('data:image/')) {
+    throw new Error('Invalid avatar');
+  }
+
+  const maxLen = 5_000_000;
+  if (updates.avatar.length > maxLen) {
+    throw new Error('Avatar too large');
+  }
+
+  return updates;
+};
+
 export default async (req, res) => {
+  setCorsHeaders(req, res);
+
+  if (req.method === 'OPTIONS') {
+    return res.status(204).end();
+  }
+
   const { id } = req.query;
   const pool = getPool();
 
@@ -23,9 +71,10 @@ export default async (req, res) => {
       res.status(500).json({ success: false, message: 'Ошибка сервера' });
     }
   } else if (req.method === 'PATCH') {
-    const updates = req.body;
+    let updates = req.body;
 
     try {
+      updates = normalizeAvatarUpdate(updates);
       const fields = [];
       const values = [];
       let paramCount = 1;
@@ -58,6 +107,9 @@ export default async (req, res) => {
       res.json({ success: true, data: mapUserFromDb(result.rows[0]) });
     } catch (error) {
       console.error('Update error:', error);
+      if (error && (error.message === 'Invalid avatar' || error.message === 'Avatar too large')) {
+        return res.status(400).json({ success: false, message: 'Неверный аватар' });
+      }
       res.status(500).json({ success: false, message: 'Ошибка сервера' });
     }
   } else {

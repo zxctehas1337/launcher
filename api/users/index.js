@@ -1,7 +1,30 @@
 import { getPool } from '../_lib/db.js';
 import { mapUserFromDb } from '../_lib/userMapper.js';
 
+const setCorsHeaders = (req, res) => {
+  const origin = req.headers.origin;
+  const allowedOriginPatterns = [
+    /^http:\/\/localhost(?::\d+)?$/,
+    /^http:\/\/127\.0\.0\.1(?::\d+)?$/,
+    /^https:\/\/shakedown\.vercel\.app$/,
+  ];
+
+  const isAllowedOrigin =
+    typeof origin === 'string' && allowedOriginPatterns.some((pattern) => pattern.test(origin));
+
+  res.setHeader('Access-Control-Allow-Origin', isAllowedOrigin ? origin : '*');
+  res.setHeader('Vary', 'Origin');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,PATCH,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+};
+
 export default async (req, res) => {
+  setCorsHeaders(req, res);
+
+  if (req.method === 'OPTIONS') {
+    return res.status(204).end();
+  }
+
   const pool = getPool();
   const { id } = req.query;
 
