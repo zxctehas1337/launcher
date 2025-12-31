@@ -2,9 +2,10 @@ name: Build Launcher
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main, master ]
+    tags: [ '*' ]
   pull_request:
-    branches: [ master ]
+    branches: [ main, master ]
   workflow_dispatch:
 
 jobs:
@@ -33,7 +34,7 @@ jobs:
           - platform: 'windows-latest'
             args: ''
             target_triple: ''
-            artifact_name: 'ShakeDown_Launcher.exe'
+            artifact_name: 'ShakeDown Launcher_0.1.0_x64-setup.exe'
             asset_name: 'ShakeDown-Launcher-windows.exe'
 
     runs-on: ${{ matrix.platform }}
@@ -112,7 +113,9 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: ${{ matrix.asset_name }}
-        path: src-tauri/target/${{ matrix.target_triple != '' && format('{0}/release/bundle/{1}', matrix.target_triple, contains(matrix.target_triple, 'darwin') && 'dmg' || (contains(matrix.target_triple, 'windows') && 'nsis' || 'appimage')) || 'release/bundle/' }}/${{ matrix.artifact_name }}
+        path: |
+          src-tauri/target/${{ matrix.target_triple != '' && format('{0}/release/bundle/{1}', matrix.target_triple, contains(matrix.target_triple, 'darwin') && 'dmg' || (contains(matrix.target_triple, 'windows') && 'nsis' || 'appimage')) || 'release/bundle' }}/
+          src-tauri/target/${{ matrix.target_triple != '' && format('{0}/release', matrix.target_triple) || 'release' }}/
 
   release:
     if: startsWith(github.ref, 'refs/tags/')
