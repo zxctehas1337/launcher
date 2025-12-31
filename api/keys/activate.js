@@ -74,9 +74,17 @@ export default async function handler(req, res) {
         const currentSub = String(currentRow?.subscription || 'free').trim().toLowerCase();
         const currentEnd = currentRow?.subscription_end_date;
 
-        // Treat NULL end date as lifetime only for already-paid subs
+        // Treat NULL end date as lifetime only if user has actually used a lifetime key
         if (currentEnd === null && (currentSub === 'premium' || currentSub === 'alpha')) {
-          hasLifetime = true;
+          try {
+            const lifetimeKeyResult = await pool.query(
+              'SELECT 1 FROM license_keys WHERE used_by = $1 AND duration_days = 0 LIMIT 1',
+              [userId]
+            );
+            hasLifetime = lifetimeKeyResult.rows.length > 0;
+          } catch (lifetimeCheckError) {
+            hasLifetime = false;
+          }
         } else if (currentEnd) {
           const currentEndDate = new Date(currentEnd);
           if (!Number.isNaN(currentEndDate.getTime()) && currentEndDate > baseDate) {
@@ -105,6 +113,20 @@ export default async function handler(req, res) {
     } catch (columnError) {
       // Fallback to update without subscription_end_date if column doesn't exist
       await pool.query('UPDATE users SET subscription = $1 WHERE id = $2', [newSubscription, userId]);
+    }
+
+    try {
+      const verifyResult = await pool.query(
+        'SELECT subscription, subscription_end_date FROM users WHERE id = $1',
+        [userId]
+      );
+      const verifyRow = verifyResult.rows?.[0];
+      if (verifyRow) {
+        newSubscription = String(verifyRow.subscription || newSubscription).trim().toLowerCase();
+        subscriptionEndDate = verifyRow.subscription_end_date ?? null;
+      }
+    } catch (verifyError) {
+      console.error('Verify subscription end date error:', verifyError);
     }
 
     res.json({
