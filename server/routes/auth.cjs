@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
-const { pool } = require('../config/database.js');
-const { generateVerificationCode, sendVerificationEmail } = require('../services/email.js');
-const { mapUserFromDb } = require('../utils/userMapper.js');
+const { pool } = require('../database.cjs');
+const { generateVerificationCode, sendVerificationEmail } = require('../services/email.cjs');
+const { mapUserFromDb } = require('../utils/userMapper.cjs');
 
 const SALT_ROUNDS = 10;
 

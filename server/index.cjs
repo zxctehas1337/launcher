@@ -1,21 +1,19 @@
-import express from 'express';
-import cors from 'cors';
-import path from 'path';
-import dotenv from 'dotenv';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
+const express = require('express');
+const cors = require('cors');
+const path = require('path');
+require('dotenv').config();
 
 // Config
-const { pool, initDatabase } = require('./config/database.js');
+const { pool, initDatabase } = require('./database.cjs');
 
 // Routes
-import authRoutes from './routes/auth.js';
-import usersRoutes from './routes/users.js';
-import productsRoutes from './routes/products.js';
-import hwidRoutes from './routes/hwid.js';
-import keysRoutes from './routes/keys.js';
-import versionsRoutes from './routes/versions.js';
-import clientRoutes from './routes/client.js';
+const authRoutes = require('./routes/auth.cjs');
+const usersRoutes = require('./routes/users.cjs');
+const productsRoutes = require('./routes/products.cjs');
+const hwidRoutes = require('./routes/hwid.cjs');
+const keysRoutes = require('./routes/keys.cjs');
+const versionsRoutes = require('./routes/versions.cjs');
+const clientRoutes = require('./routes/client.cjs');
 
 const app = express();
 const PORT = process.env.PORT || 8080;

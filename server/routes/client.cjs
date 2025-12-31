@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { pool } = require('../config/database.js');
+const { pool } = require('../database.cjs');
 
 // Публичный эндпоинт для лаунчера: получить активную (или последнюю) версию
 router.get('/version', async (_req, res) => {

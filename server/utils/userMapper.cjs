@@ -1,5 +1,5 @@
 // Маппинг пользователя из БД в API формат
-export function mapUserFromDb(dbUser) {
+function mapUserFromDb(dbUser) {
   return {
     id: dbUser.id,
     username: dbUser.username,
@@ -12,3 +12,5 @@ export function mapUserFromDb(dbUser) {
     settings: dbUser.settings
   };
 }
+
+module.exports = { mapUserFromDb };

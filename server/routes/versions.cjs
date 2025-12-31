@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { pool } = require('../config/database.js');
+const { pool } = require('../database.cjs');
 
 // Получение всех версий (для админки)
 router.get('/', async (_req, res) => {
