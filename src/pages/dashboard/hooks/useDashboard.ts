@@ -75,7 +75,11 @@ export function useDashboard() {
       
       if (result.success) {
         // Обновление подписки пользователя
-        const updatedUser = { ...user, subscription: result.data.newSubscription }
+        const updatedUser = {
+          ...user,
+          subscription: result.data.newSubscription,
+          subscriptionEndDate: result.data.subscriptionEndDate ?? user.subscriptionEndDate
+        }
         updateUserData(updatedUser)
 
         const productNames: Record<string, string> = {

@@ -117,7 +117,7 @@ async function handleLogin(req, res, pool) {
   const { usernameOrEmail, password, hwid } = req.body;
 
   const result = await pool.query(
-    `SELECT id, username, email, password, subscription, registered_at, is_admin, is_banned, email_verified, settings, avatar, hwid
+    `SELECT id, username, email, password, subscription, subscription_end_date, registered_at, is_admin, is_banned, email_verified, settings, avatar, hwid
      FROM users 
      WHERE (username = $1 OR email = $1)
      LIMIT 1`,
@@ -182,7 +182,7 @@ async function handleRegister(req, res, pool) {
     const result = await client.query(
       `INSERT INTO users (username, email, password, verification_code, verification_code_expires, email_verified, hwid) 
        VALUES ($1, $2, $3, $4, $5, false, $6) 
-       RETURNING id, username, email, subscription, registered_at, is_admin, is_banned, email_verified, settings, avatar, hwid`,
+       RETURNING id, username, email, subscription, subscription_end_date, registered_at, is_admin, is_banned, email_verified, settings, avatar, hwid`,
       [username, email, hashedPassword, verificationCode, codeExpires, hwid]
     );
 

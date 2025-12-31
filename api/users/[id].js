@@ -56,7 +56,7 @@ export default async (req, res) => {
   if (req.method === 'GET') {
     try {
       const result = await pool.query(
-        `SELECT id, username, email, password, subscription, avatar, registered_at, is_admin, is_banned, email_verified, settings, hwid 
+        `SELECT id, username, email, password, subscription, subscription_end_date, avatar, registered_at, is_admin, is_banned, email_verified, settings, hwid 
          FROM users WHERE id = $1`,
         [id]
       );
@@ -96,7 +96,7 @@ export default async (req, res) => {
       const result = await pool.query(
         `UPDATE users SET ${fields.join(', ')} 
          WHERE id = $${paramCount} 
-         RETURNING id, username, email, password, subscription, avatar, registered_at, is_admin, is_banned, settings, hwid`,
+         RETURNING id, username, email, password, subscription, subscription_end_date, avatar, registered_at, is_admin, is_banned, settings, hwid`,
         values
       );
 

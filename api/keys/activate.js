@@ -56,10 +56,37 @@ export default async function handler(req, res) {
     }
 
     // Calculate subscription end date
+    // - duration_days === 0 => lifetime (store NULL)
+    // - duration_days > 0 => extend from current subscription_end_date if it's in the future
     if (licenseKey.duration_days > 0) {
-      const endDate = new Date();
-      endDate.setDate(endDate.getDate() + licenseKey.duration_days);
-      subscriptionEndDate = endDate.toISOString();
+      let baseDate = new Date();
+
+      try {
+        const currentResult = await pool.query(
+          'SELECT subscription_end_date FROM users WHERE id = $1',
+          [userId]
+        );
+
+        const currentEnd = currentResult.rows?.[0]?.subscription_end_date;
+
+        // If user already has lifetime access, keep it lifetime
+        if (currentEnd === null) {
+          subscriptionEndDate = null;
+        } else if (currentEnd) {
+          const currentEndDate = new Date(currentEnd);
+          if (!Number.isNaN(currentEndDate.getTime()) && currentEndDate > baseDate) {
+            baseDate = currentEndDate;
+          }
+        }
+      } catch (columnError) {
+        // Backwards compatibility: if subscription_end_date doesn't exist, fall back to now
+      }
+
+      if (subscriptionEndDate !== null) {
+        const endDate = new Date(baseDate);
+        endDate.setDate(endDate.getDate() + licenseKey.duration_days);
+        subscriptionEndDate = endDate.toISOString();
+      }
     }
 
     try {
@@ -79,7 +106,8 @@ export default async function handler(req, res) {
       data: {
         product: licenseKey.product,
         duration: licenseKey.duration_days,
-        newSubscription
+        newSubscription,
+        subscriptionEndDate
       }
     });
   } catch (error) {
