@@ -47,13 +47,25 @@ export default async function handler(req, res) {
     );
 
     let newSubscription = 'free';
+    let subscriptionEndDate = null;
+    
     if (licenseKey.product === 'premium' || licenseKey.product === 'inside-client') {
       newSubscription = 'premium';
     } else if (licenseKey.product === 'alpha') {
       newSubscription = 'alpha';
     }
 
-    await pool.query('UPDATE users SET subscription = $1 WHERE id = $2', [newSubscription, userId]);
+    // Calculate subscription end date
+    if (licenseKey.duration_days > 0) {
+      const endDate = new Date();
+      endDate.setDate(endDate.getDate() + licenseKey.duration_days);
+      subscriptionEndDate = endDate.toISOString();
+    }
+
+    await pool.query(
+      'UPDATE users SET subscription = $1, subscription_end_date = $2 WHERE id = $3', 
+      [newSubscription, subscriptionEndDate, userId]
+    );
 
     res.json({
       success: true,

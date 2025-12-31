@@ -4,6 +4,7 @@ export interface User {
   email: string
   password: string
   subscription: 'free' | 'premium' | 'alpha'
+  subscriptionEndDate?: string
   registeredAt: string
   avatar?: string
   settings: UserSettings

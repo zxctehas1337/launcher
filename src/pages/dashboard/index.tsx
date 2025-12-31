@@ -123,7 +123,7 @@ export default function DashboardPage() {
                   <h3>
                     {user.profile?.displayName || user.username} <span className="profile-uid">[{user.id}]</span>
                   </h3>
-                  <p>{t.dashboard.subscriptionTill}: 01.01.1970</p>
+                  <p>{t.dashboard.subscriptionTill}: {user.subscriptionEndDate ? formatDate(user.subscriptionEndDate) : t.dashboard.forever}</p>
                 </div>
                 <button className="profile-logout-btn" onClick={() => setShowLogoutModal(true)}>
                   <IconLogout size={18} />

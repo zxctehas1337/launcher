@@ -112,6 +112,23 @@ async function createTables(pool) {
       END $$;
     `);
     
+    // Добавление колонки subscription_end_date если её нет
+    await client.query(`
+      DO $$
+      BEGIN
+          IF NOT EXISTS (
+              SELECT 1
+              FROM information_schema.columns
+              WHERE table_schema = 'public'
+                AND table_name = 'users'
+                AND column_name = 'subscription_end_date'
+          ) THEN
+              ALTER TABLE users 
+              ADD COLUMN subscription_end_date TIMESTAMP WITH TIME ZONE;
+          END IF;
+      END $$;
+    `);
+    
     // Создание таблицы license_keys
     await client.query(`
       CREATE TABLE IF NOT EXISTS license_keys (

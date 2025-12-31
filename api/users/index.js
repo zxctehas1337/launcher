@@ -32,7 +32,7 @@ export default async (req, res) => {
     if (req.method === 'GET') {
       try {
         const result = await pool.query(
-          `SELECT id, username, email, password, subscription, avatar, registered_at, is_admin, is_banned, email_verified, settings, hwid 
+          `SELECT id, username, email, password, subscription, subscription_end_date, avatar, registered_at, is_admin, is_banned, email_verified, settings, hwid 
            FROM users WHERE id = $1`,
           [id]
         );
@@ -73,7 +73,7 @@ export default async (req, res) => {
         const result = await pool.query(
           `UPDATE users SET ${fields.join(', ')} 
            WHERE id = $${paramCount} 
-           RETURNING id, username, email, password, subscription, avatar, registered_at, is_admin, is_banned, email_verified, settings, hwid`,
+           RETURNING id, username, email, password, subscription, subscription_end_date, avatar, registered_at, is_admin, is_banned, email_verified, settings, hwid`,
           values
         );
 
@@ -93,7 +93,7 @@ export default async (req, res) => {
 
   try {
     const result = await pool.query(
-      `SELECT id, username, email, subscription, registered_at, is_admin, is_banned, email_verified, settings, hwid 
+      `SELECT id, username, email, subscription, subscription_end_date, registered_at, is_admin, is_banned, email_verified, settings, hwid 
        FROM users ORDER BY id DESC`
     );
 
@@ -102,6 +102,7 @@ export default async (req, res) => {
       username: dbUser.username,
       email: dbUser.email,
       subscription: dbUser.subscription,
+      subscriptionEndDate: dbUser.subscription_end_date,
       registeredAt: dbUser.registered_at,
       isAdmin: dbUser.is_admin,
       isBanned: dbUser.is_banned,
