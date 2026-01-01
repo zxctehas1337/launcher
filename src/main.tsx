@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import './styles/index.css'
+import './styles/favicon.css'
 import { SpeedInsights } from '@vercel/speed-insights/react'
 
 // Скрытая функция для локального тестирования (вызов из консоли: local_auth_test())
