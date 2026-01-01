@@ -29,24 +29,61 @@ export function useDashboard() {
       setUser(userData)
       setProfileForm(userData.profile || {})
 
-      ;(async () => {
+      // Переменные для управления частотой обновлений
+      let lastUpdateTime = 0
+      let isUpdating = false
+      let lastUserData = ''
+
+      // Функция для обновления данных пользователя
+      const updateUserDataFromServer = async () => {
+        const now = Date.now()
+        const savedUser = getCurrentUser()
+        
+        // Проверяем, что с момента последнего обновления прошла хотя бы 1 секунда
+        // и нет активного запроса на обновление
+        if (!savedUser || isUpdating || (now - lastUpdateTime < 1000)) {
+          return
+        }
+
         try {
-          const response = await getUserInfo(userData.id)
+          isUpdating = true
+          lastUpdateTime = now
+          
+          const response = await getUserInfo(savedUser.id)
+          
           if (response?.success && response.data) {
             const mergedUser: User = {
-              ...userData,
+              ...savedUser,
               ...response.data,
-              registeredAt: response.data.registeredAt || userData.registeredAt,
-              settings: response.data.settings || userData.settings,
+              registeredAt: response.data.registeredAt || savedUser.registeredAt,
+              settings: response.data.settings || savedUser.settings,
             }
-            setCurrentUser(mergedUser)
-            setUser(mergedUser)
-            setProfileForm(mergedUser.profile || {})
+
+            // Обновляем только если данные изменились
+            const userDataStr = JSON.stringify(mergedUser)
+            if (userDataStr !== lastUserData) {
+              lastUserData = userDataStr
+              setCurrentUser(mergedUser)
+              setUser(mergedUser)
+              setProfileForm(mergedUser.profile || {})
+            }
+          } else {
+            // Ошибка обновления данных
           }
-        } catch (error) {
-          console.error('Failed to refresh user from API:', error)
+        } catch (e) {
+          // Auto-update failed
+        } finally {
+          isUpdating = false
         }
-      })()
+      }
+
+      // Запускаем обновление каждую секунду
+      const intervalId = setInterval(updateUserDataFromServer, 1000)
+      
+      // Первое обновление
+      updateUserDataFromServer()
+
+      return () => clearInterval(intervalId)
     }
   }, [navigate])
 
