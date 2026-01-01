@@ -71,10 +71,23 @@
 }
 
 .auth-logo-small {
-    margin-bottom: -60px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
 }
 
-.auth-logo-small .logoWithHat__logo {
+.auth-page-centered .auth-logo-small .logoWithHat__logo,
+.auth-page-centered .auth-logo-small img {
+    width: 60px !important;
+    height: 60px !important;
+    max-width: 60px !important;
+    max-height: 60px !important;
+    min-width: 60px !important;
+    min-height: 60px !important;
+    object-fit: cover;
+    border-radius: 6px;
+    flex-shrink: 0;
+    flex-grow: 0;
 }
 
 .auth-title-clean h2 {

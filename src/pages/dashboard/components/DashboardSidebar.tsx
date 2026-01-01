@@ -35,7 +35,7 @@ export function DashboardSidebar({
       <div className="sidebar-header">
         <LogoWithHat
           alt="Shakedown"
-          size={56}
+          size={40}
           className="sidebar-logo no-user-drag"
           draggable={false}
           onContextMenu={(e) => e.preventDefault()}

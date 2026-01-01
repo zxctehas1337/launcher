@@ -12,7 +12,7 @@ export function MobileHeader({ mobileMenuOpen, setMobileMenuOpen }: Props) {
       <div className="mobile-header-left">
         <LogoWithHat
           alt="Shakedown"
-          size={48}
+          size={36}
           className="mobile-logo no-user-drag"
           draggable={false}
           onContextMenu={(e) => e.preventDefault()}

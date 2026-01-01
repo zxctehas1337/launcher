@@ -160,3 +160,8 @@ export const MEDIA = {
   videoPreview: 'https://www.youtube.com/embed/YOUR_VIDEO_ID', // Замените на ваше видео
   videoThumbnail: '/video-thumbnail.jpg' // Или используйте скриншот
 }
+
+// Логотип сайта (WebP)
+export const SITE_LOGO = `
+<img src="/icon.png" alt="Shakedown" width="120" height="120" style="image-rendering: pixelated;" />
+`

@@ -107,7 +107,7 @@ export default function AuthPage() {
       <div className="auth-box-clean">
         <div className="auth-header">
           <div className="auth-logo-small">
-            <LogoWithHat size={180} alt="ShakeDown Logo" />
+            <LogoWithHat size={40} alt="ShakeDown Logo" useSvgLogo={false} />
           </div>
           <div className="auth-title-clean">
             <h2>{t.auth.welcome}</h2>

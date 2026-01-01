@@ -25,7 +25,7 @@ export function AdminSidebar({
       <div className="admin-brand">
         <LogoWithHat
           alt="Shakedown"
-          size={48}
+          size={36}
           className="no-user-drag"
           draggable={false}
           onContextMenu={(e) => e.preventDefault()}
