@@ -1,3 +1,4 @@
+#[cfg(target_os = "windows")]
 use serde::Deserialize;
 use sha2::{Sha256, Digest};
 

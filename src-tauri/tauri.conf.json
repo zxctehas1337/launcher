@@ -42,7 +42,8 @@
     "active": true,
     "icon": [
       "icons/icon.ico",
-      "icons/icon.icns"
+      "icons/icon.icns",
+      "icons/icon.png"
     ],
     "targets": ["appimage", "nsis", "dmg"],
     "windows": {
