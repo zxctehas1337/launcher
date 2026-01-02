@@ -35,7 +35,6 @@
 
 .key-stat-card {
     background: rgba(255, 140, 0, 0.03);
-    border: 1px solid rgba(255, 140, 0, 0.1);
     border-radius: 16px;
     padding: 20px;
     display: flex;
@@ -46,14 +45,12 @@
 
 .key-stat-card:hover {
     background: rgba(255, 140, 0, 0.05);
-    border-color: rgba(255, 140, 0, 0.3);
     transform: translateY(-2px);
 }
 
 .key-stat-icon {
     width: 44px;
     height: 44px;
-    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -61,17 +58,14 @@
 }
 
 .key-stat-icon.total {
-    background: rgba(255, 140, 0, 0.1);
     color: var(--orange-500);
 }
 
 .key-stat-icon.available {
-    background: rgba(50, 200, 100, 0.1);
     color: #32C864;
 }
 
 .key-stat-icon.used {
-    background: rgba(255, 77, 77, 0.1);
     color: #FF4D4D;
 }
 

@@ -1,11 +1,16 @@
+import { useState } from 'react'
 import { User } from '../../../types'
 import { getAvatarUrl } from '../../../utils/avatarGenerator'
+import { AdminSubNav } from './AdminSubNav'
 
 interface ActivityTabProps {
   users: User[]
 }
 
+type ActivitySubTab = 'overview' | 'analytics' | 'recent'
+
 export function ActivityTab({ users }: ActivityTabProps) {
+  const [activeSubTab, setActiveSubTab] = useState<ActivitySubTab>('overview')
   const now = new Date()
 
   // Данные для графика (регистрации за последние 7 дней)
@@ -41,27 +46,45 @@ export function ActivityTab({ users }: ActivityTabProps) {
     ? Math.round((premiumUsers / users.length) * 100)
     : 0
 
+  const subNavItems = [
+    {
+      id: 'overview',
+      label: 'Обзор',
+      icon: (
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z" />
+        </svg>
+      )
+    },
+    {
+      id: 'analytics',
+      label: 'Аналитика',
+      icon: (
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z" />
+        </svg>
+      )
+    },
+    {
+      id: 'recent',
+      label: 'Недавние',
+      icon: (
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z" />
+        </svg>
+      )
+    }
+  ]
+
   return (
     <div className="admin-section">
-      <div className="activity-stats">
-        <div className="activity-chart-card">
-          <h3>Регистрации за последние 7 дней</h3>
-          <div className="chart-placeholder">
-            <div className="chart-bars">
-              {chartData.map((data, i) => (
-                <div key={i} className="chart-bar">
-                  <div
-                    className="bar-fill"
-                    style={{ height: `${(data.count / maxCount) * 100}%` }}
-                    title={`${data.count} рег.`}
-                  ></div>
-                  <div className="bar-label">{data.label}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+      <AdminSubNav
+        items={subNavItems}
+        activeId={activeSubTab}
+        onChange={(id) => setActiveSubTab(id as ActivitySubTab)}
+      />
 
+      {activeSubTab === 'overview' && (
         <div className="activity-info-grid">
           <div className="info-card">
             <div className="info-icon">
@@ -99,26 +122,50 @@ export function ActivityTab({ users }: ActivityTabProps) {
             </div>
           </div>
         </div>
-      </div>
+      )}
 
-      <div className="recent-users">
-        <h3>Недавно зарегистрированные</h3>
-        <div className="users-list">
-          {users.slice(0, 10).map(user => (
-            <div key={user.id} className="user-item">
-              <img src={getAvatarUrl(user.avatar)} alt={user.username} className="user-avatar-small" />
-              <div className="user-item-info">
-                <div className="user-item-name">{user.username}</div>
-                <div className="user-item-date">{new Date(user.registeredAt).toLocaleDateString('ru-RU')}</div>
+      {activeSubTab === 'analytics' && (
+        <div className="activity-stats">
+          <div className="activity-chart-card">
+            <h3>Регистрации за последние 7 дней</h3>
+            <div className="chart-placeholder">
+              <div className="chart-bars">
+                {chartData.map((data, i) => (
+                  <div key={i} className="chart-bar">
+                    <div
+                      className="bar-fill"
+                      style={{ height: `${(data.count / maxCount) * 100}%` }}
+                      title={`${data.count} рег.`}
+                    ></div>
+                    <div className="bar-label">{data.label}</div>
+                  </div>
+                ))}
               </div>
-              <span className={`subscription-badge ${user.subscription}`}>
-                {user.subscription === 'premium' ? 'Premium' :
-                  user.subscription === 'alpha' ? 'Alpha' : 'Free'}
-              </span>
             </div>
-          ))}
+          </div>
         </div>
-      </div>
+      )}
+
+      {activeSubTab === 'recent' && (
+        <div className="recent-users">
+          <h3>Недавно зарегистрированные</h3>
+          <div className="users-list">
+            {users.slice(0, 10).map(user => (
+              <div key={user.id} className="user-item">
+                <img src={getAvatarUrl(user.avatar)} alt={user.username} className="user-avatar-small" />
+                <div className="user-item-info">
+                  <div className="user-item-name">{user.username}</div>
+                  <div className="user-item-date">{new Date(user.registeredAt).toLocaleDateString('ru-RU')}</div>
+                </div>
+                <span className={`subscription-badge ${user.subscription}`}>
+                  {user.subscription === 'premium' ? 'Premium' :
+                    user.subscription === 'alpha' ? 'Alpha' : 'Free'}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

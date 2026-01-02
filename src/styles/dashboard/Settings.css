@@ -47,7 +47,7 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.04);
 }
 
-.setting-item:has(.friend-add-group) {
+.setting-item:has(.friend-input-wrapper) {
   flex-direction: column;
   align-items: stretch;
   gap: 12px;
@@ -202,55 +202,93 @@ input:checked+.toggle-slider:before {
   border: 1px solid rgba(239, 68, 68, 0.3);
 }
 
-/* Friend Add Group */
-.friend-add-group {
+.friend-input-wrapper {
   display: flex;
-  gap: 8px;
-  align-items: flex-start;
+  align-items: center;
   position: relative;
+  width: 100%;
+  max-width: 550px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 2px 2px 2px 4px;
+  transition: all 0.2s ease;
 }
 
-.send-icon {
-  width: 16px;
-  height: 16px;
-  filter: brightness(0) invert(1);
+.friend-input-wrapper:focus-within {
+  border-color: rgba(255, 140, 0, 0.5);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.telegram-send-btn {
+  background: transparent;
+  border: none;
+  color: #ff8c00;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 20px;
+  border-radius: 8px;
+}
+
+.telegram-send-btn:hover:not(:disabled) {
+  background: rgba(255, 140, 0, 0.1);
+  color: #ffa500;
+}
+
+.telegram-send-btn:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.telegram-send-btn:disabled {
+  opacity: 0.2;
+  cursor: default;
+  color: rgba(255, 255, 255, 0.4);
 }
 
 .friend-avatar {
   position: absolute;
-  right: 8px;
-  top: -100px;
+  right: 12px;
+  top: -110px;
   height: 150px;
   width: 100px;
   object-fit: contain;
   z-index: 1;
+  pointer-events: none;
 }
 
-.friend-add-group .setting-btn {
-  min-width: auto;
-  flex: 0;
-  padding: 8px 28px;
-  width: auto;
+.friend-avatar.animate {
+  animation: slideInFromRight 0.8s ease-out;
 }
+
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(200px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
 
 .friend-input {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: transparent !important;
+  border: none !important;
   color: #ffffff;
   padding: 8px 12px;
-  border-radius: 8px;
   font-size: 14px;
-  flex: 1.5;
-  min-width: 250px;
-  max-width: 550px;
-  transition: all 0.2s ease;
+  flex: 1;
+  min-width: 0;
+  outline: none !important;
+  box-shadow: none !important;
 }
 
-.friend-input:focus {
-  outline: none;
-  border-color: rgba(255, 140, 0, 0.5);
-  box-shadow: 0 0 0 2px rgba(255, 140, 0, 0.1);
-}
 
 .friend-input::placeholder {
   color: rgba(255, 255, 255, 0.4);
@@ -270,7 +308,7 @@ input:checked+.toggle-slider:before {
     align-self: flex-end;
   }
 
-  .friend-add-group {
+  .friend-input-wrapper {
     width: 100%;
   }
 
@@ -307,21 +345,27 @@ input:checked+.toggle-slider:before {
   border-bottom-color: rgba(0, 0, 0, 0.05);
 }
 
-[data-theme="light"] .friend-input,
+[data-theme="light"] .friend-input-wrapper,
 [data-theme="light"] .setting-select {
   background: #ffffff;
   border-color: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .setting-select {
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .friend-input-wrapper:focus-within,
+[data-theme="light"] .setting-select:focus {
+  border-color: var(--orange-500);
+}
+
+[data-theme="light"] .friend-input {
   color: var(--text-primary);
 }
 
 [data-theme="light"] .friend-input::placeholder {
   color: var(--text-tertiary);
-}
-
-[data-theme="light"] .friend-input:focus,
-[data-theme="light"] .setting-select:focus {
-  border-color: var(--orange-500);
-  box-shadow: 0 0 0 2px rgba(255, 140, 0, 0.1);
 }
 
 [data-theme="light"] .setting-select option {
@@ -354,8 +398,8 @@ input:checked+.toggle-slider:before {
   color: #ffffff;
 }
 
-[data-theme="light"] .send-icon {
-  filter: none;
+[data-theme="light"] .telegram-send-btn:disabled {
+  color: rgba(0, 0, 0, 0.2);
 }
 
 .setting-description {

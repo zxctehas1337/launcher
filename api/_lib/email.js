@@ -29,11 +29,11 @@ function generateVerificationCode() {
 async function sendVerificationEmail(email, username, verificationCode) {
   try {
     const transporter = getTransporter();
-    
+
     await transporter.sendMail({
       from: process.env.SMTP_FROM,
       to: email,
-      subject: 'Код подтверждения - SHAKEDOWN',
+      subject: 'Код подтверждения - BOOLEAN',
       html: `
         <!DOCTYPE html>
         <html>
@@ -122,7 +122,7 @@ async function sendVerificationEmail(email, username, verificationCode) {
         <body>
           <div class="container">
             <div class="header">
-              <h1 class="logo">SHAKEDOWN</h1>
+              <h1 class="logo">BOOLEAN CLIENT</h1>
             </div>
             <div class="content">
               <h2 class="title">Код подтверждения</h2>
@@ -142,14 +142,14 @@ async function sendVerificationEmail(email, username, verificationCode) {
               </p>
             </div>
             <div class="footer">
-              <p>© 2025 SHAKEDOWN. Все права защищены.</p>
+              <p>© 2025 BOOLEAN. Все права защищены.</p>
             </div>
           </div>
         </body>
         </html>
       `
     });
-    
+
     return true;
   } catch (error) {
     console.error('Email error:', {

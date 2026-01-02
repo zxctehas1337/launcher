@@ -22,7 +22,15 @@ export function AdminSidebar({
   return (
     <aside className="admin-sidebar">
       <div className="admin-brand">
-        <h1>Shakedown <span>Admin</span></h1>
+        <img
+          src="/icon.png"
+          alt="Boolean Logo"
+          className="admin-logo"
+          draggable={false}
+          onContextMenu={(e) => e.preventDefault()}
+          onDragStart={(e) => e.preventDefault()}
+        />
+        <h1>Boolean <span>Admin</span></h1>
       </div>
 
       <nav className="admin-nav">
@@ -52,7 +60,9 @@ export function AdminSidebar({
           className={`admin-nav-item ${activeTab === 'keys' ? 'active' : ''}`}
           onClick={() => setActiveTab('keys')}
         >
-          <img src="/key.png" width="20" height="20" alt="Key" />
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12.65 10C11.83 7.67 9.61 6 7 6c-3.31 0-6 2.69-6 6s2.69 6 6 6c2.61 0 4.83-1.67 5.65-4H17v4h4v-4h2v-4H12.65zM7 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z" />
+          </svg>
           <span>Ключи</span>
           {availableKeysCount > 0 && <span className="badge">{availableKeysCount}</span>}
         </button>

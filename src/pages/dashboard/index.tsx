@@ -46,8 +46,8 @@ export default function DashboardPage() {
   } = useDashboard()
 
 
-  const handleDownloadLauncher = (platform: 'windows' | 'macos' | 'linux') => {
-    const downloadUrl = DOWNLOAD_LINKS[platform]
+  const handleDownloadLauncher = (platform: 'windows' | 'macos' | 'macos_arm64' | 'linux_rpm' | 'linux_deb' | 'linux_appimage') => {
+    const downloadUrl = DOWNLOAD_LINKS[platform as keyof typeof DOWNLOAD_LINKS]
     if (downloadUrl) {
       const link = document.createElement('a')
       link.href = downloadUrl
@@ -56,8 +56,16 @@ export default function DashboardPage() {
       link.click()
 
       // Show notification
+      const platformNames: Record<string, string> = {
+        windows: 'Windows',
+        macos: 'macOS (Intel)',
+        macos_arm64: 'macOS (Apple Silicon)',
+        linux_rpm: 'Linux (RPM)',
+        linux_deb: 'Linux (DEB)',
+        linux_appimage: 'Linux (AppImage)'
+      }
       setNotification({
-        message: `${platform.charAt(0).toUpperCase() + platform.slice(1)} ${t.dashboard.launcherDownloadStarted || 'download started...'}`,
+        message: `${platformNames[platform] || platform} ${t.dashboard.launcherDownloadStarted || 'download started...'}`,
         type: 'success'
       })
 
@@ -65,7 +73,7 @@ export default function DashboardPage() {
       setTimeout(() => setNotification(null), 3000)
     } else {
       setNotification({
-        message: `${platform.charAt(0).toUpperCase() + platform.slice(1)} download not available`,
+        message: `${platform.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')} download not available`,
         type: 'error'
       })
       setTimeout(() => setNotification(null), 3000)
@@ -244,17 +252,43 @@ export default function DashboardPage() {
                   {/* Download Buttons */}
                   <div className="download-buttons-grid">
                     <button className="download-os-btn windows" onClick={() => handleDownloadLauncher('windows')}>
-                      <WindowsIcon size={20} />
+                      <WindowsIcon size={48} />
                       <span>Windows</span>
                     </button>
-                    <button className="download-os-btn macos" onClick={() => handleDownloadLauncher('macos')}>
-                      <MacIcon size={20} />
+
+                    <div className="download-os-btn macos">
+                      <MacIcon size={48} />
                       <span>macOS</span>
-                    </button>
-                    <button className="download-os-btn linux" onClick={() => handleDownloadLauncher('linux')}>
-                      <LinuxIcon size={20} />
+                      <div className="macos-options">
+                        <div className="macos-sub-btn" onClick={() => handleDownloadLauncher('macos')}>
+                          <img src="/intel.png" alt="Intel" className="sub-btn-icon" />
+                          <span>Intel</span>
+                        </div>
+                        <div className="macos-sub-btn" onClick={() => handleDownloadLauncher('macos_arm64')}>
+                          <MacIcon size={12} className="apple-silicon-icon" />
+                          <span>Apple Silicon</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="download-os-btn linux">
+                      <LinuxIcon size={48} />
                       <span>Linux</span>
-                    </button>
+                      <div className="linux-options">
+                        <div className="linux-sub-btn" onClick={() => handleDownloadLauncher('linux_deb')}>
+                          <img src="/debian.png" alt="Debian" className="sub-btn-icon" />
+                          <span>Debian</span>
+                        </div>
+                        <div className="linux-sub-btn" onClick={() => handleDownloadLauncher('linux_rpm')}>
+                          <img src="/fedora.png" alt="Fedora" className="sub-btn-icon" />
+                          <span>Fedora/Redhat</span>
+                        </div>
+                        <div className="linux-sub-btn" onClick={() => handleDownloadLauncher('linux_appimage')}>
+                          <img src="/appimage.png" alt="AppImage" className="sub-btn-icon" />
+                          <span>AppImage</span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               )}

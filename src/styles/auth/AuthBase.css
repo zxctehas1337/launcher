@@ -62,7 +62,6 @@
 .auth-box-clean {
     width: 100%;
     max-width: 380px;
-    animation: fadeIn 0.8s ease-out;
 }
 
 .auth-header {

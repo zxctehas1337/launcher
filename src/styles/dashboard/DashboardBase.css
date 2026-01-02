@@ -6,7 +6,7 @@
   min-height: 100vh;
   background: #000000;
   color: #ffffff;
-  padding: 160px 20px 60px;
+  padding: 130px 20px 60px;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   overflow-x: hidden;
 }
@@ -218,7 +218,7 @@
 .dashboard-nav {
   display: flex;
   gap: 12px;
-  margin-bottom: 24px;
+  margin-bottom: 4px;
   height: 54px;
 }
 
@@ -518,7 +518,7 @@
   }
 
   .new-dashboard {
-    padding: 120px 15px;
+    padding: 80px 15px;
   }
 }
 

@@ -11,7 +11,7 @@ export function MobileHeader({ mobileMenuOpen, setMobileMenuOpen }: Props) {
     <header className="mobile-header">
       <div className="mobile-header-left">
         <LogoWithHat
-          alt="Shakedown"
+          alt="Boolean"
           size={36}
           className="mobile-logo no-user-drag"
           draggable={false}
@@ -20,7 +20,7 @@ export function MobileHeader({ mobileMenuOpen, setMobileMenuOpen }: Props) {
         />
         <span className="mobile-brand">{CLIENT_INFO.name}</span>
       </div>
-      <button 
+      <button
         className={`mobile-menu-btn ${mobileMenuOpen ? 'active' : ''}`}
         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
       >

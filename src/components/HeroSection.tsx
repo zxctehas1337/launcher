@@ -25,7 +25,7 @@ export default function HeroSection({ lang }: HeroSectionProps) {
         <PixelBackground />
         <div className={`hero-content ${isVisible ? 'animate-in' : ''}`}>
           
-          <h1 className="hero-title animate-item delay-2" dangerouslySetInnerHTML={{ __html: translation.hero.title }} />
+          <h1 className="hero-title" dangerouslySetInnerHTML={{ __html: translation.hero.title }} />
 
           <p className="hero-subtitle animate-item delay-3">
             {translation.hero.subtitle}

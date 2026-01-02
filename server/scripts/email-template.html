@@ -1,146 +1,166 @@
 <!DOCTYPE html>
-        <html>
-        <head>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <style>
-            body { 
-              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; 
-              background-color: #000000; 
-              margin: 0; padding: 24px; 
-              color: #ffffff;
-            }
-            .container { 
-              max-width: 500px; 
-              margin: 0 auto; 
-              background-color: #0a0a0a; 
-              border: 1px solid #1a1a1a; 
-              border-radius: 8px; 
-              overflow: hidden;
-            }
-            .header { 
-              background-color: #000000; 
-              padding: 32px 24px; 
-              text-align: center; 
-              border-bottom: 1px solid #1a1a1a;
-            }
-            .logo { 
-              font-size: 20px; 
-              font-weight: 600; 
-              color: #ffffff; 
-              letter-spacing: 2px;
-              margin: 0;
-            }
-            .content { 
-              padding: 40px 24px; 
-              text-align: center; 
-            }
-            .title { 
-              font-size: 18px; 
-              font-weight: 500; 
-              color: #ffffff; 
-              margin: 0 0 16px 0;
-            }
-            .description { 
-              font-size: 15px; 
-              line-height: 1.5; 
-              color: #888888; 
-              margin: 0 0 32px 0;
-            }
-            .code-container { 
-              background-color: #111111; 
-              border: 1px solid #2a2a2a; 
-              border-radius: 6px; 
-              padding: 24px; 
-              margin: 24px 0;
-            }
-            .code { 
-              font-size: 32px; 
-              font-weight: 600; 
-              letter-spacing: 6px; 
-              color: #ffffff; 
-              font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace; 
-              margin: 0;
-            }
-            .expiry { 
-              font-size: 13px; 
-              color: #666666; 
-              margin: 16px 0 0 0;
-            }
-            .footer { 
-              padding: 24px; 
-              text-align: center; 
-              color: #666666; 
-              font-size: 12px; 
-              border-top: 1px solid #1a1a1a;
-            }
-            .icon { 
-              width: 16px; 
-              height: 16px; 
-              margin-right: 8px; 
-              vertical-align: middle;
-            }
-            .icon-large { 
-              width: 24px; 
-              height: 24px; 
-              margin-bottom: 16px; 
-              display: block;
-              margin-left: auto;
-              margin-right: auto;
-            }
-            .security-badge {
-              background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
-              border: 1px solid #333333;
-              border-radius: 8px;
-              padding: 16px;
-              margin: 20px 0;
-              text-align: center;
-            }
-            .warning-text {
-              color: #ff6b6b;
-              font-weight: 500;
-              margin: 16px 0;
-            }
-            .security-info {
-              background-color: #0f0f0f;
-              border-left: 3px solid #ff6b6b;
-              padding: 16px;
-              margin: 20px 0;
-              font-size: 13px;
-              text-align: left;
-            }
-            .divider {
-              height: 1px;
-              background: linear-gradient(90deg, transparent, #333333, transparent);
-              margin: 24px 0;
-            }
-          </style>
-        </head>
-        <body>
-          <div class="container">
-            <div class="header">
-              <h1 class="logo">SHAKEDOWN</h1>
-            </div>
-            <div class="content">
-              <h2 class="title">Код подтверждения</h2>
-              <p class="description">
-                <svg class="icon" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
-                  <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
-                </svg>
-                Код отправлен на ${email}
-              </p>
-              <div class="code-container">
-                <div class="code">${verificationCode}</div>
-                <p class="expiry">Код действителен 10 минут</p>
-              </div>
-              <p class="description">
-                Если вы не запрашивали код, проигнорируйте это письмо.
-              </p>
-            </div>
-            <div class="footer">
-              <p>© 2025 SHAKEDOWN. Все права защищены.</p>
-            </div>
-          </div>
-        </body>
-        </html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background-color: #000000;
+      margin: 0;
+      padding: 24px;
+      color: #ffffff;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+      background-color: #0a0a0a;
+      border: 1px solid #1a1a1a;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .header {
+      background-color: #000000;
+      padding: 32px 24px;
+      text-align: center;
+      border-bottom: 1px solid #1a1a1a;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 600;
+      color: #ffffff;
+      letter-spacing: 2px;
+      margin: 0;
+    }
+
+    .content {
+      padding: 40px 24px;
+      text-align: center;
+    }
+
+    .title {
+      font-size: 18px;
+      font-weight: 500;
+      color: #ffffff;
+      margin: 0 0 16px 0;
+    }
+
+    .description {
+      font-size: 15px;
+      line-height: 1.5;
+      color: #888888;
+      margin: 0 0 32px 0;
+    }
+
+    .code-container {
+      background-color: #111111;
+      border: 1px solid #2a2a2a;
+      border-radius: 6px;
+      padding: 24px;
+      margin: 24px 0;
+    }
+
+    .code {
+      font-size: 32px;
+      font-weight: 600;
+      letter-spacing: 6px;
+      color: #ffffff;
+      font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+      margin: 0;
+    }
+
+    .expiry {
+      font-size: 13px;
+      color: #666666;
+      margin: 16px 0 0 0;
+    }
+
+    .footer {
+      padding: 24px;
+      text-align: center;
+      color: #666666;
+      font-size: 12px;
+      border-top: 1px solid #1a1a1a;
+    }
+
+    .icon {
+      width: 16px;
+      height: 16px;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+
+    .icon-large {
+      width: 24px;
+      height: 24px;
+      margin-bottom: 16px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .security-badge {
+      background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+      border: 1px solid #333333;
+      border-radius: 8px;
+      padding: 16px;
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .warning-text {
+      color: #ff6b6b;
+      font-weight: 500;
+      margin: 16px 0;
+    }
+
+    .security-info {
+      background-color: #0f0f0f;
+      border-left: 3px solid #ff6b6b;
+      padding: 16px;
+      margin: 20px 0;
+      font-size: 13px;
+      text-align: left;
+    }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #333333, transparent);
+      margin: 24px 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <h1 class="logo">BOOLEAN CLIENT</h1>
+    </div>
+    <div class="content">
+      <h2 class="title">Код подтверждения</h2>
+      <p class="description">
+        <svg class="icon" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+          <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+        </svg>
+        Код отправлен на ${email}
+      </p>
+      <div class="code-container">
+        <div class="code">${verificationCode}</div>
+        <p class="expiry">Код действителен 10 минут</p>
+      </div>
+      <p class="description">
+        Если вы не запрашивали код, проигнорируйте это письмо.
+      </p>
+    </div>
+    <div class="footer">
+      <p>© 2025 BOOLEAN. Все права защищены.</p>
+    </div>
+  </div>
+</body>
+
+</html>

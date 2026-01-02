@@ -34,7 +34,7 @@ export function DashboardSidebar({
     <aside className={`dashboard-sidebar ${mobileMenuOpen ? 'mobile-open' : ''}`}>
       <div className="sidebar-header">
         <LogoWithHat
-          alt="Shakedown"
+          alt="Boolean"
           size={40}
           className="sidebar-logo no-user-drag"
           draggable={false}
@@ -64,28 +64,28 @@ export function DashboardSidebar({
         <button onClick={(e) => { e.stopPropagation(); navigate('/'); setMobileMenuOpen(false); }} className="nav-item" title={t.nav.home}>
           <IconHome />
         </button>
-        <button 
+        <button
           className={`nav-item ${activeTab === 'overview' ? 'active' : ''}`}
           onClick={(e) => { e.stopPropagation(); setActiveTab('overview'); setMobileMenuOpen(false); }}
           title={t.dashboard.overview}
         >
           <IconGrid />
         </button>
-        <button 
+        <button
           className={`nav-item ${activeTab === 'profile' ? 'active' : ''}`}
           onClick={(e) => { e.stopPropagation(); setActiveTab('profile'); setMobileMenuOpen(false); }}
           title={t.dashboard.profile}
         >
           <IconProfile />
         </button>
-        <button 
+        <button
           className={`nav-item ${activeTab === 'subscription' ? 'active' : ''}`}
           onClick={(e) => { e.stopPropagation(); setActiveTab('subscription'); setMobileMenuOpen(false); }}
           title={t.dashboard.subscription}
         >
           <IconSubscription />
         </button>
-        <button 
+        <button
           className={`nav-item ${activeTab === 'settings' ? 'active' : ''}`}
           onClick={(e) => { e.stopPropagation(); setActiveTab('settings'); setMobileMenuOpen(false); }}
           title={t.dashboard.settings}

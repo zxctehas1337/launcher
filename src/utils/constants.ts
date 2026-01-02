@@ -1,8 +1,8 @@
- // Константы приложения
+// Константы приложения
 
 // Информация о клиенте
 export const CLIENT_INFO = {
-  name: 'SHAKEDOWN',
+  name: 'BOOLEAN',
   version: '1.21.4',
   minecraftVersion: '1.21.4',
   platform: 'Windows 10/11'
@@ -10,9 +10,12 @@ export const CLIENT_INFO = {
 
 // Ссылки на скачивание лаунчера
 export const DOWNLOAD_LINKS = {
-  windows: 'https://drive.usercontent.google.com/download?id=1zn7RdiX3bUiXoD2cETzpgb2ugLMUk8Bf&export=download&authuser=0&confirm=t&uuid=94dbbdfa-6c50-4624-9708-639b6652a0b2&at=ANTm3cyzG46EBttP3QNamm2oHsYZ%3A1767207546351',
-  macos: 'https://drive.usercontent.google.com/download?id=1WXhkw2GFXUGazCNc1Gl7612OUItMlaTb&export=download&authuser=0&confirm=t&uuid=29df9e39-f2bb-4254-9d21-f21f9d3538f8&at=ANTm3cyh6uT_8nveubxS1xu6slG8%3A1767207185484',
-  linux: 'https://drive.usercontent.google.com/download?id=1vV9Wl48soTX1uZauEq1z_0ytYk1qzFN-&export=download&authuser=0',
+  windows: '',
+  macos: '',
+  macos_arm64: '', // Same for now, can be updated later
+  linux_rpm: '',
+  linux_deb: '',
+  linux_appimage: '',
 }
 
 // Социальные сети (заполнишь позже)
@@ -163,5 +166,5 @@ export const MEDIA = {
 
 // Логотип сайта (WebP)
 export const SITE_LOGO = `
-<img src="/icon.png" alt="Shakedown" width="120" height="120" style="image-rendering: pixelated;" />
+<img src="/icon.png" alt="Boolean" width="120" height="120" style="image-rendering: pixelated;" />
 `

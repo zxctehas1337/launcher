@@ -16,7 +16,7 @@ export default function Footer({ lang }: FooterProps) {
         <div className="footer-links-section">
           <div className="footer-logo-top">
             <LogoWithHat
-              alt="Shakedown"
+              alt="Boolean"
               size={45}
               className="footer-logo-top no-user-drag"
               draggable={false}

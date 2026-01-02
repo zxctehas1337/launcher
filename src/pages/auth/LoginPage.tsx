@@ -70,7 +70,7 @@ export default function LoginPage() {
                 <div className="auth-box-clean">
                     <div className="auth-header">
                         <div className="auth-logo-small">
-                            <LogoWithHat size={40} alt="ShakeDown Logo" />
+                            <LogoWithHat size={40} alt="Boolean Logo" />
                         </div>
                         <div className="auth-title-clean">
                             <h2>Welcome back!</h2>

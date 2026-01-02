@@ -70,3 +70,45 @@
 [data-theme="light"] .feature-card-desc {
   color: #4B5563;
 }
+
+/* ========================================
+   WHITE THEME FOR LEGAL PAGES
+   ======================================== */
+[data-theme="light"] .legal-page {
+  background: #ffffff;
+  color: #1f2937;
+}
+
+[data-theme="light"] .legal-content {
+  color: #374151;
+}
+
+[data-theme="light"] .legal-intro h1 {
+  background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+[data-theme="light"] .legal-intro p {
+  color: #4b5563;
+}
+
+[data-theme="light"] .legal-section-title {
+  color: #1f2937;
+}
+
+[data-theme="light"] .legal-section-number {
+  background: linear-gradient(135deg, #ff8c00 0%, #ffa500 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+[data-theme="light"] .legal-section-content p {
+  color: #374151;
+}
+
+[data-theme="light"] .legal-section-content li {
+  color: #374151;
+}
