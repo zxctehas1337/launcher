@@ -249,5 +249,208 @@ export const enTranslations: TranslationStructure = {
       premium30: 2.99,
       alpha: 5.99
     }
+  },
+  legal: {
+    usageRules: {
+      title: 'Rules of Use',
+      subtitle: 'To ensure the service operates stably and safely, the following actions are prohibited.',
+      sections: [
+        {
+          title: 'General Provisions',
+          paragraphs: [
+            'These Rules of Use (hereinafter — "Rules") define the terms of operation of the software, website, personal account, and associated API services (collectively referred to as — "Services") provided by the Project Administration.',
+            'Use of any of the Services implies the User\'s unconditional agreement with these Rules. In case of disagreement with any provisions of these Rules, the User must immediately stop using the Services and remove the software from their device.',
+            'The Administration reserves the right to unilaterally change the content of these Rules. The new version takes effect from the moment of its publication on the current page, unless otherwise provided by the version itself.'
+          ]
+        },
+        {
+          title: 'Restrictions and Prohibitions',
+          paragraphs: ['The User is strictly prohibited from performing the following actions, including but not limited to:'],
+          list: [
+            { title: 'Violation of Infrastructure Integrity:', text: 'carrying out unauthorized access, bypassing security systems, conducting DDoS/DoS attacks, password guessing (brute force), or other interference with the operation of server equipment and APIs.' },
+            { title: 'Analysis and Code Modification:', text: 'decompiling, disassembling, conducting reverse engineering, extracting algorithms or source code of the project\'s software products.' },
+            { title: 'Bypassing Legal and Technical Restrictions:', text: 'use of exploits, automated scripts, spoofing network requests, or using proxy servers to obtain improper advantages or access to closed segments of the Service.' },
+            { title: 'Conflict of Interest:', text: 'use of Services by persons directly or indirectly involved in the development of computer attack counteraction systems (anti-cheats) or competing software products.' },
+            { title: 'Illegal Distribution:', text: 'copying, selling, renting, sublicensing, or distributing any components of the Service, including access keys and launcher files.' },
+            { title: 'Reputational Damage:', text: 'committing actions aimed at discrediting the project, including spreading deliberately false information, slander, or provocative behavior in the public domain.' },
+            { title: 'Illegal Activity:', text: 'using Services for the purposes of fraud, phishing, spreading malware, or violating the privacy rights of third parties.' }
+          ]
+        },
+        {
+          title: 'Account Security',
+          paragraphs: [
+            'The User bears full legal and technical responsibility for the safety of their authentication data (login/password) and for all operations performed using their account.',
+            'Upon detection of unauthorized access facts, the Administration has the right to suspend access to the User\'s account until the completion of the legal owner verification procedure.'
+          ]
+        },
+        {
+          title: 'Intellectual Property',
+          paragraphs: [
+            'All exclusive rights to the software code, graphic interfaces, trademarks, and other intellectual property objects available within the Service belong to the copyright holder on legal grounds.',
+            'The User is granted a limited, non-exclusive, and revocable license solely for the purpose of personal use of the Service according to its functional purpose.'
+          ]
+        },
+        {
+          title: 'Responsibility and Sanctions',
+          paragraphs: [
+            'For a single or systematic violation of these Rules, the Administration has the right to apply technical access restriction measures (blocking) without prior notice and refund of funds.',
+            'Services are provided on an "as is" basis (AS IS). The Administration does not guarantee uninterrupted operation and is not responsible for indirect losses, including blocks in third-party products (anti-cheat systems, gaming platforms). The use of the software is carried out by the User at their own risk.'
+          ]
+        },
+        {
+          title: 'Final Provisions',
+          paragraphs: [
+            'All disputes arising from these Rules are subject to resolution through pre-trial claim correspondence. In case of failure to reach an agreement, the dispute is transferred for consideration to a competent court in accordance with the legislation at the place of registration of the Administration.'
+          ]
+        }
+      ]
+    },
+    privacyPolicy: {
+      title: 'Personal Data Processing',
+      subtitle: 'We only take and process the data necessary for account operation, payment, and support.',
+      sections: [
+        {
+          title: 'General Provisions',
+          paragraphs: [
+            'This Privacy Policy (hereinafter — "Policy") is developed in accordance with the requirements of the Federal Law No. 152-FZ "On Personal Data" (RF) and the General Data Protection Regulation (GDPR, EU).',
+            'The Policy defines the procedure for processing personal data and measures to ensure the security of Users\' information that the Project Administration may receive during the use of the Services.'
+          ]
+        },
+        {
+          title: 'Composition of Processed Information',
+          paragraphs: [
+            'The Administration may process the following data: email, device identifiers (HWID), IP addresses, transaction data (without storing card details), access logs, and other technical information necessary for the functioning of the software and protection against fraud.'
+          ]
+        },
+        {
+          title: 'Data Processing Purposes',
+          paragraphs: ['Personal data is processed exclusively for the purposes of:'],
+          list: [
+            'Providing access to the functionality of the Personal Account and Software;',
+            'Ensuring information security and preventing hacks;',
+            'Technical support and processing of applications;',
+            'Fulfilment of obligations within the License Agreement.'
+          ]
+        },
+        {
+          title: 'Legal Grounds',
+          paragraphs: [
+            'The basis for data processing is the User\'s consent, expressed in the form of Accept of the License Agreement, as well as the need to execute the contract (providing a license).'
+          ]
+        },
+        {
+          title: 'Security and Storage',
+          paragraphs: [
+            'We apply modern encryption methods and organizational data protection measures. Information is stored on secure servers and is not subject to transfer to third parties except in cases provided by law or necessary for the operation of payment gateways.'
+          ]
+        },
+        {
+          title: 'Use of Cookies',
+          paragraphs: [
+            'The Service uses cookies to save authorization sessions and analyze preferences. Use of the Service implies consent to work with these technologies.'
+          ]
+        },
+        {
+          title: 'User Rights',
+          paragraphs: ['The User has the right to:'],
+          list: [
+            'Obtaining information about the volumes and methods of processing their data;',
+            'Clarification, blocking, or destruction of incomplete, inaccurate, or illegally obtained data;',
+            'Withdrawal of consent to the processing of personal data (by requesting the deletion of the account).'
+          ]
+        },
+        {
+          title: 'Cross-Border Transfer',
+          paragraphs: [
+            'The User realizes and agrees that in the process of the Service operation, data can be transferred to servers located in various jurisdictions (including EU and RF countries) to ensure fault tolerance and access speed.'
+          ]
+        },
+        {
+          title: 'Policy Change',
+          paragraphs: [
+            'The Administration has the right to change the Privacy Policy. The new version takes effect from the moment of posting on the website. The User undertakes to independently track changes.'
+          ]
+        },
+        {
+          title: 'Contacts on Data Issues',
+          paragraphs: [
+            'Requests for providing information about processing or for deleting data are accepted through official support channels of the Project.'
+          ]
+        }
+      ]
+    },
+    userAgreement: {
+      title: 'User Agreement',
+      subtitle: 'By using the site and services of the project, you agree to the terms below.',
+      sections: [
+        {
+          title: 'Definitions and Terms',
+          paragraphs: [],
+          list: [
+            { title: 'Licensor', text: '— the copyright holder who manages the Project and provides the right to use the software.' },
+            { title: 'Licensee', text: '— a natural person who has the necessary legal capacity to enter into this Agreement, using the project Services.' },
+            { title: 'Software', text: '— a collection of software code, graphic, text, and other materials that make up the Product of the Project.' },
+            { title: 'Acceptance', text: '— full and unconditional acceptance of the terms of this Agreement by performing conclusive actions (registration, authorization, use of the software).' }
+          ]
+        },
+        {
+          title: 'Subject of the Agreement',
+          paragraphs: [
+            'The Licensor grants the Licensee the right to use the software on the terms of a simple non-exclusive license for introductory and entertainment purposes. The volume of granted rights depends on the selected type of access (subscription).'
+          ]
+        },
+        {
+          title: 'Procedure for Use and Registration',
+          paragraphs: [
+            'To access the functionality, the Licensee creates an account. The Licensee undertakes to provide up-to-date data and is responsible for any actions committed under their account.',
+            'Transfer (for a fee or free of charge) of access to the account to third parties is prohibited. The Licensee realizes that violation of this condition leads to immediate revocation of the license (blocking).'
+          ]
+        },
+        {
+          title: 'Limitation of Liability',
+          paragraphs: [
+            'The Licensor is not responsible for direct or indirect damage arising from the use or inability to use the software, including loss of data or blocks in third-party services.',
+            'The Licensor does not guarantee the compatibility of the software with the entire range of technical configurations of the Licensee\'s devices and software.'
+          ]
+        },
+        {
+          title: 'Financial Terms and Subscriptions',
+          paragraphs: [
+            'The provision of extended access is carried out on a fee-paying basis. The moment of fulfilment of the Licensor\'s obligations to provide the right to use is considered the moment of activation of the corresponding key or accrual of access time in the account.'
+          ]
+        },
+        {
+          title: 'Refund Policy',
+          paragraphs: [
+            'In accordance with the legislation on intellectual property and digital goods, no refund is made for already activated access (start of using the license).',
+            'A refund is possible only in case of proven technical non-operability of the software through the fault of the Licensor, provided that the Licensee applied for support and provided the necessary data for diagnostics.'
+          ]
+        },
+        {
+          title: 'Validity and Change of Terms',
+          paragraphs: [
+            'The Agreement takes effect from the moment of Acceptance and is valid throughout the entire period of using the Service. The Licensor has the right to change the terms of the Agreement at any time without personal notice.'
+          ]
+        },
+        {
+          title: 'Dispute Resolution',
+          paragraphs: [
+            'The parties establish a mandatory claim procedure. The term for considering a claim is 15 (fifteen) working days from the moment of receiving the application to the support service.'
+          ]
+        },
+        {
+          title: 'Legal Status of the Software',
+          paragraphs: [
+            'The software is a result of intellectual activity. Regardless of the terminology "purchase", the Licensee is granted the right of use (license), and not the ownership right to the code or brand.'
+          ]
+        },
+        {
+          title: 'Feedback',
+          paragraphs: [
+            'For any questions related to the execution of this Agreement, the Licensee has the right to contact the Licensor through official ticket systems and communication channels indicated in the Project interface.'
+          ]
+        }
+      ]
+    }
   }
 }

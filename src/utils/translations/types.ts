@@ -253,4 +253,33 @@ export interface TranslationStructure {
       alpha: number
     }
   }
+  legal: {
+    usageRules: {
+      title: string
+      subtitle: string
+      sections: {
+        title: string
+        paragraphs: string[]
+        list?: { title: string; text: string }[]
+      }[]
+    }
+    privacyPolicy: {
+      title: string
+      subtitle: string
+      sections: {
+        title: string
+        paragraphs: string[]
+        list?: string[]
+      }[]
+    }
+    userAgreement: {
+      title: string
+      subtitle: string
+      sections: {
+        title: string
+        paragraphs: string[]
+        list?: { title: string; text: string }[]
+      }[]
+    }
+  }
 }
