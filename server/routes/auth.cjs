@@ -171,6 +171,11 @@ router.post('/login', async (req, res) => {
       });
     }
 
+    await pool.query(
+      'UPDATE users SET last_active_at = CURRENT_TIMESTAMP WHERE id = $1',
+      [dbUser.id]
+    );
+
     res.json({ success: true, message: 'Вход выполнен!', data: mapUserFromDb(dbUser) });
   } catch (error) {
     console.error('Login error:', error);
@@ -245,7 +250,7 @@ router.post('/resend-code', async (req, res) => {
     );
 
     const emailSent = await sendVerificationEmail(user.email, user.username, verificationCode);
-    
+
     if (emailSent) {
       res.json({ success: true, message: 'Новый код отправлен на email' });
     } else {

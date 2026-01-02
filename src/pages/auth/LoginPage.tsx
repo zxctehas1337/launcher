@@ -103,8 +103,8 @@ export default function LoginPage() {
                                         className="input-clean"
                                         required
                                     />
-                                    <button 
-                                        type="button" 
+                                    <button
+                                        type="button"
                                         className="password-toggle"
                                         onClick={() => setShowPassword(!showPassword)}
                                         tabIndex={-1}
@@ -124,7 +124,6 @@ export default function LoginPage() {
                         <Link to="/" className="back-link-clean">
                             Back to Home
                         </Link>
-                        <span className="version-tag">v3.1.9</span>
                     </div>
                 </div>
             </div>

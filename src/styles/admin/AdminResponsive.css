@@ -66,9 +66,15 @@
         border-radius: 20px;
         padding: 8px;
         justify-content: space-around;
-        background: rgba(20, 20, 30, 0.95);
+        background: var(--bg-secondary);
         backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 140, 0, 0.1);
+        box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    [data-theme="light"] .admin-sidebar {
+        background: rgba(255, 255, 255, 0.9);
+        border-color: rgba(0, 0, 0, 0.05);
     }
 
     .admin-brand,

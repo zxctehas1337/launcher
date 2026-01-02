@@ -16,13 +16,19 @@
     left: 12px;
     top: 12px;
     bottom: 12px;
-    border-radius: 24px;
-    border: 1px solid rgba(138, 75, 255, 0.1);
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 140, 0, 0.1);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
     z-index: 100;
     overflow: hidden;
+    backdrop-filter: blur(20px);
+}
+
+[data-theme="light"] .admin-sidebar {
+    background: rgba(255, 255, 255, 0.8);
+    border-color: rgba(0, 0, 0, 0.05);
 }
 
 .admin-brand {
@@ -35,22 +41,19 @@
 
 .admin-brand h1 {
     font-size: 20px;
-    font-weight: 700;
-    background: linear-gradient(135deg, var(--purple-500), var(--pink-500));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    font-weight: 800;
+    color: var(--text-primary);
     margin: 0;
+    letter-spacing: -0.5px;
 }
 
-.admin-brand span {
-    font-size: 12px;
-    color: var(--text-tertiary);
+.admin-brand h1 span {
+    color: var(--orange-500);
 }
 
 .admin-nav {
     flex: 1;
-    padding: 0 16px;
+    padding: 10px 12px;
     display: flex;
     flex-direction: column;
     gap: 4px;
@@ -60,66 +63,50 @@
 .admin-nav-item {
     display: flex;
     align-items: center;
-    gap: 14px;
-    padding: 12px 16px;
+    gap: 12px;
+    padding: 12px 14px;
     background: transparent;
     border: none;
     color: var(--text-secondary);
     font-weight: 500;
     cursor: pointer;
-    border-radius: 16px;
-    /* Pill shape */
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
+    border-radius: 12px;
+    transition: all 0.2s ease;
     text-align: left;
     font-size: 14px;
+    text-decoration: none;
 }
 
 .admin-nav-item:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 140, 0, 0.05);
     color: var(--text-primary);
-    transform: translateX(4px);
 }
 
 .admin-nav-item.active {
-    background: linear-gradient(135deg, rgba(138, 75, 255, 0.15), rgba(255, 107, 157, 0.15));
-    color: var(--purple-500);
-    box-shadow: 0 2px 12px rgba(138, 75, 255, 0.1);
-}
-
-.admin-nav-item.active::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 3px;
-    height: 16px;
-    background: var(--purple-500);
-    border-radius: 0 4px 4px 0;
-    opacity: 0;
-    /* Hidden for pure pill style, or use it? let's stick to pill background */
+    background: rgba(255, 140, 0, 0.1);
+    color: var(--orange-500);
 }
 
 .admin-nav-item svg {
     flex-shrink: 0;
     opacity: 0.7;
-    transition: 0.2s;
+    width: 20px;
+    height: 20px;
 }
 
 .admin-nav-item.active svg {
     opacity: 1;
-    transform: scale(1.1);
+    color: var(--orange-500);
 }
 
 .admin-nav-item .badge {
     margin-left: auto;
-    padding: 4px 8px;
-    background: rgba(138, 75, 255, 0.2);
-    border-radius: 8px;
+    padding: 2px 8px;
+    background: var(--orange-500);
+    color: white;
+    border-radius: 10px;
     font-size: 10px;
     font-weight: 700;
-    line-height: 1;
 }
 
 /* Нижняя навигация */
@@ -127,38 +114,32 @@
     display: flex;
     flex-direction: column;
     gap: 4px;
-    padding: 16px;
-    border-top: 1px solid rgba(138, 75, 255, 0.1);
+    padding: 12px;
+    border-top: 1px solid rgba(255, 140, 0, 0.05);
     margin-top: auto;
-}
-
-.admin-nav-bottom .admin-nav-item {
-    background: rgba(138, 75, 255, 0.05);
-}
-
-.admin-nav-bottom .admin-nav-item:hover {
-    background: rgba(138, 75, 255, 0.15);
 }
 
 .btn-logout {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 12px 24px;
-    margin: 16px;
-    background: rgba(255, 77, 77, 0.1);
-    border: 1px solid rgba(255, 77, 77, 0.3);
+    justify-content: center;
+    gap: 10px;
+    padding: 12px;
+    margin: 12px;
+    background: rgba(255, 77, 77, 0.05);
+    border: 1px solid rgba(255, 77, 77, 0.1);
     color: #FF4D4D;
     border-radius: 12px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all 0.2s;
+    font-size: 14px;
 }
 
 .btn-logout:hover {
     background: #FF4D4D;
     color: white;
-    transform: translateY(-2px);
+    border-color: #FF4D4D;
 }
 
 /* Main Content */

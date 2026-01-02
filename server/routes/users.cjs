@@ -7,7 +7,7 @@ const { mapUserFromDb } = require('../utils/userMapper.cjs');
 router.get('/', async (req, res) => {
   try {
     const result = await pool.query(
-      `SELECT id, username, email, subscription, registered_at, is_admin, is_banned, email_verified, settings 
+      `SELECT id, username, email, subscription, registered_at, is_admin, is_banned, email_verified, settings, last_active_at 
        FROM users ORDER BY id DESC`
     );
 
@@ -20,7 +20,8 @@ router.get('/', async (req, res) => {
       isAdmin: dbUser.is_admin,
       isBanned: dbUser.is_banned,
       emailVerified: dbUser.email_verified,
-      settings: dbUser.settings
+      settings: dbUser.settings,
+      lastActiveAt: dbUser.last_active_at
     }));
 
     res.json({ success: true, data: users });

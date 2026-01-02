@@ -57,7 +57,7 @@ async function initDatabase() {
     const pool = getPool();
     await pool.query('SELECT 1'); // Test connection
     console.log('✅ Database connected successfully');
-    
+
     // Создаем таблицы автоматически
     await createTables(pool);
     console.log('✅ Database schema initialized successfully');
@@ -69,10 +69,10 @@ async function initDatabase() {
 // Автоматическое создание таблиц
 async function createTables(pool) {
   const client = await pool.connect();
-  
+
   try {
     await client.query('BEGIN');
-    
+
     // Создание таблицы users
     await client.query(`
       CREATE TABLE IF NOT EXISTS users (
@@ -93,7 +93,7 @@ async function createTables(pool) {
           CONSTRAINT unique_oauth UNIQUE (oauth_provider, oauth_id)
       )
     `);
-    
+
     // Добавление колонок верификации если их нет
     await client.query(`
       DO $$
@@ -111,7 +111,7 @@ async function createTables(pool) {
           END IF;
       END $$;
     `);
-    
+
     // Добавление колонки subscription_end_date если её нет
     await client.query(`
       DO $$
@@ -128,7 +128,24 @@ async function createTables(pool) {
           END IF;
       END $$;
     `);
-    
+
+    // Добавление колонки last_active_at если её нет
+    await client.query(`
+      DO $$
+      BEGIN
+          IF NOT EXISTS (
+              SELECT 1
+              FROM information_schema.columns
+              WHERE table_schema = 'public'
+                AND table_name = 'users'
+                AND column_name = 'last_active_at'
+          ) THEN
+              ALTER TABLE users 
+              ADD COLUMN last_active_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP;
+          END IF;
+      END $$;
+    `);
+
     // Создание таблицы license_keys
     await client.query(`
       CREATE TABLE IF NOT EXISTS license_keys (
@@ -144,7 +161,7 @@ async function createTables(pool) {
           notes TEXT
       )
     `);
-    
+
     // Создание таблицы client_versions
     await client.query(`
       CREATE TABLE IF NOT EXISTS client_versions (
@@ -155,7 +172,7 @@ async function createTables(pool) {
           created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
       )
     `);
-    
+
     // Добавление колонки description если её нет
     await client.query(`
       DO $$
@@ -172,14 +189,14 @@ async function createTables(pool) {
           END IF;
       END $$;
     `);
-    
+
     // Создание индексов
     await client.query('CREATE INDEX IF NOT EXISTS idx_license_keys_key ON license_keys(key)');
     await client.query('CREATE INDEX IF NOT EXISTS idx_license_keys_used_by ON license_keys(used_by)');
     await client.query('CREATE INDEX IF NOT EXISTS idx_license_keys_product ON license_keys(product)');
     await client.query('CREATE INDEX IF NOT EXISTS idx_users_email ON users(email)');
     await client.query('CREATE INDEX IF NOT EXISTS idx_users_hwid ON users(hwid)');
-    
+
     // Создание индекса для verification_code только если колонка существует
     await client.query(`
       DO $$
@@ -195,7 +212,7 @@ async function createTables(pool) {
           END IF;
       END $$;
     `);
-    
+
     await client.query('COMMIT');
     console.log('✅ All tables and indexes created successfully');
   } catch (error) {

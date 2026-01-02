@@ -42,17 +42,10 @@ export function KeysTab({ licenseKeys, onGenerateKeys, onDeleteKey, onCopyKey }:
 
   return (
     <div className="admin-section">
-      <div className="section-header">
-        <h2>Генератор ключей</h2>
-        <p>Создание и управление лицензионными ключами для продуктов</p>
-      </div>
-
       {/* Key Generator */}
       <div className="key-generator-card">
         <h3>
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-            <path d="M14.5 2a4.5 4.5 0 00-4.27 5.88L2 16.12V18h1.88l8.24-8.23A4.5 4.5 0 1014.5 2zm0 6a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/>
-          </svg>
+          <img src="/key.png" width="20" height="20" alt="Key" />
           Создать новые ключи
         </h3>
         
@@ -113,9 +106,7 @@ export function KeysTab({ licenseKeys, onGenerateKeys, onDeleteKey, onCopyKey }:
       <div className="keys-stats">
         <div className="key-stat-card">
           <div className="key-stat-icon total">
-            <svg width="24" height="24" viewBox="0 0 20 20" fill="currentColor">
-              <path d="M14.5 2a4.5 4.5 0 00-4.27 5.88L2 16.12V18h1.88l8.24-8.23A4.5 4.5 0 1014.5 2z"/>
-            </svg>
+            <img src="/key.png" width="24" height="24" alt="Key" />
           </div>
           <div className="key-stat-info">
             <div className="key-stat-value">{licenseKeys.length}</div>
@@ -167,9 +158,7 @@ export function KeysTab({ licenseKeys, onGenerateKeys, onDeleteKey, onCopyKey }:
         
         {licenseKeys.length === 0 ? (
           <div className="empty-state">
-            <svg width="48" height="48" viewBox="0 0 20 20" fill="currentColor" opacity="0.3">
-              <path d="M14.5 2a4.5 4.5 0 00-4.27 5.88L2 16.12V18h1.88l8.24-8.23A4.5 4.5 0 1014.5 2z"/>
-            </svg>
+            <img src="/key.png" width="48" height="48" alt="Key" style={{ opacity: 0.3 }} />
             <p>Ключи ещё не созданы</p>
           </div>
         ) : (

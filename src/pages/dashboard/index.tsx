@@ -18,6 +18,7 @@ import {
   IconGrid,
   IconChip,
   IconLogout,
+  IconShield,
 } from '../../components/Icons'
 import { WindowsIcon, MacIcon, LinuxIcon } from '../../components/icons/OSIcons'
 import { DOWNLOAD_LINKS } from '../../utils/constants'
@@ -53,13 +54,13 @@ export default function DashboardPage() {
       link.target = '_blank'
       link.rel = 'noopener noreferrer'
       link.click()
-      
+
       // Show notification
       setNotification({
         message: `${platform.charAt(0).toUpperCase() + platform.slice(1)} ${t.dashboard.launcherDownloadStarted || 'download started...'}`,
         type: 'success'
       })
-      
+
       // Clear notification after 3 seconds
       setTimeout(() => setNotification(null), 3000)
     } else {
@@ -138,6 +139,20 @@ export default function DashboardPage() {
                 </button>
               </div>
             </div>
+
+            {/* Admin Access Card */}
+            {user.isAdmin && (
+              <div
+                className="glass-card admin-access-card"
+                onClick={() => navigate('/admin')}
+              >
+                <div className="admin-card-content">
+                  <IconShield size={24} color="#ff8c00" />
+                  <span>{t.dashboard.adminPanel || "Admin Panel"}</span>
+                </div>
+                <IconArrowRight size={20} />
+              </div>
+            )}
 
             {/* License Key Card */}
             <div className="glass-card license-activation-card">
@@ -245,10 +260,10 @@ export default function DashboardPage() {
               )}
 
               {activeTab === 'settings' && (
-                <SettingsTab 
-                  user={user} 
-                  formatDate={formatDate} 
-                  t={t} 
+                <SettingsTab
+                  user={user}
+                  formatDate={formatDate}
+                  t={t}
                 />
               )}
             </div>

@@ -2,22 +2,22 @@
 
 /* Recent Activity */
 .recent-activity {
-    background: var(--bg-secondary);
-    border: 1px solid rgba(138, 75, 255, 0.2);
-    border-radius: 16px;
+    background: rgba(255, 140, 0, 0.02);
+    border: 1px solid rgba(255, 140, 0, 0.1);
+    border-radius: 20px;
     padding: 24px;
 }
 
 .recent-activity h3 {
-    font-size: 20px;
-    font-weight: 600;
+    font-size: 18px;
+    font-weight: 700;
     margin-bottom: 20px;
 }
 
 .activity-list {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 8px;
 }
 
 .activity-item {
@@ -25,25 +25,27 @@
     align-items: center;
     gap: 12px;
     padding: 12px;
-    background: rgba(18, 18, 26, 0.8);
-    border: 1px solid rgba(138, 75, 255, 0.1);
+    background: rgba(255, 140, 0, 0.03);
+    border: 1px solid rgba(255, 140, 0, 0.05);
     border-radius: 12px;
-    transition: all 0.3s;
+    transition: all 0.2s ease;
 }
 
 .activity-item:hover {
-    border-color: var(--purple-500);
+    background: rgba(255, 140, 0, 0.05);
+    border-color: rgba(255, 140, 0, 0.2);
+    transform: translateX(4px);
 }
 
 .activity-icon {
     width: 40px;
     height: 40px;
-    border-radius: 8px;
-    background: rgba(138, 75, 255, 0.2);
+    border-radius: 10px;
+    background: rgba(255, 140, 0, 0.1);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--purple-500);
+    color: var(--orange-500);
     flex-shrink: 0;
 }
 
@@ -53,7 +55,9 @@
 
 .activity-title {
     font-weight: 600;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
+    font-size: 14px;
+    color: var(--text-primary);
 }
 
 .activity-meta {
@@ -65,22 +69,22 @@
 
 /* Recent Users */
 .recent-users {
-    background: var(--bg-secondary);
-    border: 1px solid rgba(138, 75, 255, 0.2);
-    border-radius: 16px;
+    background: rgba(255, 140, 0, 0.02);
+    border: 1px solid rgba(255, 140, 0, 0.1);
+    border-radius: 20px;
     padding: 24px;
 }
 
 .recent-users h3 {
-    font-size: 20px;
-    font-weight: 600;
+    font-size: 18px;
+    font-weight: 700;
     margin-bottom: 20px;
 }
 
 .users-list {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 8px;
 }
 
 .user-item {
@@ -88,34 +92,37 @@
     align-items: center;
     gap: 12px;
     padding: 12px;
-    background: rgba(18, 18, 26, 0.8);
-    border: 1px solid rgba(138, 75, 255, 0.1);
+    background: rgba(255, 140, 0, 0.03);
+    border: 1px solid rgba(255, 140, 0, 0.05);
     border-radius: 12px;
-    transition: all 0.3s;
+    transition: all 0.2s ease;
 }
 
 .user-item:hover {
-    border-color: var(--purple-500);
+    background: rgba(255, 140, 0, 0.05);
+    border-color: rgba(255, 140, 0, 0.2);
+    transform: translateX(4px);
 }
 
 .user-avatar-small {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
     object-fit: cover;
     flex-shrink: 0;
 }
 
 .user-avatar-placeholder-small {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--purple-500), var(--pink-500));
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--orange-500), var(--orange-400));
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 700;
-    font-size: 16px;
+    font-size: 14px;
+    color: white;
     flex-shrink: 0;
 }
 
@@ -126,6 +133,8 @@
 .user-item-name {
     font-weight: 600;
     margin-bottom: 2px;
+    font-size: 14px;
+    color: var(--text-primary);
 }
 
 .user-item-date {

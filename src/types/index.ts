@@ -13,6 +13,7 @@ export interface User {
   emailVerified?: boolean
   profile?: UserProfile
   hwid?: string
+  lastActiveAt?: string
 }
 
 export interface UserProfile {

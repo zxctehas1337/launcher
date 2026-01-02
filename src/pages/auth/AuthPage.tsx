@@ -150,7 +150,6 @@ export default function AuthPage() {
           <a href="/" className="back-link-clean">
             {t.auth.backToMain}
           </a>
-          <span className="version-tag">v3.1.9</span>
         </div>
       </div>
 

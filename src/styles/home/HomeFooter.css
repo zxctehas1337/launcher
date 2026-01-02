@@ -39,8 +39,8 @@
 }
 
 .footer-logo-top img {
-  width: 49px;
-  height: 48px;
+  width: 32px;
+  height: 32px;
   border-radius: 15px;
   object-fit: cover;
   margin-right: 17px; /* Compensate for the negative gap */

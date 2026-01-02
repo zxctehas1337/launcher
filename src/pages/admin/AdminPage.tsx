@@ -6,7 +6,6 @@ import { LogoutModal } from '../../components/LogoutModal'
 import { useAdminData } from './hooks/useAdminData'
 import { 
   AdminSidebar, 
-  OverviewTab, 
   UsersTab, 
   ActivityTab, 
   KeysTab,
@@ -15,11 +14,11 @@ import {
 import { getProductName } from './utils/keyUtils'
 import '../../styles/admin/index.css'
 
-type TabType = 'overview' | 'users' | 'activity' | 'keys' | 'versions'
+type TabType = 'users' | 'activity' | 'keys' | 'versions'
 
 export default function AdminPage() {
   const navigate = useNavigate()
-  const [activeTab, setActiveTab] = useState<TabType>('overview')
+  const [activeTab, setActiveTab] = useState<TabType>('users')
   const [notification, setNotification] = useState<{ message: string; type: 'success' | 'error' | 'info' } | null>(null)
   const [showLogoutModal, setShowLogoutModal] = useState(false)
   
@@ -170,10 +169,6 @@ export default function AdminPage() {
       />
 
       <main className="admin-main">
-        {activeTab === 'overview' && (
-          <OverviewTab users={users} />
-        )}
-
         {activeTab === 'users' && (
           <UsersTab 
             users={users} 

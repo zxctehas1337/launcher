@@ -18,11 +18,6 @@ export function UsersTab({ users, onBanUser, onDeleteUser }: UsersTabProps) {
 
   return (
     <div className="admin-section">
-      <div className="section-header">
-        <h2>Управление пользователями</h2>
-        <p>Просмотр, блокировка и удаление пользователей</p>
-      </div>
-
       <div className="search-bar">
         <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
           <path d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"/>
@@ -39,11 +34,9 @@ export function UsersTab({ users, onBanUser, onDeleteUser }: UsersTabProps) {
         <table>
           <thead>
             <tr>
-              <th>ID</th>
               <th>Пользователь</th>
               <th>Email</th>
               <th>Подписка</th>
-              <th>Дата регистрации</th>
               <th>Статус</th>
               <th>Действия</th>
             </tr>
@@ -51,7 +44,6 @@ export function UsersTab({ users, onBanUser, onDeleteUser }: UsersTabProps) {
           <tbody>
             {filteredUsers.map(user => (
               <tr key={user.id} className={user.isBanned ? 'banned' : ''}>
-                <td>#{user.id}</td>
                 <td>
                   <div className="user-cell">
                     <img src={getAvatarUrl(user.avatar)} alt={user.username} className="user-avatar" />
@@ -65,7 +57,6 @@ export function UsersTab({ users, onBanUser, onDeleteUser }: UsersTabProps) {
                      user.subscription === 'alpha' ? 'Alpha' : 'Free'}
                   </span>
                 </td>
-                <td>{new Date(user.registeredAt).toLocaleDateString('ru-RU')}</td>
                 <td>
                   {user.isBanned ? (
                     <span className="status-badge banned">Заблокирован</span>

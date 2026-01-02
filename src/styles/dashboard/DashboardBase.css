@@ -255,7 +255,6 @@
   background: #ff8c00;
   color: #000;
   border-color: transparent;
-  font-weight: 600;
 }
 
 .nav-tab.active svg {
@@ -721,4 +720,32 @@
 .nav-icon-btn:hover svg.IconMoon {
   color: #ffffff !important;
   stroke: #ffffff !important;
+}
+
+/* Admin Access Card */
+.admin-access-card {
+  flex-direction: row !important;
+  align-items: center;
+  justify-content: space-between !important;
+  padding: 24px;
+  min-height: 80px;
+  cursor: pointer;
+}
+
+.admin-card-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-weight: 600;
+  font-size: 16px;
+  color: #fff;
+}
+
+.admin-access-card:hover {
+  border-color: #ff8c00;
+  background: rgba(255, 140, 0, 0.05);
+}
+
+.admin-access-card:hover svg {
+  color: #ff8c00;
 }

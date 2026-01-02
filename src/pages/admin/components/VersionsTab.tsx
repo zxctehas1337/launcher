@@ -66,11 +66,6 @@ export function VersionsTab({ versions, onCreateVersion, onUpdateVersion, onDele
 
   return (
     <div className="admin-section">
-      <div className="section-header">
-        <h2>Версии клиента</h2>
-        <p>Управление ссылками на скачивание клиента для лаунчера</p>
-      </div>
-
       <div className="create-post-card">
         <h3>{editingId ? 'Редактировать версию' : 'Добавить версию'}</h3>
 
@@ -105,7 +100,7 @@ export function VersionsTab({ versions, onCreateVersion, onUpdateVersion, onDele
         </div>
 
         
-        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+        <div className="form-buttons">
           <button className="btn-primary" onClick={submit}>
             <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
               <path d="M10 4V16M4 10H16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>

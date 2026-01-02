@@ -9,7 +9,8 @@ function mapUserFromDb(dbUser) {
     isAdmin: dbUser.is_admin,
     isBanned: dbUser.is_banned,
     emailVerified: dbUser.email_verified,
-    settings: dbUser.settings
+    settings: dbUser.settings,
+    lastActiveAt: dbUser.last_active_at
   };
 }
 

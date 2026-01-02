@@ -17,7 +17,7 @@ export default function Footer({ lang }: FooterProps) {
           <div className="footer-logo-top">
             <LogoWithHat
               alt="Shakedown"
-              size={60}
+              size={45}
               className="footer-logo-top no-user-drag"
               draggable={false}
               onContextMenu={(e) => e.preventDefault()}

@@ -7,11 +7,6 @@ interface OverviewTabProps {
 export function OverviewTab({ users }: OverviewTabProps) {
   return (
     <div className="admin-section">
-      <div className="section-header">
-        <h2>Обзор системы</h2>
-        <p>Общая статистика и метрики</p>
-      </div>
-
       <div className="stats-grid">
         <div className="stat-card">
           <div className="stat-icon purple">
