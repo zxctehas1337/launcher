@@ -741,6 +741,10 @@
   color: #fff;
 }
 
+.admin-access-card svg {
+  color: #ff8c00;
+}
+
 .admin-access-card:hover {
   border-color: #ff8c00;
   background: rgba(255, 140, 0, 0.05);

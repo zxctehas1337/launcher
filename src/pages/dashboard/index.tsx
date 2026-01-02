@@ -147,7 +147,7 @@ export default function DashboardPage() {
                 onClick={() => navigate('/admin')}
               >
                 <div className="admin-card-content">
-                  <IconShield size={24} color="#ff8c00" />
+                  <IconShield size={24} />
                   <span>{t.dashboard.adminPanel || "Admin Panel"}</span>
                 </div>
                 <IconArrowRight size={20} />
