@@ -17,7 +17,7 @@ export default function Snowfall() {
     (import.meta as any)?.env?.VITE_SNOWFALL !== 'false' && (import.meta as any)?.env?.VITE_SNOWFALL !== false
 
   const flakes = useMemo<Snowflake[]>(() => {
-    const count = 120
+    const count = 40 // было 120 - слишком много DOM-элементов
     const rand = (min: number, max: number) => min + Math.random() * (max - min)
 
     return Array.from({ length: count }, (_, idx) => ({

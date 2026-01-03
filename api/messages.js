@@ -20,11 +20,14 @@ export default async function handler(req, res) {
 
     // Default messages handling
     if (req.method === 'GET') {
-      const { userId, friendId } = req.query;
+      const { userId, friendId, offset = 0, limit = 50 } = req.query;
       
       if (!userId || !friendId) {
         return res.status(400).json({ success: false, message: 'userId and friendId required' });
       }
+
+      const offsetNum = Math.max(0, parseInt(offset) || 0);
+      const limitNum = Math.min(100, Math.max(1, parseInt(limit) || 50)); // Max 100, default 50
 
       const result = await pool.query(`
         SELECT 
@@ -40,9 +43,9 @@ export default async function handler(req, res) {
         JOIN users u ON m.sender_id = u.id
         WHERE (m.sender_id = $1 AND m.receiver_id = $2)
            OR (m.sender_id = $2 AND m.receiver_id = $1)
-        ORDER BY m.created_at ASC
-        LIMIT 100
-      `, [userId, friendId]);
+        ORDER BY m.created_at DESC
+        LIMIT $3 OFFSET $4
+      `, [userId, friendId, limitNum, offsetNum]);
 
       await pool.query(`
         UPDATE messages 
@@ -50,7 +53,7 @@ export default async function handler(req, res) {
         WHERE sender_id = $2 AND receiver_id = $1 AND is_read = false
       `, [userId, friendId]);
 
-      return res.status(200).json({ success: true, data: result.rows });
+      return res.status(200).json({ success: true, data: result.rows.reverse() });
     }
 
     if (req.method === 'POST') {

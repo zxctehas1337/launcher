@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef, useCallback, useMemo, memo } from 'react'
 import { IoSend, IoClose, IoPersonAdd, IoCheckmark, IoCloseCircle, IoArrowBack } from 'react-icons/io5'
 import { getAvatarUrl } from '../../utils/avatarGenerator'
 import { User } from '../../types'
@@ -37,6 +37,65 @@ interface FriendsMessengerProps {
   onClose: () => void
 }
 
+// Memoized friend item component to prevent unnecessary re-renders
+const FriendItem = memo(({ 
+  friend, 
+  isSelected, 
+  unreadCount, 
+  isOnline, 
+  onSelect 
+}: {
+  friend: Friend
+  isSelected: boolean
+  unreadCount: number
+  isOnline: boolean
+  onSelect: () => void
+}) => (
+  <div 
+    className={`messenger-friend-item ${isSelected ? 'active' : ''}`}
+    onClick={onSelect}
+  >
+    <div className="messenger-avatar-wrapper">
+      <img 
+        src={getAvatarUrl(friend.friend_avatar)} 
+        alt={friend.friend_username}
+        className="messenger-avatar"
+        loading="lazy"
+      />
+      <span className={`online-dot ${isOnline ? 'online' : ''}`} />
+    </div>
+    <div className="messenger-friend-info">
+      <span className="messenger-friend-name">{friend.friend_username}</span>
+      <span className={`messenger-friend-status ${isOnline ? 'online' : ''}`}>
+        {isOnline ? 'Online' : 'Offline'}
+      </span>
+    </div>
+    {unreadCount > 0 && <span className="messenger-unread">{unreadCount}</span>}
+  </div>
+))
+
+FriendItem.displayName = 'FriendItem'
+
+// Memoized message item component
+const MessageItem = memo(({ 
+  message, 
+  isOwn 
+}: {
+  message: Message
+  isOwn: boolean
+}) => (
+  <div 
+    className={`chat-message ${isOwn ? 'sent' : 'received'}`}
+  >
+    <div className="message-bubble">{message.content}</div>
+    <div className="message-time">
+      {new Date(message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+    </div>
+  </div>
+))
+
+MessageItem.displayName = 'MessageItem'
+
 export function FriendsMessenger({ user, t, onClose }: FriendsMessengerProps) {
   const [friends, setFriends] = useState<Friend[]>([])
   const [selectedFriend, setSelectedFriend] = useState<Friend | null>(null)
@@ -48,6 +107,7 @@ export function FriendsMessenger({ user, t, onClose }: FriendsMessengerProps) {
   const [typingUsers, setTypingUsers] = useState<Set<number>>(new Set())
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const lastScrollRef = useRef<boolean>(false)
 
   // Handle incoming socket message
   const handleSocketMessage = useCallback((message: Message) => {
@@ -290,18 +350,27 @@ export function FriendsMessenger({ user, t, onClose }: FriendsMessengerProps) {
     }
   }
 
-  const isOnline = (friend: Friend) => {
+  // Memoize online status check
+  const isOnline = useCallback((friend: Friend) => {
     // Prefer socket status, fallback to last_active
     if (friend.isOnline !== undefined) return friend.isOnline
     if (!friend.friend_last_active) return false
     const diff = Date.now() - new Date(friend.friend_last_active).getTime()
     return diff < 5 * 60 * 1000
-  }
+  }, [])
 
-  const getUnreadCount = (friendId: number) => {
-    const found = unreadData.byUser.find(u => u.sender_id === friendId)
-    return found ? parseInt(found.unread_count) : 0
-  }
+  // Memoize unread count map for O(1) lookup instead of O(n)
+  const unreadCountMap = useMemo(() => {
+    const map = new Map<number, number>()
+    unreadData.byUser.forEach(u => {
+      map.set(u.sender_id, parseInt(u.unread_count))
+    })
+    return map
+  }, [unreadData.byUser])
+
+  const getUnreadCount = useCallback((friendId: number) => {
+    return unreadCountMap.get(friendId) || 0
+  }, [unreadCountMap])
 
   useEffect(() => {
     fetchFriends()
@@ -338,12 +407,17 @@ export function FriendsMessenger({ user, t, onClose }: FriendsMessengerProps) {
   }, [selectedFriend?.friend_user_id])
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+    // Only scroll on new messages, not on initial load
+    if (messages.length > 0 && lastScrollRef.current) {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'auto' })
+    }
+    lastScrollRef.current = true
   }, [messages])
 
-  const acceptedFriends = friends.filter(f => f.status === 'accepted')
-  const pendingRequests = friends.filter(f => f.status === 'pending' && f.request_direction === 'incoming')
-  const pendingOutgoing = friends.filter(f => f.status === 'pending' && f.request_direction === 'outgoing')
+  // Memoize filtered friends lists
+  const acceptedFriends = useMemo(() => friends.filter(f => f.status === 'accepted'), [friends])
+  const pendingRequests = useMemo(() => friends.filter(f => f.status === 'pending' && f.request_direction === 'incoming'), [friends])
+  const pendingOutgoing = useMemo(() => friends.filter(f => f.status === 'pending' && f.request_direction === 'outgoing'), [friends])
 
   return (
     <div className="messenger-fullscreen glass-card">
@@ -415,35 +489,16 @@ export function FriendsMessenger({ user, t, onClose }: FriendsMessengerProps) {
               <div className="messenger-section-title">
                 {t.dashboard?.friends || 'Friends'} ({acceptedFriends.length})
               </div>
-              {acceptedFriends.map(friend => {
-                const unread = getUnreadCount(friend.friend_user_id)
-                const online = isOnline(friend)
-                return (
-                  <div 
-                    key={friend.id} 
-                    className={`messenger-friend-item ${selectedFriend?.id === friend.id ? 'active' : ''}`}
-                    onClick={() => setSelectedFriend(friend)}
-                  >
-                    <div className="messenger-avatar-wrapper">
-                      <img 
-                        src={getAvatarUrl(friend.friend_avatar)} 
-                        alt={friend.friend_username}
-                        className="messenger-avatar"
-                      />
-                      <span className={`online-dot ${online ? 'online' : ''}`} />
-                    </div>
-                    <div className="messenger-friend-info">
-                      <span className="messenger-friend-name">{friend.friend_username}</span>
-                      <span className={`messenger-friend-status ${online ? 'online' : ''}`}>
-                        {online 
-                          ? (t.dashboard?.online || 'Online')
-                          : (t.dashboard?.offline || 'Offline')}
-                      </span>
-                    </div>
-                    {unread > 0 && <span className="messenger-unread">{unread}</span>}
-                  </div>
-                )
-              })}
+              {acceptedFriends.map(friend => (
+                <FriendItem
+                  key={friend.id}
+                  friend={friend}
+                  isSelected={selectedFriend?.id === friend.id}
+                  unreadCount={getUnreadCount(friend.friend_user_id)}
+                  isOnline={isOnline(friend)}
+                  onSelect={() => setSelectedFriend(friend)}
+                />
+              ))}
             </div>
           )}
 
@@ -512,15 +567,11 @@ export function FriendsMessenger({ user, t, onClose }: FriendsMessengerProps) {
               {/* Messages */}
               <div className="chat-messages">
                 {messages.map(msg => (
-                  <div 
-                    key={msg.id} 
-                    className={`chat-message ${msg.sender_id === user.id ? 'sent' : 'received'}`}
-                  >
-                    <div className="message-bubble">{msg.content}</div>
-                    <div className="message-time">
-                      {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                    </div>
-                  </div>
+                  <MessageItem
+                    key={msg.id}
+                    message={msg}
+                    isOwn={msg.sender_id === user.id}
+                  />
                 ))}
                 <div ref={messagesEndRef} />
               </div>
