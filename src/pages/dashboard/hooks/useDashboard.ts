@@ -77,8 +77,8 @@ export function useDashboard() {
         }
       }
 
-      // Запускаем обновление каждую секунду
-      const intervalId = setInterval(updateUserDataFromServer, 1000)
+      // Запускаем обновление каждые 30 секунд (было 1 секунда - убивало производительность)
+      const intervalId = setInterval(updateUserDataFromServer, 30000)
       
       // Первое обновление
       updateUserDataFromServer()

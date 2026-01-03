@@ -17,7 +17,26 @@ export default defineConfig({
     }
   },
   build: {
-    outDir: 'dist'
+    outDir: 'dist',
+    // Оптимизации для production
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true
+      }
+    },
+    rollupOptions: {
+      output: {
+        // Code splitting для лучшего кэширования
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+          icons: ['react-icons']
+        }
+      }
+    },
+    // Уменьшаем размер чанков
+    chunkSizeWarningLimit: 500
   },
   logLevel: 'error'
 })

@@ -96,9 +96,18 @@ export default function PixelBackground() {
             }
         }
 
-        // Animation loop
+        // Animation loop with throttling for better performance
         let animationId: number
-        const animate = () => {
+        let lastFrameTime = 0
+        const targetFPS = 30 // Throttle to 30 FPS instead of 60
+
+        const animate = (currentTime: number = 0) => {
+            // Skip frame if not enough time has passed
+            if (currentTime - lastFrameTime < 1000 / targetFPS) {
+                animationId = requestAnimationFrame(animate)
+                return
+            }
+            lastFrameTime = currentTime
             const isLight = document.documentElement.getAttribute('data-theme') === 'light'
             const opacityMultiplier = isLight ? 2.0 : 0.4 // Much higher opacity for light mode
 

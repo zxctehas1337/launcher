@@ -315,12 +315,12 @@ export function FriendsMessenger({ user, t, onClose }: FriendsMessengerProps) {
           fetchMessages(selectedFriend.friend_user_id, false)
         }
       }
-    }, 15000)
+    }, 30000) // было 15000
     
     // Fetch friends periodically (for new friend requests)
     const friendsInterval = setInterval(() => {
       fetchFriends()
-    }, 30000)
+    }, 60000) // было 30000
 
     return () => {
       clearInterval(interval)
@@ -367,7 +367,7 @@ export function FriendsMessenger({ user, t, onClose }: FriendsMessengerProps) {
               type="text"
               value={friendInput}
               onChange={(e) => setFriendInput(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && addFriend()}
+              onKeyDown={(e) => e.key === 'Enter' && addFriend()}
               placeholder={t.dashboard?.enterFriendUsername || 'Enter nickname...'}
               className="messenger-add-input"
             />
@@ -531,7 +531,7 @@ export function FriendsMessenger({ user, t, onClose }: FriendsMessengerProps) {
                   type="text"
                   value={messageInput}
                   onChange={handleInputChange}
-                  onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+                  onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
                   placeholder={t.dashboard?.typeMessage || 'Message...'}
                   className="chat-input"
                 />
