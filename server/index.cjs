@@ -37,11 +37,12 @@ io.on('connection', (socket) => {
 
   // User joins with their ID
   socket.on('user:online', (userId) => {
-    onlineUsers.set(userId, socket.id);
+    const odIdStr = String(userId);
+    onlineUsers.set(odIdStr, socket.id);
     // Update last_active in DB
     pool.query('UPDATE users SET last_active = NOW() WHERE id = $1', [userId]).catch(() => {});
     // Broadcast online status to friends
-    io.emit('user:status', { odId: userId, online: true });
+    io.emit('user:status', { userId: Number(userId), online: true });
     console.log(`[Socket] User ${userId} is online`);
   });
 
@@ -80,7 +81,7 @@ io.on('connection', (socket) => {
       socket.emit('message:new', message);
 
       // Send to receiver if online
-      const receiverSocketId = onlineUsers.get(receiverId.toString());
+      const receiverSocketId = onlineUsers.get(String(receiverId));
       if (receiverSocketId) {
         io.to(receiverSocketId).emit('message:new', message);
       }
@@ -92,17 +93,17 @@ io.on('connection', (socket) => {
 
   // Mark messages as read
   socket.on('message:read', async (data) => {
-    const { odId, friendId } = data;
+    const { userId, friendId } = data;
     try {
       await pool.query(`
         UPDATE messages SET is_read = true 
         WHERE sender_id = $2 AND receiver_id = $1 AND is_read = false
-      `, [odId, friendId]);
+      `, [userId, friendId]);
       
       // Notify sender that messages were read
-      const senderSocketId = onlineUsers.get(friendId.toString());
+      const senderSocketId = onlineUsers.get(String(friendId));
       if (senderSocketId) {
-        io.to(senderSocketId).emit('message:read', { odId, friendId });
+        io.to(senderSocketId).emit('message:read', { userId, friendId });
       }
     } catch (error) {
       console.error('[Socket] Read error:', error);
@@ -111,27 +112,27 @@ io.on('connection', (socket) => {
 
   // Typing indicator
   socket.on('typing:start', (data) => {
-    const receiverSocketId = onlineUsers.get(data.receiverId.toString());
+    const receiverSocketId = onlineUsers.get(String(data.receiverId));
     if (receiverSocketId) {
-      io.to(receiverSocketId).emit('typing:start', { odId: data.senderId });
+      io.to(receiverSocketId).emit('typing:start', { userId: data.senderId });
     }
   });
 
   socket.on('typing:stop', (data) => {
-    const receiverSocketId = onlineUsers.get(data.receiverId.toString());
+    const receiverSocketId = onlineUsers.get(String(data.receiverId));
     if (receiverSocketId) {
-      io.to(receiverSocketId).emit('typing:stop', { odId: data.senderId });
+      io.to(receiverSocketId).emit('typing:stop', { userId: data.senderId });
     }
   });
 
   // Disconnect
   socket.on('disconnect', () => {
     // Find and remove user
-    for (const [odId, socketId] of onlineUsers.entries()) {
+    for (const [odIdStr, socketId] of onlineUsers.entries()) {
       if (socketId === socket.id) {
-        onlineUsers.delete(odId);
-        io.emit('user:status', { odId, online: false });
-        console.log(`[Socket] User ${odId} disconnected`);
+        onlineUsers.delete(odIdStr);
+        io.emit('user:status', { userId: Number(odIdStr), online: false });
+        console.log(`[Socket] User ${odIdStr} disconnected`);
         break;
       }
     }
