@@ -63,7 +63,7 @@
 }
 
 .friends-add-input:focus {
-  border-color: rgba(0, 180, 216, 0.4);
+  border-color: rgba(255, 140, 0, 0.4);
 }
 
 .friends-add-input::placeholder {
@@ -71,11 +71,11 @@
 }
 
 .friends-add-btn {
-  background: var(--accent, #00b4d8);
-  border: none;
+  background: rgba(255, 140, 0, 0.1);
+  border: 1px solid rgba(255, 140, 0, 0.3);
   border-radius: 12px;
   padding: 12px 14px;
-  color: #fff;
+  color: #ff8c00;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -84,7 +84,9 @@
 }
 
 .friends-add-btn:hover:not(:disabled) {
-  background: #00c4eb;
+  background: rgba(255, 140, 0, 0.2);
+  border-color: rgba(255, 140, 0, 0.5);
+  color: #ffa500;
   transform: scale(1.05);
 }
 
