@@ -76,10 +76,6 @@ export default async function handler(req, res) {
             ELSE u1.avatar
           END as friend_avatar,
           CASE 
-            WHEN f.user_id = $1 THEN u2.last_active_at
-            ELSE u1.last_active_at
-          END as friend_last_active,
-          CASE 
             WHEN f.user_id = $1 THEN 'outgoing'
             ELSE 'incoming'
           END as request_direction
