@@ -3,14 +3,13 @@ import type { User } from '../types'
 import '../styles/Sidebar.css'
 
 interface SidebarProps {
-  activeTab: 'home' | 'profile' | 'settings' | 'messenger'
-  onTabChange: (tab: 'home' | 'profile' | 'settings' | 'messenger') => void
+  activeTab: 'home' | 'profile' | 'settings'
+  onTabChange: (tab: 'home' | 'profile' | 'settings') => void
   user: User
   onLogout?: () => void
-  unreadMessages?: number
 }
 
-export default function Sidebar({ activeTab, onTabChange, onLogout, unreadMessages = 0 }: SidebarProps) {
+export default function Sidebar({ activeTab, onTabChange, onLogout }: SidebarProps) {
   const { t } = useLanguage()
 
   return (
@@ -25,20 +24,6 @@ export default function Sidebar({ activeTab, onTabChange, onLogout, unreadMessag
           <svg className="nav-icon" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 3L4 9V21H9V14H15V21H20V9L12 3Z" />
           </svg>
-        </div>
-
-        {/* Messenger */}
-        <div
-          className={`nav-item ${activeTab === 'messenger' ? 'active' : ''}`}
-          onClick={() => onTabChange('messenger')}
-          title={t('sidebar.messenger')}
-        >
-          <svg className="nav-icon" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/>
-          </svg>
-          {unreadMessages > 0 && (
-            <span className="nav-badge">{unreadMessages > 99 ? '99+' : unreadMessages}</span>
-          )}
         </div>
 
         {/* Profile */}

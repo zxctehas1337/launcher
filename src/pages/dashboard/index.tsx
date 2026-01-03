@@ -20,7 +20,7 @@ import {
 } from '../../components/Icons'
 import { WindowsIcon, MacIcon, LinuxIcon } from '../../components/icons/OSIcons'
 import { DOWNLOAD_LINKS } from '../../utils/constants'
-import { FriendsMessenger } from '../../components/FriendsMessenger/FriendsMessenger'
+import { Friends } from '../../components/Friends'
 
 import '../../styles/dashboard/DashboardBase.css'
 import '../../styles/dashboard/DownloadButtons.css'
@@ -44,7 +44,7 @@ export default function DashboardPage() {
     formatDate,
   } = useDashboard()
 
-  const [messengerOpen, setMessengerOpen] = useState(false)
+  const [friendsOpen, setFriendsOpen] = useState(false)
 
   const handleDownloadLauncher = (platform: 'windows_exe' | 'windows_msi' | 'macos' | 'macos_arm64' | 'linux_rpm' | 'linux_deb' | 'linux_appimage') => {
     const downloadUrl = DOWNLOAD_LINKS[platform as keyof typeof DOWNLOAD_LINKS]
@@ -87,7 +87,7 @@ export default function DashboardPage() {
     const path = location.pathname.split('/').pop()
     if (path && ['profile', 'launcher'].includes(path)) {
       setActiveTab(path as any)
-      setMessengerOpen(false)
+      setFriendsOpen(false)
     }
   }, [location.pathname, setActiveTab])
 
@@ -181,11 +181,11 @@ export default function DashboardPage() {
 
           {/* Right Column */}
           <div className="dashboard-right">
-            {messengerOpen ? (
-              <FriendsMessenger 
+            {friendsOpen ? (
+              <Friends 
                 user={user} 
                 t={t} 
-                onClose={() => setMessengerOpen(false)} 
+                onClose={() => setFriendsOpen(false)} 
               />
             ) : (
               <>
@@ -301,7 +301,7 @@ export default function DashboardPage() {
                 <div className="bottom-row-grid">
                   <div 
                     className="glass-card friends-box-trigger"
-                    onClick={() => setMessengerOpen(true)}
+                    onClick={() => setFriendsOpen(true)}
                   >
                     <div className="friends-label">
                       <IconProfile size={20} />

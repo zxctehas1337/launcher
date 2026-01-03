@@ -1,1 +1,0 @@
-export { FriendsMessenger } from './FriendsMessenger'

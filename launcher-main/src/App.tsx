@@ -6,22 +6,17 @@ import ProfilePage from './pages/ProfilePage'
 import SettingsPage from './pages/SettingsPage'
 import AuthPage from './pages/AuthPage'
 import UpdateNotification from './components/UpdateNotification'
-import FriendsMessenger from './components/FriendsMessenger'
 import { LanguageProvider } from './contexts/LanguageContext'
 import type { User } from './types'
 import { getUserInfo } from './utils/api'
-import { fetch } from '@tauri-apps/plugin-http'
 import Snowfall from './components/Snowfall'
 import './styles/App.css'
 
-const API_URL = 'https://booleanclient.ru'
-
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<'home' | 'profile' | 'settings' | 'messenger'>('home')
+  const [activeTab, setActiveTab] = useState<'home' | 'profile' | 'settings'>('home')
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
-  const [unreadMessages, setUnreadMessages] = useState(0)
 
   useEffect(() => {
     // Проверяем сохраненного пользователя и обновляем его данные с сервера
@@ -141,27 +136,6 @@ export default function App() {
     return () => clearInterval(intervalId)
   }, [])
 
-  // Fetch unread messages count
-  useEffect(() => {
-    if (!user) return
-
-    const fetchUnread = async () => {
-      try {
-        const response = await fetch(`${API_URL}/api/messages/unread?userId=${user.id}`)
-        const data = await response.json()
-        if (data.success) {
-          setUnreadMessages(data.data.total || 0)
-        }
-      } catch (error) {
-        console.error('Error fetching unread messages:', error)
-      }
-    }
-
-    fetchUnread()
-    const interval = setInterval(fetchUnread, 5000)
-    return () => clearInterval(interval)
-  }, [user])
-
   const handleLogin = (userData: User) => {
     // Сохраняем токен отдельно
     if ('token' in userData) {
@@ -211,10 +185,9 @@ export default function App() {
         <TitleBar />
         <UpdateNotification />
         <div className="app-main">
-          <Sidebar activeTab={activeTab} onTabChange={setActiveTab} user={user} onLogout={handleLogout} unreadMessages={unreadMessages} />
+          <Sidebar activeTab={activeTab} onTabChange={setActiveTab} user={user} onLogout={handleLogout} />
           <div className="app-content">
             {activeTab === 'home' && <HomePage user={user} />}
-            {activeTab === 'messenger' && <FriendsMessenger user={user} />}
             {activeTab === 'profile' && <ProfilePage user={user} onLogout={handleLogout} onUserUpdate={handleUserUpdate} />}
             {activeTab === 'settings' && <SettingsPage />}
           </div>
