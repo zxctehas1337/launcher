@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { IoSend, IoClose, IoPersonAdd, IoCheckmark, IoCloseCircle, IoArrowBack } from 'react-icons/io5'
 import { getAvatarUrl } from '../../utils/avatarGenerator'
 import { User } from '../../types'
-import { useSocket } from '../../hooks/useSocket'
+import { useAbly } from '../../hooks/useAbly'
 import './FriendsMessenger.css'
 
 interface Friend {
@@ -109,7 +109,7 @@ export function FriendsMessenger({ user, t, onClose }: FriendsMessengerProps) {
     })
   }, [])
 
-  const { connected, sendMessage: socketSendMessage, markAsRead, startTyping, stopTyping } = useSocket({
+  const { connected, sendMessage: ablySendMessage, markAsRead, startTyping, stopTyping } = useAbly({
     userId: user.id,
     onMessage: handleSocketMessage,
     onUserStatus: handleUserStatus,
@@ -164,10 +164,12 @@ export function FriendsMessenger({ user, t, onClose }: FriendsMessengerProps) {
   const sendMessage = async () => {
     if (!messageInput.trim() || !selectedFriend) return
 
-    // Use socket if connected, fallback to HTTP
+    const content = messageInput.trim()
+    setMessageInput('')
+
+    // Use Ably if connected, fallback to HTTP
     if (connected) {
-      socketSendMessage(selectedFriend.friend_user_id, messageInput.trim())
-      setMessageInput('')
+      ablySendMessage(selectedFriend.friend_user_id, content)
     } else {
       try {
         const response = await fetch('/api/messages', {
@@ -176,13 +178,12 @@ export function FriendsMessenger({ user, t, onClose }: FriendsMessengerProps) {
           body: JSON.stringify({
             senderId: user.id,
             receiverId: selectedFriend.friend_user_id,
-            content: messageInput.trim()
+            content
           })
         })
         const data = await response.json()
         if (data.success) {
           setMessages(prev => [...prev, { ...data.data, sender_username: user.username }])
-          setMessageInput('')
         }
       } catch (error) {
         console.error('Error sending message:', error)
