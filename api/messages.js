@@ -1,4 +1,4 @@
-import { getPool } from '../_lib/db.js';
+import { getPool } from './_lib/db.js';
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -10,8 +10,15 @@ export default async function handler(req, res) {
   }
 
   const pool = getPool();
+  const { action } = req.query;
 
   try {
+    // Handle unread messages count
+    if (action === 'unread') {
+      return handleUnread(req, res, pool);
+    }
+
+    // Default messages handling
     if (req.method === 'GET') {
       const { userId, friendId } = req.query;
       
@@ -19,7 +26,6 @@ export default async function handler(req, res) {
         return res.status(400).json({ success: false, message: 'userId and friendId required' });
       }
 
-      // Get messages between two users
       const result = await pool.query(`
         SELECT 
           m.id,
@@ -38,17 +44,13 @@ export default async function handler(req, res) {
         LIMIT 100
       `, [userId, friendId]);
 
-      // Mark messages as read
       await pool.query(`
         UPDATE messages 
         SET is_read = true 
         WHERE sender_id = $2 AND receiver_id = $1 AND is_read = false
       `, [userId, friendId]);
 
-      return res.status(200).json({ 
-        success: true, 
-        data: result.rows 
-      });
+      return res.status(200).json({ success: true, data: result.rows });
     }
 
     if (req.method === 'POST') {
@@ -61,7 +63,6 @@ export default async function handler(req, res) {
         });
       }
 
-      // Check if they are friends
       const friendshipResult = await pool.query(`
         SELECT * FROM friendships 
         WHERE status = 'accepted' 
@@ -75,17 +76,13 @@ export default async function handler(req, res) {
         });
       }
 
-      // Insert message
       const result = await pool.query(`
         INSERT INTO messages (sender_id, receiver_id, content)
         VALUES ($1, $2, $3)
         RETURNING id, sender_id, receiver_id, content, is_read, created_at
       `, [senderId, receiverId, content.trim()]);
 
-      return res.status(201).json({ 
-        success: true, 
-        data: result.rows[0] 
-      });
+      return res.status(201).json({ success: true, data: result.rows[0] });
     }
 
     if (req.method === 'PATCH') {
@@ -95,7 +92,6 @@ export default async function handler(req, res) {
         return res.status(400).json({ success: false, message: 'userId and friendId required' });
       }
 
-      // Mark all messages from friend as read
       await pool.query(`
         UPDATE messages 
         SET is_read = true 
@@ -108,6 +104,48 @@ export default async function handler(req, res) {
     return res.status(405).json({ success: false, message: 'Method not allowed' });
   } catch (error) {
     console.error('Messages API error:', error);
+    return res.status(500).json({ success: false, message: 'Server error' });
+  }
+}
+
+async function handleUnread(req, res, pool) {
+  if (req.method !== 'GET') {
+    return res.status(405).json({ success: false, message: 'Method not allowed' });
+  }
+
+  try {
+    const { userId } = req.query;
+    
+    if (!userId) {
+      return res.status(400).json({ success: false, message: 'userId required' });
+    }
+
+    const result = await pool.query(`
+      SELECT 
+        m.sender_id,
+        COUNT(*) as unread_count,
+        u.username as sender_username
+      FROM messages m
+      JOIN users u ON m.sender_id = u.id
+      WHERE m.receiver_id = $1 AND m.is_read = false
+      GROUP BY m.sender_id, u.username
+    `, [userId]);
+
+    const totalResult = await pool.query(`
+      SELECT COUNT(*) as total_unread
+      FROM messages
+      WHERE receiver_id = $1 AND is_read = false
+    `, [userId]);
+
+    return res.status(200).json({ 
+      success: true, 
+      data: {
+        byUser: result.rows,
+        total: parseInt(totalResult.rows[0].total_unread) || 0
+      }
+    });
+  } catch (error) {
+    console.error('Unread messages API error:', error);
     return res.status(500).json({ success: false, message: 'Server error' });
   }
 }

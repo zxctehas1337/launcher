@@ -46,6 +46,14 @@
       "destination": "/api/versions?id=:id"
     },
     {
+      "source": "/api/messages/unread",
+      "destination": "/api/messages?action=unread"
+    },
+    {
+      "source": "/api/keys/activate",
+      "destination": "/api/keys?action=activate"
+    },
+    {
       "source": "/api/(.*)",
       "destination": "/api/$1"
     },
