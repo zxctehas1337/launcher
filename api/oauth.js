@@ -29,7 +29,7 @@ function decodeState(stateStr) {
 
 export default async (req, res) => {
   const { provider, action, redirect } = req.query;
-  const frontendUrl = process.env.FRONTEND_URL || 'https://shakedown.vercel.app';
+  const frontendUrl = process.env.FRONTEND_URL || 'https://booleanclient.vercel.app';
   const baseUrl = frontendUrl; // Используем FRONTEND_URL, а не VERCEL_URL (он меняется при каждом деплое)
 
   if (!['github', 'google', 'yandex'].includes(provider)) {

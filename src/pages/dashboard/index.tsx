@@ -46,7 +46,7 @@ export default function DashboardPage() {
   } = useDashboard()
 
 
-  const handleDownloadLauncher = (platform: 'windows' | 'macos' | 'macos_arm64' | 'linux_rpm' | 'linux_deb' | 'linux_appimage') => {
+  const handleDownloadLauncher = (platform: 'windows_exe' | 'windows_msi' | 'macos' | 'macos_arm64' | 'linux_rpm' | 'linux_deb' | 'linux_appimage') => {
     const downloadUrl = DOWNLOAD_LINKS[platform as keyof typeof DOWNLOAD_LINKS]
     if (downloadUrl) {
       const link = document.createElement('a')
@@ -57,7 +57,8 @@ export default function DashboardPage() {
 
       // Show notification
       const platformNames: Record<string, string> = {
-        windows: 'Windows',
+        windows_exe: 'Windows (.exe)',
+        windows_msi: 'Windows (.msi)',
         macos: 'macOS (Intel)',
         macos_arm64: 'macOS (Apple Silicon)',
         linux_rpm: 'Linux (RPM)',
@@ -251,10 +252,20 @@ export default function DashboardPage() {
                 <div className="launcher-view">
                   {/* Download Buttons */}
                   <div className="download-buttons-grid">
-                    <button className="download-os-btn windows" onClick={() => handleDownloadLauncher('windows')}>
+                    <div className="download-os-btn windows">
                       <WindowsIcon size={48} />
                       <span>Windows</span>
-                    </button>
+                      <div className="windows-options">
+                        <div className="windows-sub-btn" onClick={() => handleDownloadLauncher('windows_exe')}>
+                          <WindowsIcon size={12} className="sub-btn-icon-svg" />
+                          <span>Exe Installer</span>
+                        </div>
+                        <div className="windows-sub-btn" onClick={() => handleDownloadLauncher('windows_msi')}>
+                          <WindowsIcon size={12} className="sub-btn-icon-svg" />
+                          <span>MSI Installer</span>
+                        </div>
+                      </div>
+                    </div>
 
                     <div className="download-os-btn macos">
                       <MacIcon size={48} />

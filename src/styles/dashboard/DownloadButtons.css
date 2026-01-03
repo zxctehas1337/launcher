@@ -53,6 +53,7 @@
   letter-spacing: 0.5px;
 }
 
+.windows-options,
 .macos-options,
 .linux-options {
   display: flex;
@@ -62,11 +63,13 @@
   margin-top: 5px;
 }
 
+.download-os-btn.windows,
 .download-os-btn.macos,
 .download-os-btn.linux {
   cursor: default;
 }
 
+.download-os-btn.windows:hover,
 .download-os-btn.macos:hover,
 .download-os-btn.linux:hover {
   transform: none;
@@ -75,6 +78,7 @@
   box-shadow: none;
 }
 
+.windows-sub-btn,
 .macos-sub-btn,
 .linux-sub-btn {
   font-size: 0.8rem !important;
@@ -89,6 +93,7 @@
   box-sizing: border-box;
 }
 
+.windows-sub-btn:hover,
 .macos-sub-btn:hover,
 .linux-sub-btn:hover {
   opacity: 1;
@@ -102,11 +107,13 @@
   object-fit: contain;
 }
 
-.apple-silicon-icon {
+.apple-silicon-icon,
+.sub-btn-icon-svg {
   width: 24px !important;
   height: 24px !important;
 }
 
+.windows-sub-btn,
 .macos-sub-btn,
 .linux-sub-btn {
   display: flex;
@@ -126,6 +133,7 @@
   border: 1px solid rgba(255, 255, 255, 0.03);
 }
 
+.windows-sub-btn span,
 .macos-sub-btn span,
 .linux-sub-btn span {
   font-size: 0.85rem !important;
@@ -133,6 +141,7 @@
   color: rgba(255, 255, 255, 0.9);
 }
 
+.windows-sub-btn:hover,
 .macos-sub-btn:hover,
 .linux-sub-btn:hover {
   opacity: 1;
@@ -140,6 +149,7 @@
   border-color: #ff8c00;
 }
 
+.windows-sub-btn:hover span,
 .macos-sub-btn:hover span,
 .linux-sub-btn:hover span {
   color: #ff8c00;

@@ -9,13 +9,17 @@ export const CLIENT_INFO = {
 }
 
 // Ссылки на скачивание лаунчера
+export const WINDOWS_EXE_LINK = 'https://github.com/nihmadev/hoka/releases/download/v1/Boolean.Launcher_0.1.0_x64-setup.exe'
+export const WINDOWS_MSI_LINK = 'https://github.com/nihmadev/hoka/releases/download/v1/Boolean.Launcher_0.1.0_x64_en-US.msi'
+
 export const DOWNLOAD_LINKS = {
-  windows: '',
-  macos: '',
-  macos_arm64: '', // Same for now, can be updated later
-  linux_rpm: '',
-  linux_deb: '',
-  linux_appimage: '',
+  windows_exe: WINDOWS_EXE_LINK,
+  windows_msi: WINDOWS_MSI_LINK,
+  macos: 'https://github.com/nihmadev/hoka/releases/download/v1/Boolean.Launcher_0.1.0_x64.dmg',
+  macos_arm64: 'https://github.com/nihmadev/hoka/releases/download/v1/Boolean.Launcher_0.1.0_aarch64.dmg', // Same for now, can be updated later
+  linux_rpm: 'https://github.com/nihmadev/hoka/releases/download/v1/Boolean.Launcher-0.1.0-1.x86_64.rpm',
+  linux_deb: 'https://github.com/nihmadev/hoka/releases/download/v1/Boolean.Launcher_0.1.0_amd64.deb',
+  linux_appimage: 'https://github.com/nihmadev/hoka/releases/download/v1/Boolean.Launcher_0.1.0_amd64.AppImage',
 }
 
 // Социальные сети (заполнишь позже)
