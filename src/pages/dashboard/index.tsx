@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import Notification from '../../components/Notification'
 import { LogoutModal } from '../../components/LogoutModal'
 import { SoonModal } from '../../components/SoonModal'
@@ -6,22 +6,21 @@ import { useDashboard } from './hooks/useDashboard'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { getAvatarUrl } from '../../utils/avatarGenerator'
 import Navigation from '../../components/Navigation'
-import { SettingsTab } from './tabs/SettingsTab'
 import {
   IconProfile,
-  IconSettings,
   IconKey,
   IconCheck,
   IconArrowRight,
   IconMail,
   IconClock,
-  IconGrid,
+  IconDownload,
   IconChip,
   IconLogout,
   IconShield,
 } from '../../components/Icons'
 import { WindowsIcon, MacIcon, LinuxIcon } from '../../components/icons/OSIcons'
 import { DOWNLOAD_LINKS } from '../../utils/constants'
+import { FriendsMessenger } from '../../components/FriendsMessenger/FriendsMessenger'
 
 import '../../styles/dashboard/DashboardBase.css'
 import '../../styles/dashboard/DownloadButtons.css'
@@ -45,6 +44,7 @@ export default function DashboardPage() {
     formatDate,
   } = useDashboard()
 
+  const [messengerOpen, setMessengerOpen] = useState(false)
 
   const handleDownloadLauncher = (platform: 'windows_exe' | 'windows_msi' | 'macos' | 'macos_arm64' | 'linux_rpm' | 'linux_deb' | 'linux_appimage') => {
     const downloadUrl = DOWNLOAD_LINKS[platform as keyof typeof DOWNLOAD_LINKS]
@@ -55,7 +55,6 @@ export default function DashboardPage() {
       link.rel = 'noopener noreferrer'
       link.click()
 
-      // Show notification
       const platformNames: Record<string, string> = {
         windows_exe: 'Windows (.exe)',
         windows_msi: 'Windows (.msi)',
@@ -69,8 +68,6 @@ export default function DashboardPage() {
         message: `${platformNames[platform] || platform} ${t.dashboard.launcherDownloadStarted || 'download started...'}`,
         type: 'success'
       })
-
-      // Clear notification after 3 seconds
       setTimeout(() => setNotification(null), 3000)
     } else {
       setNotification({
@@ -81,18 +78,16 @@ export default function DashboardPage() {
     }
   }
 
-  const handleLanguageChange = () => {
-    // Component will naturally re-render when translations change
-    // as it's often listening to storage or event changes globally
-  }
+  const handleLanguageChange = () => {}
 
   const location = useLocation()
   const navigate = useNavigate()
 
   useEffect(() => {
     const path = location.pathname.split('/').pop()
-    if (path && ['profile', 'settings', 'overview'].includes(path)) {
+    if (path && ['profile', 'launcher'].includes(path)) {
       setActiveTab(path as any)
+      setMessengerOpen(false)
     }
   }, [location.pathname, setActiveTab])
 
@@ -186,154 +181,145 @@ export default function DashboardPage() {
 
           {/* Right Column */}
           <div className="dashboard-right">
-            {/* Navigation Tabs */}
-            <div className="dashboard-nav">
-              <button
-                className={`nav-tab ${activeTab === 'profile' ? 'active' : ''}`}
-                onClick={() => {
-                  setActiveTab('profile')
-                  navigate('/dashboard/profile')
-                }}
-              >
-                <IconProfile size={16} />
-                <span>{t.dashboard.accountTab}</span>
-              </button>
-              <button
-                className={`nav-tab ${activeTab === 'settings' ? 'active' : ''}`}
-                onClick={() => {
-                  setActiveTab('settings')
-                  navigate('/dashboard/settings')
-                }}
-              >
-                <IconSettings size={16} />
-                <span>{t.dashboard.settings}</span>
-              </button>
-              <button
-                className={`nav-tab ${activeTab === 'overview' ? 'active' : ''}`}
-                onClick={() => {
-                  setActiveTab('overview')
-                  navigate('/dashboard/overview')
-                }}
-              >
-                <IconGrid size={16} />
-                <span>{t.dashboard.launcherTab}</span>
-              </button>
-            </div>
-
-            {/* Tab Content */}
-            <div className="tab-content-wrapper">
-              {activeTab === 'profile' && (
-                <div className="account-details-row">
-                  <div className="info-box">
-                    <div className="info-header">
-                      <IconMail size={14} />
-                      <span>{t.dashboard.email}</span>
-                    </div>
-                    <div className="info-text">{user.email}</div>
-                  </div>
-                  <div className="info-box">
-                    <div className="info-header">
-                      <IconClock size={14} />
-                      <span>{t.dashboard.registration}</span>
-                    </div>
-                    <div className="info-text">{new Date(user.registeredAt).toLocaleDateString()}</div>
-                  </div>
-                  <div className="info-box">
-                    <div className="info-header">
-                      <IconChip size={14} />
-                      <span>{t.dashboard.hwid}</span>
-                    </div>
-                    <div className="info-text">{user.hwid || t.dashboard.notLinked}</div>
-                  </div>
+            {messengerOpen ? (
+              <FriendsMessenger 
+                user={user} 
+                t={t} 
+                onClose={() => setMessengerOpen(false)} 
+              />
+            ) : (
+              <>
+                {/* Navigation Tabs */}
+                <div className="dashboard-nav">
+                  <button
+                    className={`nav-tab ${activeTab === 'profile' ? 'active' : ''}`}
+                    onClick={() => {
+                      setActiveTab('profile')
+                      navigate('/dashboard/profile')
+                    }}
+                  >
+                    <IconProfile size={16} />
+                    <span>{t.dashboard.accountTab}</span>
+                  </button>
+                  <button
+                    className={`nav-tab ${activeTab === 'launcher' ? 'active' : ''}`}
+                    onClick={() => {
+                      setActiveTab('launcher')
+                      navigate('/dashboard/launcher')
+                    }}
+                  >
+                    <IconDownload size={16} />
+                    <span>{t.dashboard.launcherTab}</span>
+                  </button>
                 </div>
-              )}
 
-              {activeTab === 'overview' && (
-                <div className="launcher-view">
-                  {/* Download Buttons */}
-                  <div className="download-buttons-grid">
-                    <div className="download-os-btn windows">
-                      <WindowsIcon size={48} />
-                      <span>Windows</span>
-                      <div className="windows-options">
-                        <div className="windows-sub-btn" onClick={() => handleDownloadLauncher('windows_exe')}>
-                          <WindowsIcon size={12} className="sub-btn-icon-svg" />
-                          <span>EXE Installer</span>
+                {/* Tab Content */}
+                <div className="tab-content-wrapper">
+                  {activeTab === 'profile' && (
+                    <div className="account-details-row">
+                      <div className="info-box">
+                        <div className="info-header">
+                          <IconMail size={14} />
+                          <span>{t.dashboard.email}</span>
                         </div>
-                        <div className="windows-sub-btn" onClick={() => handleDownloadLauncher('windows_msi')}>
-                          <WindowsIcon size={12} className="sub-btn-icon-svg" />
-                          <span>MSI Installer</span>
+                        <div className="info-text">{user.email}</div>
+                      </div>
+                      <div className="info-box">
+                        <div className="info-header">
+                          <IconClock size={14} />
+                          <span>{t.dashboard.registration}</span>
+                        </div>
+                        <div className="info-text">{new Date(user.registeredAt).toLocaleDateString()}</div>
+                      </div>
+                      <div className="info-box">
+                        <div className="info-header">
+                          <IconChip size={14} />
+                          <span>{t.dashboard.hwid}</span>
+                        </div>
+                        <div className="info-text">{user.hwid || t.dashboard.notLinked}</div>
+                      </div>
+                    </div>
+                  )}
+
+                  {activeTab === 'launcher' && (
+                    <div className="launcher-view">
+                      <div className="download-buttons-grid">
+                        <div className="download-os-btn windows">
+                          <WindowsIcon size={48} />
+                          <span>Windows</span>
+                          <div className="windows-options">
+                            <div className="windows-sub-btn" onClick={() => handleDownloadLauncher('windows_exe')}>
+                              <WindowsIcon size={12} className="sub-btn-icon-svg" />
+                              <span>EXE Installer</span>
+                            </div>
+                            <div className="windows-sub-btn" onClick={() => handleDownloadLauncher('windows_msi')}>
+                              <WindowsIcon size={12} className="sub-btn-icon-svg" />
+                              <span>MSI Installer</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="download-os-btn macos">
+                          <MacIcon size={48} />
+                          <span>macOS</span>
+                          <div className="macos-options">
+                            <div className="macos-sub-btn" onClick={() => handleDownloadLauncher('macos')}>
+                              <img src="/intel.png" alt="Intel" className="sub-btn-icon" />
+                              <span>Intel</span>
+                            </div>
+                            <div className="macos-sub-btn" onClick={() => handleDownloadLauncher('macos_arm64')}>
+                              <MacIcon size={12} className="apple-silicon-icon" />
+                              <span>Apple Silicon</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="download-os-btn linux">
+                          <LinuxIcon size={48} />
+                          <span>Linux</span>
+                          <div className="linux-options">
+                            <div className="linux-sub-btn" onClick={() => handleDownloadLauncher('linux_deb')}>
+                              <img src="/debian.png" alt="Debian" className="sub-btn-icon" />
+                              <span>Debian</span>
+                            </div>
+                            <div className="linux-sub-btn" onClick={() => handleDownloadLauncher('linux_rpm')}>
+                              <img src="/fedora.png" alt="Fedora" className="sub-btn-icon" />
+                              <span>Fedora/Redhat</span>
+                            </div>
+                            <div className="linux-sub-btn" onClick={() => handleDownloadLauncher('linux_appimage')}>
+                              <img src="/appimage.png" alt="AppImage" className="sub-btn-icon" />
+                              <span>AppImage</span>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
+                  )}
+                </div>
 
-                    <div className="download-os-btn macos">
-                      <MacIcon size={48} />
-                      <span>macOS</span>
-                      <div className="macos-options">
-                        <div className="macos-sub-btn" onClick={() => handleDownloadLauncher('macos')}>
-                          <img src="/intel.png" alt="Intel" className="sub-btn-icon" />
-                          <span>Intel</span>
-                        </div>
-                        <div className="macos-sub-btn" onClick={() => handleDownloadLauncher('macos_arm64')}>
-                          <MacIcon size={12} className="apple-silicon-icon" />
-                          <span>Apple Silicon</span>
-                        </div>
-                      </div>
+                {/* Bottom Cards Row */}
+                <div className="bottom-row-grid">
+                  <div 
+                    className="glass-card friends-box-trigger"
+                    onClick={() => setMessengerOpen(true)}
+                  >
+                    <div className="friends-label">
+                      <IconProfile size={20} />
+                      <span>{t.dashboard.friends}</span>
                     </div>
-
-                    <div className="download-os-btn linux">
-                      <LinuxIcon size={48} />
-                      <span>Linux</span>
-                      <div className="linux-options">
-                        <div className="linux-sub-btn" onClick={() => handleDownloadLauncher('linux_deb')}>
-                          <img src="/debian.png" alt="Debian" className="sub-btn-icon" />
-                          <span>Debian</span>
-                        </div>
-                        <div className="linux-sub-btn" onClick={() => handleDownloadLauncher('linux_rpm')}>
-                          <img src="/fedora.png" alt="Fedora" className="sub-btn-icon" />
-                          <span>Fedora/Redhat</span>
-                        </div>
-                        <div className="linux-sub-btn" onClick={() => handleDownloadLauncher('linux_appimage')}>
-                          <img src="/appimage.png" alt="AppImage" className="sub-btn-icon" />
-                          <span>AppImage</span>
-                        </div>
-                      </div>
+                    <div className="friends-value-icon">
+                      <IconArrowRight size={36} />
                     </div>
                   </div>
+                  <div className="glass-card diagonal-soon-card">
+                    <div className="soon-diagonal-text">{t.dashboard.soon}</div>
+                  </div>
                 </div>
-              )}
-
-              {activeTab === 'settings' && (
-                <SettingsTab
-                  user={user}
-                  formatDate={formatDate}
-                  t={t}
-                />
-              )}
-            </div>
-
-            {/* Bottom Cards Row */}
-            <div className="bottom-row-grid">
-              <div className="glass-card friends-box">
-                <div className="friends-label">
-                  <IconProfile size={14} />
-                  <span>{t.dashboard.friends}</span>
-                </div>
-                <div className="friends-value">0</div>
-                <div className="friends-arrow">
-                  <IconArrowRight size={20} />
-                </div>
-              </div>
-              <div className="glass-card diagonal-soon-card">
-                <div className="soon-diagonal-text">{t.dashboard.soon}</div>
-              </div>
-            </div>
+              </>
+            )}
           </div>
         </div>
       </div>
     </div>
   )
 }
-
-

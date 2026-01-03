@@ -155,7 +155,19 @@ export const ruTranslations: TranslationStructure = {
     light: 'Светлая',
     auto: 'Авто',
     snowEffect: 'Эффект снега',
-    enterFriendUsername: 'Введите имя друга...'
+    enterFriendUsername: 'Введите имя друга...',
+    // Messenger translations
+    online: 'В сети',
+    offline: 'Не в сети',
+    typeMessage: 'Сообщение...',
+    friendRequests: 'Заявки в друзья',
+    pendingRequests: 'Ожидают',
+    requestSent: 'Запрос отправлен',
+    wantsToBeYourFriend: 'Хочет добавить вас в друзья',
+    noFriendsYet: 'Пока нет друзей',
+    addFriendHint: 'Добавьте друзей используя поле выше',
+    removeFriend: 'Удалить из друзей',
+    selectFriendToChat: 'Выберите друга для начала чата'
   },
   // Модальное окно оплаты
   payment: {

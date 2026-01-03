@@ -7,7 +7,7 @@ interface Props {
   formatDate: (date: string) => string
   handleBuyClient: (productId?: string) => void
   handleDownloadLauncher: (platform: 'windows' | 'macos' | 'linux') => void
-  setActiveTab: (tab: 'overview' | 'profile' | 'subscription' | 'settings') => void
+  setActiveTab: (tab: 'launcher' | 'profile' | 'subscription' | 'friends') => void
   t: any
 }
 

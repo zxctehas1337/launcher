@@ -3,12 +3,13 @@
    ======================================== */
 
 .new-dashboard {
-  min-height: 100vh;
+  height: 100vh;
   background: #000000;
   color: #ffffff;
   padding: 130px 20px 60px;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  overflow-x: hidden;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .dashboard-wrapper {
@@ -32,18 +33,12 @@
   border-radius: 24px;
   backdrop-filter: blur(24px);
   padding: 24px;
-  transition: background 0.2s ease, border-color 0.2s ease;
   position: relative;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
-}
-
-.glass-card:hover {
-  border-color: rgba(255, 140, 0, 0.2);
-  background: rgba(25, 25, 25, 0.85);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 /* Left Column */
@@ -108,18 +103,12 @@
   background: none;
   border: none;
   color: #fff;
-  opacity: 0.4;
+  opacity: 0.5;
   cursor: pointer;
-  transition: all 0.2s;
   padding: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.profile-logout-btn:hover {
-  opacity: 1;
-  color: #ff8c00;
 }
 
 .icon-dimmed {
@@ -192,19 +181,15 @@
   justify-content: center;
   gap: 10px;
   cursor: pointer;
-  transition: all 0.2s;
   height: 54px;
   box-sizing: border-box;
+  box-shadow: 0 2px 6px rgba(255, 140, 0, 0.2);
 }
 
 .pink-btn svg {
   width: 16px;
   height: 16px;
   color: inherit;
-}
-
-.pink-btn:hover {
-  background: #ffa500;
 }
 
 /* Right Column */
@@ -236,19 +221,14 @@
   justify-content: center;
   gap: 10px;
   cursor: pointer;
-  transition: all 0.2s;
   height: 54px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 
 .nav-tab svg {
   color: rgba(255, 255, 255, 0.6);
   width: 18px;
   height: 18px;
-}
-
-.nav-tab:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: rgba(255, 255, 255, 0.9);
 }
 
 .nav-tab.active {
@@ -281,13 +261,9 @@
   flex-direction: column;
   gap: 8px;
   align-items: center;
-  transition: all 0.2s ease;
   min-height: 110px;
   justify-content: center;
-}
-
-.info-box:hover {
-  background: rgba(255, 255, 255, 0.03);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 
 .info-header {
@@ -359,18 +335,14 @@
   justify-content: center;
   gap: 16px;
   cursor: pointer;
-  transition: all 0.3s;
   min-height: 80px;
+  box-shadow: 0 2px 8px rgba(255, 140, 0, 0.25);
 }
 
 .download-launcher-btn svg {
   width: 24px;
   height: 24px;
   color: inherit;
-}
-
-.download-launcher-btn:hover {
-  background: #ffa500;
 }
 
 /* Launcher View */
@@ -394,7 +366,7 @@
   justify-content: center;
   gap: 12px;
   cursor: pointer;
-  transition: all 0.3s;
+  box-shadow: 0 1px 4px rgba(255, 140, 0, 0.1);
 }
 
 .download-full-btn svg {
@@ -403,48 +375,50 @@
   color: inherit;
 }
 
-.download-full-btn:hover {
-  background: rgba(255, 140, 0, 0.15);
-  color: #fff;
-}
-
 /* Bottom Cards */
 .bottom-row-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
-}
-
-.friends-box {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 32px 24px;
-  min-height: 140px;
-  justify-content: center;
   position: relative;
 }
 
-.friends-label {
+/* Friends Box Trigger */
+.friends-box-trigger {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 24px;
+  min-height: 140px;
+  position: relative;
+  cursor: pointer;
+}
+
+.friends-box-trigger .friends-label {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.4);
+  gap: 12px;
+  font-size: 20px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
 }
 
-.friends-value {
-  font-size: 38px;
-  font-weight: 700;
-  color: #fff;
+.friends-box-trigger .friends-label svg {
+  width: 26px;
+  height: 26px;
 }
 
-.friends-arrow {
+.friends-box-trigger .friends-value-icon {
   position: absolute;
   right: 24px;
-  bottom: 24px;
+  top: 50%;
+  transform: translateY(-50%);
   color: #ff8c00;
   opacity: 0.8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .diagonal-soon-card {
@@ -542,12 +516,7 @@
 [data-theme="light"] .glass-card {
   background: rgba(255, 255, 255, 0.7);
   border-color: rgba(0, 0, 0, 0.06);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-}
-
-[data-theme="light"] .glass-card:hover {
-  background: rgba(255, 255, 255, 0.9);
-  border-color: rgba(255, 140, 0, 0.4);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
 }
 
 [data-theme="light"] .profile-text p,
@@ -561,10 +530,6 @@
 
 [data-theme="light"] .profile-logout-btn {
   color: var(--text-secondary);
-}
-
-[data-theme="light"] .profile-logout-btn:hover {
-  color: #ff8c00;
 }
 
 [data-theme="light"] .input-with-icon input {
@@ -581,11 +546,6 @@
 
 [data-theme="light"] .nav-tab svg {
   color: var(--text-tertiary);
-}
-
-[data-theme="light"] .nav-tab:hover {
-  background: rgba(0, 0, 0, 0.05);
-  color: var(--text-primary);
 }
 
 [data-theme="light"] .nav-tab.active {
@@ -611,11 +571,6 @@
 [data-theme="light"] .download-full-btn {
   background: rgba(255, 140, 0, 0.05);
   border-color: rgba(255, 140, 0, 0.2);
-}
-
-[data-theme="light"] .download-full-btn:hover {
-  background: #ff8c00;
-  color: #ffffff;
 }
 
 [data-theme="light"] .diagonal-soon-card {
@@ -690,21 +645,7 @@
   stroke: #ffffff !important;
 }
 
-/* Hover states - ORANGE */
-.nav-icon-btn:hover {
-  color: #FF8C00 !important;
-}
 
-.nav-icon-btn:hover svg.IconSun {
-  color: #FF8C00 !important;
-  stroke: #FF8C00 !important;
-}
-
-/* Keep moon icon white even on hover */
-.nav-icon-btn:hover svg.IconMoon {
-  color: #ffffff !important;
-  stroke: #ffffff !important;
-}
 
 /* ========================================
    MOON ICON ALWAYS WHITE - OVERWRITE ALL THEMES
@@ -742,14 +683,5 @@
 }
 
 .admin-access-card svg {
-  color: #ff8c00;
-}
-
-.admin-access-card:hover {
-  border-color: #ff8c00;
-  background: rgba(255, 140, 0, 0.05);
-}
-
-.admin-access-card:hover svg {
   color: #ff8c00;
 }

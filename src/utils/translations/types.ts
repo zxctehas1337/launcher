@@ -152,6 +152,18 @@ export interface TranslationStructure {
     auto: string
     snowEffect: string
     enterFriendUsername: string
+    // Messenger translations
+    online: string
+    offline: string
+    typeMessage: string
+    friendRequests: string
+    pendingRequests: string
+    requestSent: string
+    wantsToBeYourFriend: string
+    noFriendsYet: string
+    addFriendHint: string
+    removeFriend: string
+    selectFriendToChat: string
   }
   payment: {
     title: string

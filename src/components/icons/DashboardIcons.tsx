@@ -17,6 +17,15 @@ export const IconProfile: React.FC<IconProps> = ({ size = 20, className }) => (
     </svg>
 )
 
+export const IconFriends: React.FC<IconProps> = ({ size = 20, className }) => (
+    <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <circle cx="9" cy="7" r="3" />
+        <path d="M3 18c0-3 3-5 6-5s6 2 6 5" />
+        <circle cx="17" cy="9" r="2.5" />
+        <path d="M15 18c0-2.5 2-4 4-4s4 1.5 4 4" />
+    </svg>
+)
+
 export const IconStar: React.FC<IconProps> = ({ size = 20, className }) => (
     <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />

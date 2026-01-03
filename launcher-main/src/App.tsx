@@ -1,0 +1,226 @@
+import { useState, useEffect } from 'react'
+import TitleBar from './components/TitleBar'
+import Sidebar from './components/Sidebar'
+import HomePage from './pages/HomePage'
+import ProfilePage from './pages/ProfilePage'
+import SettingsPage from './pages/SettingsPage'
+import AuthPage from './pages/AuthPage'
+import UpdateNotification from './components/UpdateNotification'
+import FriendsMessenger from './components/FriendsMessenger'
+import { LanguageProvider } from './contexts/LanguageContext'
+import type { User } from './types'
+import { getUserInfo } from './utils/api'
+import { fetch } from '@tauri-apps/plugin-http'
+import Snowfall from './components/Snowfall'
+import './styles/App.css'
+
+const API_URL = 'https://booleanclient.ru'
+
+
+export default function App() {
+  const [activeTab, setActiveTab] = useState<'home' | 'profile' | 'settings' | 'messenger'>('home')
+  const [user, setUser] = useState<User | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [unreadMessages, setUnreadMessages] = useState(0)
+
+  useEffect(() => {
+    // Проверяем сохраненного пользователя и обновляем его данные с сервера
+    const loadUser = async () => {
+      const savedUser = localStorage.getItem('user')
+      if (savedUser) {
+        try {
+          const parsedUser = JSON.parse(savedUser)
+          setUser(parsedUser)
+          setIsLoading(false) // Сразу показываем UI с кешированными данными
+
+          // Загружаем актуальные данные с сервера (включая аватарку) в фоне
+          console.log('🔄 Обновление данных пользователя с сервера...')
+          try {
+            const response = await Promise.race([
+              getUserInfo(parsedUser.id),
+              new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 5000))
+            ]) as any
+
+            if (response.success && response.data) {
+              console.log('✅ Данные пользователя обновлены:', response.data)
+              const updatedUser = {
+                ...parsedUser,
+                ...response.data,
+                registeredAt: response.data.registeredAt || parsedUser.registeredAt
+              }
+
+              // Логируем подписку при загрузке
+              console.log('📋 Текущая подписка:', updatedUser.subscription)
+
+              setUser(updatedUser)
+              localStorage.setItem('user', JSON.stringify(updatedUser))
+            } else {
+              console.error('❌ Ошибка загрузки данных пользователя:', response)
+            }
+          } catch (e) {
+            console.error('❌ Не удалось обновить данные с сервера:', e)
+            // Продолжаем работу с кешированными данными
+          }
+        } catch (e) {
+          console.error('Failed to parse user:', e)
+          setIsLoading(false)
+        }
+      } else {
+        setIsLoading(false)
+      }
+    }
+
+    loadUser()
+
+    // Переменные для управления частотой обновлений
+    let lastUpdateTime = 0
+    let isUpdating = false
+    let lastUserData = ''
+
+    // Функция для обновления данных пользователя
+    const updateUserData = async () => {
+      const now = Date.now()
+      const savedUser = localStorage.getItem('user')
+      
+      // Проверяем, что с момента последнего обновления прошла хотя бы 1 секунда
+      // и нет активного запроса на обновление
+      if (!savedUser || isUpdating || (now - lastUpdateTime < 1000)) {
+        return
+      }
+
+      try {
+        isUpdating = true
+        lastUpdateTime = now
+        
+        const parsedUser = JSON.parse(savedUser)
+        const response = await getUserInfo(parsedUser.id)
+        
+        if (response.success && response.data) {
+          const updatedUser = {
+            ...parsedUser,
+            ...response.data,
+            registeredAt: response.data.registeredAt || parsedUser.registeredAt
+          }
+
+          // Обновляем только если данные изменились
+          const userDataStr = JSON.stringify(updatedUser)
+          if (userDataStr !== lastUserData) {
+            lastUserData = userDataStr
+            
+            // Логируем изменение подписки
+            if (parsedUser.subscription !== response.data.subscription) {
+              console.log('🔔 ПОДПИСКА ИЗМЕНЕНА!')
+              console.log('  Старая:', parsedUser.subscription)
+              console.log('  Новая:', response.data.subscription)
+            }
+
+            setUser(updatedUser)
+            localStorage.setItem('user', userDataStr)
+            console.log('🔄 Данные обновлены:', {
+              id: updatedUser.id,
+              username: updatedUser.username,
+              subscription: updatedUser.subscription
+            })
+          }
+        } else {
+          console.error('❌ Ошибка обновления данных:', response)
+        }
+      } catch (e) {
+        console.error('Auto-update failed:', e)
+      } finally {
+        isUpdating = false
+      }
+    }
+
+    // Запускаем обновление каждую секунду
+    const intervalId = setInterval(updateUserData, 1000)
+    
+    // Первое обновление
+    updateUserData()
+
+    return () => clearInterval(intervalId)
+  }, [])
+
+  // Fetch unread messages count
+  useEffect(() => {
+    if (!user) return
+
+    const fetchUnread = async () => {
+      try {
+        const response = await fetch(`${API_URL}/api/messages/unread?userId=${user.id}`)
+        const data = await response.json()
+        if (data.success) {
+          setUnreadMessages(data.data.total || 0)
+        }
+      } catch (error) {
+        console.error('Error fetching unread messages:', error)
+      }
+    }
+
+    fetchUnread()
+    const interval = setInterval(fetchUnread, 5000)
+    return () => clearInterval(interval)
+  }, [user])
+
+  const handleLogin = (userData: User) => {
+    // Сохраняем токен отдельно
+    if ('token' in userData) {
+      localStorage.setItem('token', (userData as any).token)
+    }
+    // Сохраняем пользователя без токена
+    const userWithoutToken = { ...userData }
+    delete (userWithoutToken as any).token
+    setUser(userWithoutToken)
+    localStorage.setItem('user', JSON.stringify(userWithoutToken))
+  }
+
+  const handleUserUpdate = (userData: User) => {
+    setUser(userData)
+    localStorage.setItem('user', JSON.stringify(userData))
+  }
+
+  const handleLogout = () => {
+    setUser(null)
+    localStorage.removeItem('user')
+    localStorage.removeItem('token')
+  }
+
+  if (isLoading) {
+    return (
+      <LanguageProvider>
+        <div className="app loading">
+          <div className="loader"></div>
+        </div>
+      </LanguageProvider>
+    )
+  }
+
+  if (!user) {
+    return (
+      <LanguageProvider>
+        <Snowfall />
+        <AuthPage onLogin={handleLogin} />
+      </LanguageProvider>
+    )
+  }
+
+  return (
+    <LanguageProvider>
+      <Snowfall />
+      <div className="app">
+        <TitleBar />
+        <UpdateNotification />
+        <div className="app-main">
+          <Sidebar activeTab={activeTab} onTabChange={setActiveTab} user={user} onLogout={handleLogout} unreadMessages={unreadMessages} />
+          <div className="app-content">
+            {activeTab === 'home' && <HomePage user={user} />}
+            {activeTab === 'messenger' && <FriendsMessenger user={user} />}
+            {activeTab === 'profile' && <ProfilePage user={user} onLogout={handleLogout} onUserUpdate={handleUserUpdate} />}
+            {activeTab === 'settings' && <SettingsPage />}
+          </div>
+        </div>
+      </div>
+    </LanguageProvider>
+  )
+}
+

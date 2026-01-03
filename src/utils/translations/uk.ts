@@ -148,7 +148,19 @@ export const ukTranslations: TranslationStructure = {
     light: 'Світла',
     auto: 'Авто',
     snowEffect: 'Ефект снігу',
-    enterFriendUsername: 'Введіть ім\'я друга...'
+    enterFriendUsername: 'Введіть ім\'я друга...',
+    // Messenger translations
+    online: 'В мережі',
+    offline: 'Не в мережі',
+    typeMessage: 'Повідомлення...',
+    friendRequests: 'Заявки в друзі',
+    pendingRequests: 'Очікують',
+    requestSent: 'Запит надіслано',
+    wantsToBeYourFriend: 'Хоче додати вас в друзі',
+    noFriendsYet: 'Поки немає друзів',
+    addFriendHint: 'Додайте друзів використовуючи поле вище',
+    removeFriend: 'Видалити з друзів',
+    selectFriendToChat: 'Виберіть друга для початку чату'
   },
   payment: {
     title: 'Оберіть спосіб оплати',

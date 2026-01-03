@@ -148,7 +148,19 @@ export const enTranslations: TranslationStructure = {
     light: 'Light',
     auto: 'Auto',
     snowEffect: 'Snow Effect',
-    enterFriendUsername: 'Enter friend username...'
+    enterFriendUsername: 'Enter friend username...',
+    // Messenger translations
+    online: 'Online',
+    offline: 'Offline',
+    typeMessage: 'Message...',
+    friendRequests: 'Friend Requests',
+    pendingRequests: 'Pending',
+    requestSent: 'Request sent',
+    wantsToBeYourFriend: 'Wants to be your friend',
+    noFriendsYet: 'No friends yet',
+    addFriendHint: 'Add friends using the input above',
+    removeFriend: 'Remove friend',
+    selectFriendToChat: 'Select a friend to start chatting'
   },
   payment: {
     title: 'Select Payment Method',

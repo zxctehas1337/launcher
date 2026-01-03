@@ -6,7 +6,7 @@ import { activateLicenseKey } from '../../../utils/keys'
 import { User, NotificationType, UserProfile } from '../../../types'
 import { useTranslation } from '../../../hooks/useTranslation'
 
-export type TabType = 'overview' | 'profile' | 'subscription' | 'settings'
+export type TabType = 'launcher' | 'profile' | 'subscription' | 'friends'
 
 export function useDashboard() {
   const [user, setUser] = useState<User | null>(null)
@@ -14,7 +14,7 @@ export function useDashboard() {
   const [showLogoutModal, setShowLogoutModal] = useState(false)
   const [showSoonModal, setShowSoonModal] = useState(false)
   const [keyInput, setKeyInput] = useState('')
-  const [activeTab, setActiveTab] = useState<TabType>('overview')
+  const [activeTab, setActiveTab] = useState<TabType>('launcher')
   const [profileForm, setProfileForm] = useState<UserProfile>({})
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const avatarInputRef = useRef<HTMLInputElement>(null)

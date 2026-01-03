@@ -155,7 +155,19 @@ export const kzTranslations: TranslationStructure = {
     light: 'Ашық',
     auto: 'Авто',
     snowEffect: 'Қар эффектісі',
-    enterFriendUsername: 'Достың логиніңізді енгізіңіз...'
+    enterFriendUsername: 'Достың логиніңізді енгізіңіз...',
+    // Messenger translations
+    online: 'Желіде',
+    offline: 'Желіде емес',
+    typeMessage: 'Хабарлама...',
+    friendRequests: 'Достық сұраулары',
+    pendingRequests: 'Күтуде',
+    requestSent: 'Сұрау жіберілді',
+    wantsToBeYourFriend: 'Сізді досқа қосқысы келеді',
+    noFriendsYet: 'Әзірге достар жоқ',
+    addFriendHint: 'Жоғарыдағы өрісті пайдаланып достар қосыңыз',
+    removeFriend: 'Достардан жою',
+    selectFriendToChat: 'Чат бастау үшін досты таңдаңыз'
   },
   // Модальное окно оплаты
   payment: {

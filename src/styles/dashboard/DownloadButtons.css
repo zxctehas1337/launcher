@@ -172,3 +172,50 @@
     padding: 30px 20px;
   }
 }
+
+/* ========================================
+   LIGHT THEME OVERRIDES
+   ======================================== */
+
+[data-theme="light"] .download-os-btn {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.08);
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .download-os-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .download-os-btn span {
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .download-os-btn.macos svg {
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .windows-sub-btn,
+[data-theme="light"] .macos-sub-btn,
+[data-theme="light"] .linux-sub-btn {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .windows-sub-btn span,
+[data-theme="light"] .macos-sub-btn span,
+[data-theme="light"] .linux-sub-btn span {
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .windows-sub-btn:hover,
+[data-theme="light"] .macos-sub-btn:hover,
+[data-theme="light"] .linux-sub-btn:hover {
+  background: rgba(255, 140, 0, 0.1);
+}
+
+[data-theme="light"] .windows-sub-btn:hover span,
+[data-theme="light"] .macos-sub-btn:hover span,
+[data-theme="light"] .linux-sub-btn:hover span {
+  color: #ff8c00;
+}

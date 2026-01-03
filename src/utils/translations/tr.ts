@@ -148,7 +148,19 @@ export const trTranslations: TranslationStructure = {
     light: 'Açık',
     auto: 'Otomatik',
     snowEffect: 'Kar Etkisi',
-    enterFriendUsername: 'Arkadaş kullanıcı adını girin...'
+    enterFriendUsername: 'Arkadaş kullanıcı adını girin...',
+    // Messenger translations
+    online: 'Çevrimiçi',
+    offline: 'Çevrimdışı',
+    typeMessage: 'Mesaj...',
+    friendRequests: 'Arkadaşlık İstekleri',
+    pendingRequests: 'Beklemede',
+    requestSent: 'İstek gönderildi',
+    wantsToBeYourFriend: 'Arkadaşınız olmak istiyor',
+    noFriendsYet: 'Henüz arkadaş yok',
+    addFriendHint: 'Yukarıdaki alanı kullanarak arkadaş ekleyin',
+    removeFriend: 'Arkadaşı sil',
+    selectFriendToChat: 'Sohbet başlatmak için bir arkadaş seçin'
   },
   payment: {
     title: 'Ödeme Yöntemini Seçin',

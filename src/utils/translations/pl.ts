@@ -148,7 +148,19 @@ export const plTranslations: TranslationStructure = {
     light: 'Jasny',
     auto: 'Auto',
     snowEffect: 'Efekt śniegu',
-    enterFriendUsername: 'Wprowadź nazwę znajomego...'
+    enterFriendUsername: 'Wprowadź nazwę znajomego...',
+    // Messenger translations
+    online: 'Online',
+    offline: 'Offline',
+    typeMessage: 'Wiadomość...',
+    friendRequests: 'Zaproszenia do znajomych',
+    pendingRequests: 'Oczekujące',
+    requestSent: 'Zaproszenie wysłane',
+    wantsToBeYourFriend: 'Chce być Twoim znajomym',
+    noFriendsYet: 'Brak znajomych',
+    addFriendHint: 'Dodaj znajomych używając pola powyżej',
+    removeFriend: 'Usuń znajomego',
+    selectFriendToChat: 'Wybierz znajomego, aby rozpocząć czat'
   },
   payment: {
     title: 'Wybierz metodę płatności',

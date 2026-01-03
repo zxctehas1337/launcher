@@ -30,7 +30,7 @@ if (process.env.NODE_ENV !== 'production') {
   });
 }
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'https://booleanclient.vercel.app',
+  origin: process.env.FRONTEND_URL || 'https://booleanclient.ru',
   credentials: true
 }));
 app.use(express.json());

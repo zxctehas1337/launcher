@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import LanguageSelector from '../../../components/ThemeLanguageSelector'
 import LogoWithHat from '../../../components/LogoWithHat'
-import { IconHome, IconGrid, IconProfile, IconSubscription, IconSettings, IconShield, IconLogout } from '../../../components/Icons'
+import { IconHome, IconDownload, IconProfile, IconSubscription, IconFriends, IconShield, IconLogout } from '../../../components/Icons'
 import { User } from '../../../types'
 import { CLIENT_INFO } from '../../../utils/constants'
 import { TabType } from '../hooks/useDashboard'
@@ -65,11 +65,11 @@ export function DashboardSidebar({
           <IconHome />
         </button>
         <button
-          className={`nav-item ${activeTab === 'overview' ? 'active' : ''}`}
-          onClick={(e) => { e.stopPropagation(); setActiveTab('overview'); setMobileMenuOpen(false); }}
-          title={t.dashboard.overview}
+          className={`nav-item ${activeTab === 'launcher' ? 'active' : ''}`}
+          onClick={(e) => { e.stopPropagation(); setActiveTab('launcher'); setMobileMenuOpen(false); }}
+          title={t.dashboard.launcherTab}
         >
-          <IconGrid />
+          <IconDownload />
         </button>
         <button
           className={`nav-item ${activeTab === 'profile' ? 'active' : ''}`}
@@ -86,11 +86,11 @@ export function DashboardSidebar({
           <IconSubscription />
         </button>
         <button
-          className={`nav-item ${activeTab === 'settings' ? 'active' : ''}`}
-          onClick={(e) => { e.stopPropagation(); setActiveTab('settings'); setMobileMenuOpen(false); }}
-          title={t.dashboard.settings}
+          className={`nav-item ${activeTab === 'friends' ? 'active' : ''}`}
+          onClick={(e) => { e.stopPropagation(); setActiveTab('friends'); setMobileMenuOpen(false); }}
+          title={t.dashboard.friends}
         >
-          <IconSettings />
+          <IconFriends />
         </button>
       </nav>
 
