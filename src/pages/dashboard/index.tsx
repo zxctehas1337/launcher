@@ -258,7 +258,7 @@ export default function DashboardPage() {
                       <div className="windows-options">
                         <div className="windows-sub-btn" onClick={() => handleDownloadLauncher('windows_exe')}>
                           <WindowsIcon size={12} className="sub-btn-icon-svg" />
-                          <span>Exe Installer</span>
+                          <span>EXE Installer</span>
                         </div>
                         <div className="windows-sub-btn" onClick={() => handleDownloadLauncher('windows_msi')}>
                           <WindowsIcon size={12} className="sub-btn-icon-svg" />
