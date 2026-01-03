@@ -27,6 +27,29 @@ export function useAbly({ userId, onMessage, onUserStatus, onTyping, onMessagesR
   const userChannelRef = useRef<Ably.RealtimeChannel | null>(null)
   const presenceChannelRef = useRef<Ably.RealtimeChannel | null>(null)
   const [connected, setConnected] = useState(false)
+  
+  // Store callbacks in refs to avoid stale closures
+  const onMessageRef = useRef(onMessage)
+  const onUserStatusRef = useRef(onUserStatus)
+  const onTypingRef = useRef(onTyping)
+  const onMessagesReadRef = useRef(onMessagesRead)
+  
+  // Keep refs updated with latest callbacks
+  useEffect(() => {
+    onMessageRef.current = onMessage
+  }, [onMessage])
+  
+  useEffect(() => {
+    onUserStatusRef.current = onUserStatus
+  }, [onUserStatus])
+  
+  useEffect(() => {
+    onTypingRef.current = onTyping
+  }, [onTyping])
+  
+  useEffect(() => {
+    onMessagesReadRef.current = onMessagesRead
+  }, [onMessagesRead])
 
   useEffect(() => {
     if (!userId) return
@@ -68,15 +91,15 @@ export function useAbly({ userId, onMessage, onUserStatus, onTyping, onMessagesR
         userChannelRef.current = userChannel
 
         userChannel.subscribe('message', (msg) => {
-          onMessage?.(msg.data as Message)
+          onMessageRef.current?.(msg.data as Message)
         })
 
         userChannel.subscribe('typing', (msg) => {
-          onTyping?.(msg.data as { userId: number; typing: boolean })
+          onTypingRef.current?.(msg.data as { userId: number; typing: boolean })
         })
 
         userChannel.subscribe('read', (msg) => {
-          onMessagesRead?.(msg.data as { userId: number; friendId: number })
+          onMessagesReadRef.current?.(msg.data as { userId: number; friendId: number })
         })
 
         // Global presence channel
@@ -86,18 +109,18 @@ export function useAbly({ userId, onMessage, onUserStatus, onTyping, onMessagesR
         await presenceChannel.presence.enter({ odId: userId })
 
         presenceChannel.presence.subscribe('enter', (member) => {
-          onUserStatus?.({ userId: Number(member.clientId), online: true })
+          onUserStatusRef.current?.({ userId: Number(member.clientId), online: true })
         })
 
         presenceChannel.presence.subscribe('leave', (member) => {
-          onUserStatus?.({ userId: Number(member.clientId), online: false })
+          onUserStatusRef.current?.({ userId: Number(member.clientId), online: false })
         })
 
         // Get initial presence
         const members = await presenceChannel.presence.get()
         members.forEach((member) => {
           if (member.clientId !== String(userId)) {
-            onUserStatus?.({ userId: Number(member.clientId), online: true })
+            onUserStatusRef.current?.({ userId: Number(member.clientId), online: true })
           }
         })
 
