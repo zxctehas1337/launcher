@@ -30,10 +30,15 @@ async function ensureFriendsTables(pool) {
     await pool.query('CREATE INDEX IF NOT EXISTS idx_friendships_friend ON friendships(friend_id)');
     await pool.query('CREATE INDEX IF NOT EXISTS idx_messages_sender ON messages(sender_id)');
     await pool.query('CREATE INDEX IF NOT EXISTS idx_messages_receiver ON messages(receiver_id)');
+    await pool.query('CREATE INDEX IF NOT EXISTS idx_messages_unread ON messages(receiver_id, is_read) WHERE is_read = false');
+    await pool.query('CREATE INDEX IF NOT EXISTS idx_messages_conversation ON messages(sender_id, receiver_id, created_at)');
   } catch (error) {
     console.error('Error ensuring friends tables:', error);
   }
 }
+
+// Tables should be created via migration, not on every request
+let tablesEnsured = false;
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -45,7 +50,12 @@ export default async function handler(req, res) {
   }
 
   const pool = getPool();
-  await ensureFriendsTables(pool);
+  
+  // Only ensure tables once per cold start
+  if (!tablesEnsured) {
+    await ensureFriendsTables(pool);
+    tablesEnsured = true;
+  }
 
   try {
     if (req.method === 'GET') {

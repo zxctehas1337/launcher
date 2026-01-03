@@ -1,7 +1,8 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { IoSend, IoClose, IoPersonAdd, IoCheckmark, IoCloseCircle, IoArrowBack } from 'react-icons/io5'
 import { getAvatarUrl } from '../../utils/avatarGenerator'
 import { User } from '../../types'
+import { useSocket } from '../../hooks/useSocket'
 import './FriendsMessenger.css'
 
 interface Friend {
@@ -12,6 +13,7 @@ interface Friend {
   friend_avatar: string | null
   friend_last_active: string | null
   request_direction: 'incoming' | 'outgoing'
+  isOnline?: boolean
 }
 
 interface Message {
@@ -43,7 +45,76 @@ export function FriendsMessenger({ user, t, onClose }: FriendsMessengerProps) {
   const [friendInput, setFriendInput] = useState('')
   const [unreadData, setUnreadData] = useState<UnreadData>({ byUser: [], total: 0 })
   const [loading, setLoading] = useState(false)
+  const [typingUsers, setTypingUsers] = useState<Set<number>>(new Set())
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+
+  // Handle incoming socket message
+  const handleSocketMessage = useCallback((message: Message) => {
+    // If message is for current chat, add it
+    if (selectedFriend && 
+        (message.sender_id === selectedFriend.friend_user_id || 
+         message.receiver_id === selectedFriend.friend_user_id)) {
+      setMessages(prev => {
+        // Avoid duplicates
+        if (prev.some(m => m.id === message.id)) return prev
+        return [...prev, message]
+      })
+      // Mark as read if we're in the chat
+      if (message.sender_id === selectedFriend.friend_user_id) {
+        markAsRead(selectedFriend.friend_user_id)
+      }
+    } else if (message.sender_id !== user.id) {
+      // Update unread count for other chats
+      setUnreadData(prev => {
+        const existing = prev.byUser.find(u => u.sender_id === message.sender_id)
+        if (existing) {
+          return {
+            ...prev,
+            byUser: prev.byUser.map(u => 
+              u.sender_id === message.sender_id 
+                ? { ...u, unread_count: String(parseInt(u.unread_count) + 1) }
+                : u
+            ),
+            total: prev.total + 1
+          }
+        }
+        return {
+          byUser: [...prev.byUser, { sender_id: message.sender_id, unread_count: '1' }],
+          total: prev.total + 1
+        }
+      })
+    }
+  }, [selectedFriend, user.id])
+
+  // Handle user online status
+  const handleUserStatus = useCallback((data: { userId: number; online: boolean }) => {
+    setFriends(prev => prev.map(f => 
+      f.friend_user_id === data.userId 
+        ? { ...f, isOnline: data.online }
+        : f
+    ))
+  }, [])
+
+  // Handle typing indicator
+  const handleTyping = useCallback((data: { userId: number; typing: boolean }) => {
+    setTypingUsers(prev => {
+      const next = new Set(prev)
+      if (data.typing) {
+        next.add(data.userId)
+      } else {
+        next.delete(data.userId)
+      }
+      return next
+    })
+  }, [])
+
+  const { connected, sendMessage: socketSendMessage, markAsRead, startTyping, stopTyping } = useSocket({
+    userId: user.id,
+    onMessage: handleSocketMessage,
+    onUserStatus: handleUserStatus,
+    onTyping: handleTyping
+  })
 
   const fetchFriends = async () => {
     try {
@@ -69,18 +140,21 @@ export function FriendsMessenger({ user, t, onClose }: FriendsMessengerProps) {
     }
   }
 
-  const fetchMessages = async (friendId: number) => {
+  const fetchMessages = async (friendId: number, markAsRead = true) => {
     try {
       const response = await fetch(`/api/messages?userId=${user.id}&friendId=${friendId}`)
       const data = await response.json()
       if (data.success) {
         setMessages(data.data)
-        await fetch('/api/messages', {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ userId: user.id, friendId })
-        })
-        fetchUnread()
+        // Mark as read is already done in GET request on backend
+        if (markAsRead) {
+          // Just update local unread count without extra request
+          setUnreadData(prev => ({
+            ...prev,
+            byUser: prev.byUser.filter(u => u.sender_id !== friendId),
+            total: Math.max(0, prev.total - (prev.byUser.find(u => u.sender_id === friendId)?.unread_count ? parseInt(prev.byUser.find(u => u.sender_id === friendId)!.unread_count) : 0))
+          }))
+        }
       }
     } catch (error) {
       console.error('Error fetching messages:', error)
@@ -90,23 +164,50 @@ export function FriendsMessenger({ user, t, onClose }: FriendsMessengerProps) {
   const sendMessage = async () => {
     if (!messageInput.trim() || !selectedFriend) return
 
-    try {
-      const response = await fetch('/api/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          senderId: user.id,
-          receiverId: selectedFriend.friend_user_id,
-          content: messageInput.trim()
+    // Use socket if connected, fallback to HTTP
+    if (connected) {
+      socketSendMessage(selectedFriend.friend_user_id, messageInput.trim())
+      setMessageInput('')
+    } else {
+      try {
+        const response = await fetch('/api/messages', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            senderId: user.id,
+            receiverId: selectedFriend.friend_user_id,
+            content: messageInput.trim()
+          })
         })
-      })
-      const data = await response.json()
-      if (data.success) {
-        setMessages(prev => [...prev, { ...data.data, sender_username: user.username }])
-        setMessageInput('')
+        const data = await response.json()
+        if (data.success) {
+          setMessages(prev => [...prev, { ...data.data, sender_username: user.username }])
+          setMessageInput('')
+        }
+      } catch (error) {
+        console.error('Error sending message:', error)
       }
-    } catch (error) {
-      console.error('Error sending message:', error)
+    }
+  }
+
+  // Handle typing indicator
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMessageInput(e.target.value)
+    
+    if (selectedFriend && connected) {
+      startTyping(selectedFriend.friend_user_id)
+      
+      // Clear previous timeout
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current)
+      }
+      
+      // Stop typing after 2 seconds of no input
+      typingTimeoutRef.current = setTimeout(() => {
+        if (selectedFriend) {
+          stopTyping(selectedFriend.friend_user_id)
+        }
+      }, 2000)
     }
   }
 
@@ -188,9 +289,11 @@ export function FriendsMessenger({ user, t, onClose }: FriendsMessengerProps) {
     }
   }
 
-  const isOnline = (lastActive: string | null) => {
-    if (!lastActive) return false
-    const diff = Date.now() - new Date(lastActive).getTime()
+  const isOnline = (friend: Friend) => {
+    // Prefer socket status, fallback to last_active
+    if (friend.isOnline !== undefined) return friend.isOnline
+    if (!friend.friend_last_active) return false
+    const diff = Date.now() - new Date(friend.friend_last_active).getTime()
     return diff < 5 * 60 * 1000
   }
 
@@ -203,22 +306,35 @@ export function FriendsMessenger({ user, t, onClose }: FriendsMessengerProps) {
     fetchFriends()
     fetchUnread()
     
+    // Only poll if socket is not connected (fallback)
     const interval = setInterval(() => {
-      fetchFriends()
-      fetchUnread()
-      if (selectedFriend) {
-        fetchMessages(selectedFriend.friend_user_id)
+      if (!connected) {
+        fetchUnread()
+        if (selectedFriend) {
+          fetchMessages(selectedFriend.friend_user_id, false)
+        }
       }
-    }, 5000)
+    }, 15000)
+    
+    // Fetch friends periodically (for new friend requests)
+    const friendsInterval = setInterval(() => {
+      fetchFriends()
+    }, 30000)
 
-    return () => clearInterval(interval)
-  }, [user.id])
+    return () => {
+      clearInterval(interval)
+      clearInterval(friendsInterval)
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current)
+      }
+    }
+  }, [user.id, connected])
 
   useEffect(() => {
     if (selectedFriend) {
-      fetchMessages(selectedFriend.friend_user_id)
+      fetchMessages(selectedFriend.friend_user_id, true)
     }
-  }, [selectedFriend])
+  }, [selectedFriend?.friend_user_id])
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -300,6 +416,7 @@ export function FriendsMessenger({ user, t, onClose }: FriendsMessengerProps) {
               </div>
               {acceptedFriends.map(friend => {
                 const unread = getUnreadCount(friend.friend_user_id)
+                const online = isOnline(friend)
                 return (
                   <div 
                     key={friend.id} 
@@ -312,12 +429,12 @@ export function FriendsMessenger({ user, t, onClose }: FriendsMessengerProps) {
                         alt={friend.friend_username}
                         className="messenger-avatar"
                       />
-                      <span className={`online-dot ${isOnline(friend.friend_last_active) ? 'online' : ''}`} />
+                      <span className={`online-dot ${online ? 'online' : ''}`} />
                     </div>
                     <div className="messenger-friend-info">
                       <span className="messenger-friend-name">{friend.friend_username}</span>
-                      <span className={`messenger-friend-status ${isOnline(friend.friend_last_active) ? 'online' : ''}`}>
-                        {isOnline(friend.friend_last_active) 
+                      <span className={`messenger-friend-status ${online ? 'online' : ''}`}>
+                        {online 
                           ? (t.dashboard?.online || 'Online')
                           : (t.dashboard?.offline || 'Offline')}
                       </span>
@@ -373,10 +490,12 @@ export function FriendsMessenger({ user, t, onClose }: FriendsMessengerProps) {
                   />
                   <div className="chat-user-info">
                     <span className="chat-username">{selectedFriend.friend_username}</span>
-                    <span className={`chat-status ${isOnline(selectedFriend.friend_last_active) ? 'online' : ''}`}>
-                      {isOnline(selectedFriend.friend_last_active) 
-                        ? (t.dashboard?.online || 'Online')
-                        : (t.dashboard?.offline || 'Offline')}
+                    <span className={`chat-status ${isOnline(selectedFriend) ? 'online' : ''}`}>
+                      {typingUsers.has(selectedFriend.friend_user_id)
+                        ? (t.dashboard?.typing || 'Typing...')
+                        : isOnline(selectedFriend) 
+                          ? (t.dashboard?.online || 'Online')
+                          : (t.dashboard?.offline || 'Offline')}
                     </span>
                   </div>
                 </div>
@@ -410,7 +529,7 @@ export function FriendsMessenger({ user, t, onClose }: FriendsMessengerProps) {
                 <input
                   type="text"
                   value={messageInput}
-                  onChange={(e) => setMessageInput(e.target.value)}
+                  onChange={handleInputChange}
                   onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
                   placeholder={t.dashboard?.typeMessage || 'Message...'}
                   className="chat-input"
